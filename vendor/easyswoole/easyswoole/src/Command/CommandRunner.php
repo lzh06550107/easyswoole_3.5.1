@@ -66,9 +66,9 @@ class CommandRunner
         }
 
         Utility::opCacheClear();
-
+        // 命令管理器执行输入的命令
         $msg = CommandManager::getInstance()->run($caller);
-
+        // 封装命令执行结构
         $result = new Result();
         $result->setMsg($msg);
         return $result;

@@ -57,6 +57,7 @@ class Color
     public const MATCH_TAG = '/<([a-zA-Z=;_]+)>(.*?)<\/\\1>/s';
 
     /**
+     * 静态魔术方法
      * @param string $method
      * @param array $arguments
      * @return string
@@ -71,6 +72,7 @@ class Color
     }
 
     /**
+     * 渲染文本为指定的颜色
      * @param string $text
      * @param null $style
      * @return string
@@ -87,6 +89,7 @@ class Color
     }
 
     /**
+     * 控制台颜色模板标签解析
      * @param string $text
      * @return string
      */

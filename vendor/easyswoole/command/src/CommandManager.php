@@ -47,6 +47,7 @@ class CommandManager
     private $script = '';
 
     /**
+     * 保存添加的命令，默认命令在CommandRunner的构造函数中添加
      * add commands
      * @var array
      */
@@ -64,6 +65,7 @@ class CommandManager
     private $originArgv = [];
 
     /**
+     * 根据输入的命令，分析执行
      * @param CallerInterface $caller
      * @return string
      */
@@ -81,7 +83,7 @@ class CommandManager
         // command
         $this->command = $caller->getCommand();
 
-        $this->parseArgv(array_values($argv));
+        $this->parseArgv(array_values($argv)); // 解析命令选项和参数
 
         // 没有找到该命令，则显示帮助信息
         if (!($command = $this->command)) {
@@ -102,9 +104,9 @@ class CommandManager
         }
 
         /** @var CommandInterface $handler */
-        $handler = $this->commands[$command];
+        $handler = $this->commands[$command]; // 获取命令处理器
 
-        return $handler->exec();
+        return $handler->exec(); // 执行命令
     }
 
     /**
@@ -116,6 +118,7 @@ class CommandManager
     }
 
     /**
+     * 解析命令选项和参数
      * @param array $params
      */
     private function parseArgv(array $params)
@@ -128,10 +131,10 @@ class CommandManager
                 if (strpos($option, '=') !== false) {
                     [$option, $value] = explode('=', $option, 2);
                 }
-                if ($option) $this->opts[$option] = $value;
+                if ($option) $this->opts[$option] = $value; // 收集命令选项
             } else if (strpos($param, '=') !== false) {
                 [$name, $value] = explode('=', $param, 2);
-                if ($name) $this->args[$name] = $value;
+                if ($name) $this->args[$name] = $value; // 收集命令参数
             } else {
                 $this->args[] = $param;
             }

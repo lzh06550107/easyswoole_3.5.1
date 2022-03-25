@@ -7,6 +7,9 @@ namespace EasySwoole\Config;
 use EasySwoole\Spl\SplArray;
 use Swoole\Table;
 
+/**
+ * 基于进程共享表的配置存储器，进程间共享
+ */
 class TableConfig extends AbstractConfig
 {
     private $table;

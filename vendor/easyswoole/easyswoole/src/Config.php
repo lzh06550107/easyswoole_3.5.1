@@ -14,8 +14,15 @@ use EasySwoole\Config\AbstractConfig;
 use EasySwoole\Config\SplArrayConfig;
 use EasySwoole\Utility\File;
 
+/**
+ * 配置管理器
+ */
 class Config
 {
+    /**
+     * 配置存储处理器
+     * @var AbstractConfig|SplArrayConfig|null
+     */
     private $conf;
 
     use Singleton;
@@ -23,7 +30,7 @@ class Config
     public function __construct(?AbstractConfig $config = null)
     {
         if($config == null){
-            $config = new SplArrayConfig();
+            $config = new SplArrayConfig(); // 默认基于进程内存空间保存加载的配置
         }
         $this->conf = $config;
     }
@@ -74,7 +81,7 @@ class Config
     }
 
     /**
-     * 载入一个文件的配置项
+     * 载入一个文件的配置项，并放入配置存储器中
      * @param string $filePath 配置文件路径
      */
     public function loadFile($filePath,bool $merge = true):bool
@@ -110,6 +117,12 @@ class Config
         return false;
     }
 
+    /**
+     * 加载ini配置文件中的配置项
+     * @param string $file
+     * @param bool $merge
+     * @return bool
+     */
     public function loadEnv(string $file,bool $merge = true):bool
     {
         if(file_exists($file)){
@@ -126,6 +139,10 @@ class Config
         return false;
     }
 
+    /**
+     * 清空配置存储器中的所有配置
+     * @return bool
+     */
     public function clear():bool
     {
         return $this->conf->clear();

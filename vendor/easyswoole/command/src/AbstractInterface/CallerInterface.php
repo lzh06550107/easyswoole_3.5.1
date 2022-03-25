@@ -3,7 +3,9 @@
 
 namespace EasySwoole\Command\AbstractInterface;
 
-
+/**
+ * 对输入的命令封装类接口
+ */
 interface CallerInterface
 {
     /**

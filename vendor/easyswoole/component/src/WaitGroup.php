@@ -6,11 +6,14 @@ namespace EasySwoole\Component;
 
 use Swoole\Coroutine\Channel;
 
+/**
+ * 进程内协程同步工具
+ */
 class WaitGroup
 {
-    private $count = 0;
+    private $count = 0; // 并发协程数
     /** @var Channel  */
-    private $channel;
+    private $channel; // 通道对象
     private $success = 0;
     private $size;
 
@@ -30,11 +33,18 @@ class WaitGroup
         return $this->success;
     }
 
+    /**
+     * 完成一个协程，推送一个记录到通道
+     */
     public function done()
     {
         $this->channel->push(1);
     }
 
+    /**
+     * 等待所有的协程执行完成
+     * @param float|null $timeout
+     */
     public function wait(?float $timeout = 15)
     {
         if($timeout <= 0){
@@ -45,16 +55,18 @@ class WaitGroup
         while(($this->count > 0) && ($left > 0))
         {
             $start = round(microtime(true),3);
-            if($this->channel->pop($left) === 1)
+            if($this->channel->pop($left) === 1) // pop方法在通道为空时，自定切换协程
             {
-                $this->count--;
+                $this->count--; // 并发
                 $this->success++;
             }
             $left = $left - (round(microtime(true),3) - $start);
         }
     }
 
-
+    /**
+     * 关闭通道，清空对象属性并重新创建对象
+     */
     function reset()
     {
         $this->close();

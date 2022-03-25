@@ -19,6 +19,9 @@ use EasySwoole\EasySwoole\SysConst;
 use EasySwoole\Utility\ArrayToTextTable;
 use Swoole\Coroutine\Scheduler;
 
+/**
+ * 服务管理相关命令
+ */
 class Server implements CommandInterface
 {
     public function commandName(): string
@@ -55,14 +58,18 @@ class Server implements CommandInterface
         return CommandManager::getInstance()->displayCommandHelp($this->commandName());
     }
 
+    /**
+     * 服务启动
+     */
     protected function start()
     {
+        // 防止重复启动
         defined('EASYSWOOLE_RUNNING') or define('EASYSWOOLE_RUNNING', true);
         $conf = Config::getInstance();
         // php easyswoole server start -d
         $daemonize = CommandManager::getInstance()->issetOpt('d');
 
-        if ($daemonize) {
+        if ($daemonize) { // 后台模式运行
             $conf->setConf("MAIN_SERVER.SETTING.daemonize", $daemonize);
         }
 
@@ -104,6 +111,7 @@ class Server implements CommandInterface
         $displayItem['temp dir'] = EASYSWOOLE_TEMP_DIR;
         $displayItem['log dir'] = EASYSWOOLE_LOG_DIR;
 
+        // 打印easyswoole log
         $msg = Color::green(Utility::easySwooleLog()) . "\n";
         foreach ($displayItem as $key => $value) {
             $msg .= Utility::displayItem($key, $value) . "\n";

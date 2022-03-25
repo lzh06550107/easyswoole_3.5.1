@@ -55,20 +55,26 @@ use EasySwoole\Crontab\Config as CrontabConfig;
 //      佛祖保佑                永无BUG               永不修改        //
 ////////////////////////////////////////////////////////////////////
 
-
+/**
+ * 应用管理器
+ */
 class Core
 {
     use Singleton;
 
-    protected $runMode = 'dev';
+    protected $runMode = 'dev'; // 默认开发模式运行
 
     function __construct()
     {
+        // 定义swoole扩展版本常量
         defined('SWOOLE_VERSION') or define('SWOOLE_VERSION', intval(phpversion('swoole')));
+        // 定义应用根目录路径常量
         defined('EASYSWOOLE_ROOT') or define('EASYSWOOLE_ROOT', realpath(getcwd()));
+        // 定义服务器类型常量
         defined('EASYSWOOLE_SERVER') or define('EASYSWOOLE_SERVER', 1);
         defined('EASYSWOOLE_WEB_SERVER') or define('EASYSWOOLE_WEB_SERVER', 2);
         defined('EASYSWOOLE_WEB_SOCKET_SERVER') or define('EASYSWOOLE_WEB_SOCKET_SERVER', 3);
+        // 加载 EasySwooleEvent.php 文件
         $eventFile = EASYSWOOLE_ROOT . '/EasySwooleEvent.php';
         if (!file_exists($eventFile)) {
             die(Color::red("EasySwooleEvent.php file miss ,check again or run php easyswoole install again \n"));

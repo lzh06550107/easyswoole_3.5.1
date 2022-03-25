@@ -6,6 +6,9 @@ namespace EasySwoole\Config;
 
 use EasySwoole\Spl\SplArray;
 
+/**
+ * 基于进程内存的配置处理器，进程间隔离
+ */
 class SplArrayConfig extends AbstractConfig
 {
     private $splArray;

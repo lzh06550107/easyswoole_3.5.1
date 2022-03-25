@@ -6,6 +6,9 @@ namespace EasySwoole\Command;
 
 use EasySwoole\Command\AbstractInterface\ResultInterface;
 
+/**
+ * 命令执行结果类
+ */
 class Result implements ResultInterface
 {
     private $result;
