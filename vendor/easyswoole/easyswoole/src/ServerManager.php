@@ -15,13 +15,16 @@ use Swoole\Server;
 use Swoole\WebSocket\Server as WebSocketServer;
 use Swoole\Http\Server as HttpServer;
 
+/**
+ * 主服务管理器
+ */
 class ServerManager
 {
     use Singleton;
     /**
      * @var Server $swooleServer
      */
-    private $swooleServer;
+    private $swooleServer; // swoole服务器对象
     private $mainServerEventRegister;
     private $subServer = [];
     private $subServerRegister = [];

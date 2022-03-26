@@ -15,6 +15,9 @@ use EasySwoole\Utility\ArrayToTextTable;
 use Swoole\Coroutine;
 use Swoole\Coroutine\Scheduler;
 
+/**
+ * 任务管理命令，获取任务执行信息
+ */
 class Task implements CommandInterface
 {
     public function commandName(): string
@@ -29,17 +32,21 @@ class Task implements CommandInterface
 
     public function help(CommandHelpInterface $commandHelp): CommandHelpInterface
     {
-        $commandHelp->addAction('status', 'status of the task');
-        $commandHelp->addAction('reboot', 'reboot all of task worker');
+        $commandHelp->addAction('status', 'status of the task'); // 获取所有的任务状态
+        $commandHelp->addAction('reboot', 'reboot all of task worker'); // 重启所有任务进程
         return $commandHelp;
     }
 
+    /**
+     * 执行一个命令时调用的主体
+     * @return string|null
+     */
     public function exec(): ?string
     {
         $action = CommandManager::getInstance()->getArg(0);
         Core::getInstance()->initialize();
-        $run = new Scheduler();
-        $run->add(function () use (&$result, $action) {
+        $run = new Scheduler(); // 实例化一个协程调度器
+        $run->add(function () use (&$result, $action) { // 启动一个协程来运行命令
             if (method_exists($this, $action) && $action != 'help') {
                 $result = $this->{$action}();
                 return;
@@ -47,7 +54,7 @@ class Task implements CommandInterface
 
             $result = CommandManager::getInstance()->displayCommandHelp($this->commandName());
         });
-        $run->start();
+        $run->start(); // 启动协程调度器
         return $result;
     }
 
@@ -114,6 +121,10 @@ class Task implements CommandInterface
         }
     }
 
+    /**
+     * 获取任务状态
+     * @return false|mixed|string
+     */
     protected function status()
     {
         return Utility::bridgeCall('status', function (Package $package) {

@@ -8,6 +8,9 @@ use EasySwoole\Component\Process\Socket\UnixProcessConfig;
 use EasySwoole\Socket\Tools\Client;
 use Swoole\Server;
 
+/**
+ * 桥接服务端，因为桥接子进程是从主进程创建的，可以访问主进程中创建的所有对象(只能读，不能修改，修改可能会分离)
+ */
 class Bridge
 {
     private $socketFile;
@@ -55,6 +58,12 @@ class Bridge
         $server->addProcess($p->getProcess());
     }
 
+    /**
+     * 进程间发送消息
+     * @param Package $package 协议包内容
+     * @param float $timeout
+     * @return Package
+     */
     function send(Package $package,float $timeout = 3.0): Package
     {
         $client = new Client($this->getSocketFile());
@@ -70,6 +79,13 @@ class Bridge
         return $package;
     }
 
+    /**
+     * 和桥接进程通讯的客户端
+     * @param string $command 命令名称
+     * @param $arg 命令参数
+     * @param float $timeout 通讯超时时间
+     * @return Package
+     */
     function call(string $command,$arg = null,float $timeout = 3.0):Package
     {
         $package = new Package();

@@ -8,7 +8,9 @@
 
 namespace EasySwoole\EasySwoole;
 
-
+/**
+ * 系统常量
+ */
 class SysConst
 {
     const EASYSWOOLE_VERSION = '3.5.1';

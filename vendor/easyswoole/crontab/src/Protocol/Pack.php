@@ -3,7 +3,9 @@
 
 namespace EasySwoole\Crontab\Protocol;
 
-
+/**
+ * 封包和解包帮助类
+ */
 class Pack
 {
     public static function pack(string $data): string

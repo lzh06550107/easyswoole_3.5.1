@@ -6,9 +6,12 @@ namespace EasySwoole\Crontab\Protocol;
 
 use EasySwoole\Spl\SplBean;
 
+/**
+ * 定时任务的命令类型类
+ */
 class Command extends SplBean
 {
-    const COMMAND_EXEC_JOB = 0x1;
+    const COMMAND_EXEC_JOB = 0x1; // 立即执行定时任务命令类型
 
     protected $command;
     protected $arg;

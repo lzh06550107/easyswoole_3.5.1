@@ -9,6 +9,7 @@
 namespace EasySwoole\EasySwoole\Command;
 use EasySwoole\Command\AbstractInterface\CommandInterface as CInterface;
 
+
 interface CommandInterface extends CInterface
 {
 

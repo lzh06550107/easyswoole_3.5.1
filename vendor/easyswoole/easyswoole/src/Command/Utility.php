@@ -79,11 +79,20 @@ LOGO;
         }
     }
 
+    /**
+     * 和服务中的桥接进程进行通讯
+     * @param string $commandName 命令名称
+     * @param callable $function 回调函数
+     * @param $action 桥接进程中的动作名称
+     * @param $params 桥接进程中的动作参数
+     * @param $timeout 超时时间
+     * @return false|mixed|string
+     */
     public static function bridgeCall(string $commandName, callable $function, $action, $params = [], $timeout = 3)
     {
         $arg = ['action' => $action] + $params;
         $package = Bridge::getInstance()->call($commandName, $arg, $timeout);
-        if ($package->getStatus() == Package::STATUS_SUCCESS) {
+        if ($package->getStatus() == Package::STATUS_SUCCESS) { // 调用成功，则调用回调函数来处理返回结果
             $result = call_user_func($function, $package);
         } else {
             $result = Color::error($package->getMsg());

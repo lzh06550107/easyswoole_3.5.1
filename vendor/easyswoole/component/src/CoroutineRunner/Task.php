@@ -3,20 +3,22 @@
 
 namespace EasySwoole\Component\CoroutineRunner;
 
-
+/**
+ * 任务封装类
+ */
 class Task
 {
-    protected $timeout = 3;
+    protected $timeout = 3; // 任务执行超时时间
     /** @var callable */
-    protected $call;
+    protected $call; // 任务执行主体
     /** @var callable */
-    protected $onSuccess;
+    protected $onSuccess; // 任务执行成功回调
     /** @var callable */
-    protected $onFail;
+    protected $onFail; // 任务执行失败回调
     /** @var float */
-    protected $startTime;
+    protected $startTime; // 任务开始执行时间
 
-    protected $result;
+    protected $result; // 任务执行结果
 
     function __construct(callable $call)
     {

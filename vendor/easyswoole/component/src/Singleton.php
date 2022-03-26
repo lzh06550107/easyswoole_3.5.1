@@ -8,7 +8,9 @@
 
 namespace EasySwoole\Component;
 
-
+/**
+ * 进程范围内的单例模式
+ */
 trait Singleton
 {
     private static $instance;

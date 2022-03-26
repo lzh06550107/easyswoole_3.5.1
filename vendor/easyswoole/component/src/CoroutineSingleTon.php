@@ -3,14 +3,17 @@
 
 namespace EasySwoole\Component;
 
-
 use Swoole\Coroutine;
 
+/**
+ * 协程范围内的单例模式，协程关闭时销毁
+ */
 trait CoroutineSingleTon
 {
     private static $instance = [];
 
     /**
+     * 获取实例，并在协程关闭时自动销毁
      * @param mixed ...$args
      * @return static
      */
@@ -31,6 +34,10 @@ trait CoroutineSingleTon
         return static::$instance[$cid];
     }
 
+    /**
+     * 手动销毁，可销毁指定协程的单例
+     * @param int|null $ci
+     */
     function destroy(int $cid = null)
     {
         if($cid === null){

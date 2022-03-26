@@ -3,26 +3,31 @@
 
 namespace EasySwoole\Crontab;
 
-
 use Cron\CronExpression;
 use EasySwoole\Component\Process\AbstractProcess;
 use EasySwoole\Component\Timer;
 use Swoole\Table;
 
+/**
+ * 定时任务调度器
+ */
 class Scheduler extends AbstractProcess
 {
     /** @var Table */
-    private $schedulerTable;
+    private $schedulerTable; // 定时任务调度器信息记录共享内存表
 
     /** @var Crontab */
-    private $crontabInstance;
+    private $crontabInstance; // 定时任务管理器对象
 
-    private $timerIds = [];
+    private $timerIds = []; // 任务定时器id
 
+    /**
+     * @param $arg 进程对象实例时传入的参数
+     */
     protected function run($arg)
     {
-        $this->crontabInstance = $arg['crontabInstance'];
-        $this->schedulerTable = $arg['schedulerTable'];
+        $this->crontabInstance = $arg['crontabInstance']; // 定时任务管理器对象
+        $this->schedulerTable = $arg['schedulerTable']; // 定时任务调度器共享内存表对象
         //异常的时候，worker会退出。先清空一遍规则,禁止循环的时候删除key
         $keys = [];
         foreach ($this->schedulerTable as $key => $value) {
@@ -32,7 +37,7 @@ class Scheduler extends AbstractProcess
             $this->schedulerTable->del($key);
         }
 
-        $jobs = $arg['jobs'];
+        $jobs = $arg['jobs']; // 要添加新的定时任务规则
         /**
          * @var  $jobName
          * @var JobInterface $job
@@ -43,7 +48,7 @@ class Scheduler extends AbstractProcess
         }
         $this->cronProcess();
         //60无法被8整除。
-        Timer::getInstance()->loop(8 * 1000, function () {
+        Timer::getInstance()->loop(8 * 1000, function () { // 8s运行一次定时任务
             $this->cronProcess();
         });
     }
@@ -51,11 +56,11 @@ class Scheduler extends AbstractProcess
     private function cronProcess()
     {
         foreach ($this->schedulerTable as $jobName => $task) {
-            if (intval($task['isStop']) == 1) {
+            if (intval($task['isStop']) == 1) { // 定时任务停止，则不运行该定时任务
                 continue;
             }
             $nextRunTime = CronExpression::factory($task['taskRule'])->getNextRunDate()->getTimestamp();
-            if ($task['taskNextRunTime'] != $nextRunTime) {
+            if ($task['taskNextRunTime'] != $nextRunTime) { // 更新下次运行时间
                 $this->schedulerTable->set($jobName, ['taskNextRunTime' => $nextRunTime]);
             }
             //本轮已经创建过任务
@@ -64,7 +69,7 @@ class Scheduler extends AbstractProcess
             }
             $distanceTime = $nextRunTime - time();
             $timerId = Timer::getInstance()->after($distanceTime * 1000, function () use ($jobName) {
-                unset($this->timerIds[$jobName]);
+                unset($this->timerIds[$jobName]); // 运行的时候清空该定时器
                 try {
                     $this->crontabInstance->rightNow($jobName);
                 } catch (\Throwable $throwable) {

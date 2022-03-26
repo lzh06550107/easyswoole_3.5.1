@@ -3,18 +3,20 @@
 
 namespace EasySwoole\Bridge;
 
-
+/**
+ * 和桥接服务交互的命令协议包
+ */
 class Package
 {
-    protected $status = self::STATUS_SUCCESS;
-    protected $command;
-    protected $args;
+    protected $status = self::STATUS_SUCCESS; // 命令执行状态
+    protected $command; // 命令名称，协议中只传命令名称
+    protected $args; // 命令执行参数
     protected $msg;
 
-    const STATUS_UNIX_CONNECT_ERROR = -1;
-    const STATUS_PACKAGE_ERROR = -2;
-    const STATUS_COMMAND_NOT_EXIST = -3;
-    const STATUS_COMMAND_ERROR = -4;
+    const STATUS_UNIX_CONNECT_ERROR = -1; // unix socket 连接错误
+    const STATUS_PACKAGE_ERROR = -2; // 包格式错误
+    const STATUS_COMMAND_NOT_EXIST = -3; // 命令不存在
+    const STATUS_COMMAND_ERROR = -4; // 命令执行错误
 
     const STATUS_SUCCESS = 1;
 

@@ -11,6 +11,9 @@ use EasySwoole\Bridge\CommandInterface;
 use EasySwoole\Bridge\Package;
 use Swoole\Coroutine\Socket;
 
+/**
+ * 桥接进程中的抽象命令类
+ */
 abstract class AbstractCommand implements CommandInterface
 {
     public function exec(Package $package, Package $responsePackage, Socket $socket)

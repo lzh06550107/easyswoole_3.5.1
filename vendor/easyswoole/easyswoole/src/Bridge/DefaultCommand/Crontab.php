@@ -9,6 +9,9 @@ use EasySwoole\Crontab\Protocol\Response;
 use EasySwoole\EasySwoole\Bridge\AbstractCommand;
 use EasySwoole\EasySwoole\Crontab\Crontab as EasySwooleCron;
 
+/**
+ * 桥接进程中获取定时任务类命令
+ */
 class Crontab extends AbstractCommand
 {
     public function commandName(): string
@@ -16,9 +19,15 @@ class Crontab extends AbstractCommand
         return 'crontab';
     }
 
+    /**
+     * 显示所有定时任务
+     * @param Package $package
+     * @param Package $response
+     * @return false|void
+     */
     protected function show(Package $package, Package $response)
     {
-        $info = EasySwooleCron::getInstance()->schedulerTable();
+        $info = EasySwooleCron::getInstance()->schedulerTable(); // 桥接子进程共享主进程中创建的定时任务管理器对象
         $data = [];
         foreach ($info as $k => $v) {
             $data[$k] = $v;
@@ -31,6 +40,12 @@ class Crontab extends AbstractCommand
         $response->setArgs($data);
     }
 
+    /**
+     * 关闭指定名称的定时任务
+     * @param Package $package
+     * @param Package $response
+     * @return bool
+     */
     protected function stop(Package $package, Package $response)
     {
         $taskName = $package->getArgs()['taskName'];
@@ -57,6 +72,12 @@ class Crontab extends AbstractCommand
         return true;
     }
 
+    /**
+     * 恢复指定名称的定时任务
+     * @param Package $package
+     * @param Package $response
+     * @return bool
+     */
     protected function resume(Package $package, Package $response)
     {
         $taskName = $package->getArgs()['taskName'];
@@ -82,6 +103,12 @@ class Crontab extends AbstractCommand
         return true;
     }
 
+    /**
+     * 立即运行指定名称的定时任务
+     * @param Package $package
+     * @param Package $response
+     * @return bool
+     */
     protected function run(Package $package, Package $response)
     {
         $taskName = $package->getArgs()['taskName'];
@@ -107,6 +134,12 @@ class Crontab extends AbstractCommand
         return true;
     }
 
+    /**
+     * 重置指定名称定时任务的规则
+     * @param Package $package
+     * @param Package $response
+     * @return bool
+     */
     protected function reset(Package $package, Package $response)
     {
         $taskName = $package->getArgs()['taskName'];

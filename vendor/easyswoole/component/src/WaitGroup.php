@@ -57,8 +57,8 @@ class WaitGroup
             $start = round(microtime(true),3);
             if($this->channel->pop($left) === 1) // pop方法在通道为空时，自定切换协程
             {
-                $this->count--; // 并发
-                $this->success++;
+                $this->count--; // 并发协程数减一
+                $this->success++; // 执行成功数加一
             }
             $left = $left - (round(microtime(true),3) - $start);
         }

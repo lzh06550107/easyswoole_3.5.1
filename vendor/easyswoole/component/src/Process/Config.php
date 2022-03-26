@@ -3,23 +3,23 @@
 
 namespace EasySwoole\Component\Process;
 
-
 use EasySwoole\Spl\SplBean;
 
+// 进程配置类
 class Config extends SplBean
 {
-    const PIPE_TYPE_NONE = 0;
-    const PIPE_TYPE_SOCK_STREAM = 1;
-    const PIPE_TYPE_SOCK_DGRAM = 2;
+    const PIPE_TYPE_NONE = 0; // 如果子进程内没有进程间通信，可以设置为 0
+    const PIPE_TYPE_SOCK_STREAM = 1; // 进程间通讯，Unix Socket，TCP包
+    const PIPE_TYPE_SOCK_DGRAM = 2; // 进程间通讯，Unix Socket，UDP包
 
-    protected $processName;
+    protected $processName; // 进程名称
     /** @var string */
-    protected $processGroup = null;
+    protected $processGroup = null; // 进程组名称
     protected $arg;
-    protected $redirectStdinStdout = false;
+    protected $redirectStdinStdout = false; // 是否重定向进程输入和输出
     protected $pipeType = self::PIPE_TYPE_SOCK_DGRAM;
-    protected $enableCoroutine = false;
-    protected $maxExitWaitTime = 3;
+    protected $enableCoroutine = false; // 进程是否开启协程
+    protected $maxExitWaitTime = 3; // 进程退出最大等待时间
 
     /**
      * @return mixed

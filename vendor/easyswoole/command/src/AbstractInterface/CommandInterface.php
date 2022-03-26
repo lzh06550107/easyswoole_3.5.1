@@ -4,7 +4,10 @@
 namespace EasySwoole\Command\AbstractInterface;
 
 /**
- * 命令接口
+ * 命令接口，用户自定义命令实现该接口
+ *
+ * 注意：实现该接口的所有命令都是在临时进程中执行，该进程没有开启协程，但 server start 命令除外
+ *
  */
 interface CommandInterface
 {

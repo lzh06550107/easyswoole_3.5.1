@@ -3,7 +3,6 @@
 
 namespace EasySwoole\Task;
 
-
 use EasySwoole\Component\Process\Socket\AbstractUnixProcess;
 use EasySwoole\Task\AbstractInterface\TaskInterface;
 use Swoole\Atomic\Long;
@@ -11,6 +10,9 @@ use Swoole\Coroutine;
 use Swoole\Coroutine\Socket;
 use Swoole\Table;
 
+/**
+ * 任务工作进程
+ */
 class Worker extends AbstractUnixProcess
 {
     protected $workerIndex;

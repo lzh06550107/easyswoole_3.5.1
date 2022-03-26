@@ -1,8 +1,6 @@
 <?php
 
-
 namespace EasySwoole\Crontab;
-
 
 use EasySwoole\Component\Process\Socket\AbstractUnixProcess;
 use EasySwoole\Crontab\Protocol\Pack;
@@ -11,27 +9,33 @@ use EasySwoole\Crontab\Protocol\Response;
 use Swoole\Coroutine\Socket;
 use Swoole\Table;
 
+/**
+ * 定时任务工作进程类
+ */
 class Worker extends AbstractUnixProcess
 {
     /** @var Crontab */
-    private $crontabInstance;
+    private $crontabInstance; // 定时任务管理器
     /** @var Table */
-    private $workerStatisticTable;
-    private $jobs = [];
-    private $workerIndex = 0;
+    private $workerStatisticTable; // 定时任务工作进程信息记录共享内存表
+    private $jobs = []; // 所有的定时任务对象
+    private $workerIndex = 0; // 工作进程索引号
     /** @var Table */
-    private $schedulerTable;
+    private $schedulerTable; // 定时任务调度器信息记录共享内存表
 
+    /**
+     * @param $arg 进程对象实例时传入的参数
+     */
     public function run($arg)
     {
-        $this->crontabInstance = $arg['crontabInstance'];
-        $this->workerStatisticTable = $arg['workerStatisticTable'];
-        $this->workerIndex = $arg['workerIndex'];
+        $this->crontabInstance = $arg['crontabInstance']; // 定时任务管理器实例对象
+        $this->workerStatisticTable = $arg['workerStatisticTable']; // 定时任务工作进程共享内存表
+        $this->workerIndex = $arg['workerIndex']; // 工作进程索引号
         $this->workerStatisticTable->set($this->workerIndex, [
             'runningNum' => 0
-        ]);
-        $this->schedulerTable = $arg['schedulerTable'];
-        $this->jobs = $arg['jobs'];
+        ]); // 初始化表
+        $this->schedulerTable = $arg['schedulerTable']; // 定时任务调度器共享内存表对象
+        $this->jobs = $arg['jobs']; // 所有的定时任务
         parent::run($arg);
     }
 
@@ -58,6 +62,7 @@ class Worker extends AbstractUnixProcess
             $this->reply($socket, $response);
             return;
         }
+        // 执行定时任务命令
         if ($data->getCommand() === Command::COMMAND_EXEC_JOB) {
             $jobName = $data->getArg();
             if (isset($this->jobs[$jobName])) {

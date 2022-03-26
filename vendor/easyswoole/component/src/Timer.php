@@ -10,7 +10,8 @@ namespace EasySwoole\Component;
 use Swoole\Timer as SWTimer;
 
 /**
- * 封装swoole定时器管理类
+ * 封装swoole定时器管理类，必须在主服务
+ * 在协程环境下 Timer::tick 回调中会自动创建一个协程，可以直接使用协程相关 API，无需调用 go 创建协程
  */
 class Timer
 {
@@ -25,7 +26,7 @@ class Timer
      * @param callable $callback 时间到期后所执行的函数，必须是可以调用的
      * @param $name 定时器名称
      * @param ...$params 给执行函数传递数据
-     * @return int
+     * @return int 定时器id
      */
     function loop(int $ms, callable $callback, $name = null, ...$params): int
     {
@@ -69,6 +70,7 @@ class Timer
     }
 
     /**
+     * 在指定的时间后执行函数
      * @param int $ms
      * @param callable $callback
      * @param ...$params
@@ -79,6 +81,10 @@ class Timer
         return SWTimer::after($ms, $callback, ...$params);
     }
 
+    /**
+     * 返回定时器迭代器，可使用 foreach 遍历当前 Worker 进程内所有 timer 的 id
+     * @return array
+     */
     function list():array 
     {
         return SWTimer::list();

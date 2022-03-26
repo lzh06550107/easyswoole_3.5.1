@@ -11,6 +11,9 @@ namespace EasySwoole\EasySwoole\Swoole;
 
 use EasySwoole\Component\MultiContainer;
 
+/**
+ * 一个事件多个监听器的注册器
+ */
 class EventRegister extends MultiContainer
 {
     const onStart = 'start';

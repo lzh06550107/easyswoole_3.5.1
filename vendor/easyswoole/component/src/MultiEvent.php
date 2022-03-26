@@ -8,10 +8,17 @@
 
 namespace EasySwoole\Component;
 
-
-
+/**
+ * 一个事件可以注册多个监听器的事件类
+ */
 class MultiEvent extends MultiContainer
 {
+    /**
+     * 覆盖添加时间和监听器
+     * @param $key
+     * @param $item
+     * @return MultiEvent|false
+     */
     function set($key, $item)
     {
         if(is_callable($item)){
@@ -21,6 +28,12 @@ class MultiEvent extends MultiContainer
         }
     }
 
+    /**
+     * 对同一个事件追加监听器
+     * @param $key
+     * @param $item
+     * @return MultiEvent|false
+     */
     function add($key, $item)
     {
         if(is_callable($item)){
@@ -31,6 +44,7 @@ class MultiEvent extends MultiContainer
     }
 
     /**
+     * 触发事件让监听器执行
      * @param $event
      * @param mixed ...$args
      * @return array

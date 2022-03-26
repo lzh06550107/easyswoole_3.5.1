@@ -3,9 +3,11 @@
 
 namespace EasySwoole\Crontab\Protocol;
 
-
 use EasySwoole\Spl\SplBean;
 
+/**
+ * 定时任务响应类
+ */
 class Response extends SplBean
 {
     const STATUS_OK = 0;
@@ -27,9 +29,9 @@ class Response extends SplBean
         self::STATUS_JOB_EXEC_ERROR => 'crontab: job exec error'
     ];
 
-    protected $status;
-    protected $result;
-    protected $msg;
+    protected $status; // 响应状态
+    protected $result; // 响应结果
+    protected $msg; // 响应消息，一般是错误消息
 
     /**
      * @return mixed

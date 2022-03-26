@@ -83,7 +83,7 @@ class CommandManager
         // command
         $this->command = $caller->getCommand();
 
-        $this->parseArgv(array_values($argv)); // 解析命令选项和参数
+        $this->parseArgv(array_values($argv)); // 解析命令选项和参数，并收集
 
         // 没有找到该命令，则显示帮助信息
         if (!($command = $this->command)) {

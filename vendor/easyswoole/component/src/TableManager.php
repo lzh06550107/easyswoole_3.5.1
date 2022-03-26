@@ -8,9 +8,11 @@
 
 namespace EasySwoole\Component;
 
-
 use Swoole\Table;
 
+/**
+ * 内存共享表管理器
+ */
 class TableManager
 {
     use Singleton;
@@ -19,6 +21,7 @@ class TableManager
 
 
     /**
+     * 添加指定名称的内存共享表
      * @param $name
      * @param array $columns    ['col'=>['type'=>Table::TYPE_STRING,'size'=>1]]
      * @param int $size
@@ -35,6 +38,11 @@ class TableManager
         }
     }
 
+    /**
+     * 获取指定名称的内存共享表
+     * @param $name
+     * @return Table|null
+     */
     public function get($name):?Table
     {
         if(isset($this->list[$name])){
@@ -44,6 +52,10 @@ class TableManager
         }
     }
 
+    /**
+     * 删除并销毁指定名称的内存共享表
+     * @param $name
+     */
     public function del($name)
     {
         if(isset($this->list[$name])){

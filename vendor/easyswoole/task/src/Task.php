@@ -1,8 +1,6 @@
 <?php
 
-
 namespace EasySwoole\Task;
-
 
 use EasySwoole\Component\Process\AbstractProcess;
 use EasySwoole\Component\Process\Socket\UnixProcessConfig;
@@ -11,16 +9,19 @@ use Swoole\Atomic\Long;
 use Swoole\Server;
 use Swoole\Table;
 
+/**
+ * 任务管理器
+ */
 class Task
 {
-    private $taskIdAtomic;
-    private $config;
+    private $taskIdAtomic; // 任务id
+    private $config; // 任务配置
     private $attachServer = false;
-    private $table;
+    private $table; // 任务信息表
 
-    const PUSH_IN_QUEUE = 0;
-    const PUSH_QUEUE_FAIL = -1;
-    const ERROR_PROCESS_BUSY = -2;
+    const PUSH_IN_QUEUE = 0; // 任务已经入队列
+    const PUSH_QUEUE_FAIL = -1; // 任务入队列失败
+    const ERROR_PROCESS_BUSY = -2; // 任务进程忙
     const ERROR_PROTOCOL_ERROR = -3;
     const ERROR_ILLEGAL_PACKAGE = -4;
     const ERROR_TASK_ERROR = -5;
@@ -92,7 +93,12 @@ class Task
     }
 
 
-
+    /**
+     * 任务工作进程关联到主服务进程中
+     * @param Server $server
+     * @return bool
+     * @throws Exception
+     */
     public function attachToServer(Server $server)
     {
         if(!$this->attachServer){
@@ -109,6 +115,11 @@ class Task
 
     }
 
+    /**
+     * 初始化任务工作进程
+     * @return array
+     * @throws \EasySwoole\Component\Process\Exception
+     */
     public function __initProcess():array
     {
         $ret = [];

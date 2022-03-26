@@ -3,12 +3,14 @@
 
 namespace EasySwoole\Crontab;
 
-
 use EasySwoole\Spl\SplBean;
 
+/**
+ * 定时任务配置类
+ */
 class Config extends SplBean
 {
-    protected $serverName = "EasySwoole";
+    protected $serverName = "EasySwoole"; // 服务名称
     protected $workerNum = 3;
     protected $tempDir;
     /** @var callable|null */

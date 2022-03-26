@@ -49,7 +49,7 @@ class Server implements CommandInterface
 
     public function exec(): ?string
     {
-        $action = CommandManager::getInstance()->getArg(0);
+        $action = CommandManager::getInstance()->getArg(0); // 第1个参数是动作命令
         if (method_exists($this, $action) && $action != 'help') {
             Core::getInstance()->initialize();
             return $this->$action();
@@ -117,22 +117,27 @@ class Server implements CommandInterface
             $msg .= Utility::displayItem($key, $value) . "\n";
         }
         echo $msg;
-        Core::getInstance()->createServer()->start();
+        Core::getInstance()->createServer()->start(); // 启动服务，进程中开启协程
     }
 
+    /**
+     * 停止服务
+     * @return string
+     */
     protected function stop()
     {
+        // 找到进程id文件
         $pidFile = Config::getInstance()->getConf("MAIN_SERVER.SETTING.pid_file");
         $msg = '';
         if (file_exists($pidFile)) {
             $pid = intval(file_get_contents($pidFile));
-            if (!\Swoole\Process::kill($pid, 0)) {
+            if (!\Swoole\Process::kill($pid, 0)) { // 查询进程是否存在
                 $msg = Color::danger("pid :{$pid} not exist ");
                 unlink($pidFile);
             } else {
                 $force = CommandManager::getInstance()->issetOpt('force');
                 if ($force) {
-                    \Swoole\Process::kill($pid, SIGKILL);
+                    \Swoole\Process::kill($pid, SIGKILL); // 和其他信号不同，SIGKILL和SIGSTOP是不可被Catch的
                 } else {
                     \Swoole\Process::kill($pid);
                 }
@@ -140,15 +145,15 @@ class Server implements CommandInterface
                 $time = time();
                 while (true) {
                     usleep(1000);
-                    if (!\Swoole\Process::kill($pid, 0)) {
+                    if (!\Swoole\Process::kill($pid, 0)) { // 如果进程不存在，则删除pid文件
                         if (is_file($pidFile)) {
                             unlink($pidFile);
                         }
                         $msg = "server stop for pid {$pid} at " . date("Y-m-d H:i:s");
                         $msg = Color::success($msg);
                         break;
-                    } else {
-                        if (time() - $time > 15) {
+                    } else { 
+                        if (time() - $time > 15) { // TODO 等待5秒 这里却是15s
                             $msg = Color::danger("stop server fail for pid:{$pid} , try [php easyswoole server stop -force] again");
                             break;
                         }
@@ -161,13 +166,17 @@ class Server implements CommandInterface
         return $msg;
     }
 
+    /**
+     * 工作进程重新加载，不会影响用户自定义进程
+     * @return string
+     */
     protected function reload()
     {
         $pidFile = Config::getInstance()->getConf("MAIN_SERVER.SETTING.pid_file");
         if (file_exists($pidFile)) {
             Utility::opCacheClear();
             $pid = file_get_contents($pidFile);
-            if (!\Swoole\Process::kill($pid, 0)) {
+            if (!\Swoole\Process::kill($pid, 0)) { // 如果进程不存在
                 $msg = Color::danger("pid :{$pid} not exist ");
             } else {
                 \Swoole\Process::kill($pid, SIGUSR1);
@@ -180,6 +189,10 @@ class Server implements CommandInterface
         return $msg;
     }
 
+    /**
+     * 重启服务
+     * @return string
+     */
     protected function restart()
     {
         $msg = $this->stop();
@@ -187,13 +200,18 @@ class Server implements CommandInterface
         return $msg;
     }
 
+    /**
+     * 查看服务器状态
+     * @return mixed
+     */
     protected function status()
     {
+        // 这里初始化一个协程调度器
         $run = new Scheduler();
         $run->add(function () use (&$result) {
             $result = Utility::bridgeCall('status', function (Package $package) {
                 $data = $package->getArgs();
-                $data['start_time'] = date('Y-m-d H:i:s', $data['start_time']);
+                $data['start_time'] = date('Y-m-d H:i:s', $data['start_time']); // 服务启动时间
 
                 $final = [];
 
@@ -205,8 +223,8 @@ class Server implements CommandInterface
                 }
                 return new ArrayToTextTable($final);
             }, 'server');
-        });
-        $run->start();
+        }); // 创建一个协程
+        $run->start(); // 启动协程调度器
         return $result;
     }
 }

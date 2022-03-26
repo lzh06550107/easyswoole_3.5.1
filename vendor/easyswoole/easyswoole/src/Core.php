@@ -115,7 +115,7 @@ class Core
         if ($ret !== false) {
             $this->registerDefaultCallBack(ServerManager::getInstance()->getSwooleServer(), $conf['SERVER_TYPE']);
         }
-        $this->extraHandler();
+        $this->extraHandler(); // 在主进程中创建的对象，所有子进程都可以访问
         return $this;
     }
 
@@ -354,6 +354,10 @@ class Core
         Config::getInstance()->loadFile($file);
     }
 
+    /**
+     * 创建的子进程可以调用 $server 对象提供的各个方法，如 getClientList/getClientInfo/stats
+     * 在Server->start之前就创建好的对象，我们称之为程序全局生命周期。这些变量在程序启动后就会一直存在，直到整个程序结束运行才会销毁。
+     */
     private function extraHandler()
     {
         $serverName = Config::getInstance()->getConf('SERVER_NAME');
@@ -369,7 +373,7 @@ class Core
         TaskManager::getInstance()->attachToServer($server);
         //初始化进程管理器
         Manager::getInstance()->attachToServer($server);
-        //初始化Bridge
+        //初始化桥接管理器
         Bridge::getInstance()->attachServer($server, $serverName);
         //注册Crontab
         Crontab::getInstance()->getConfig()->setTempDir(EASYSWOOLE_TEMP_DIR);

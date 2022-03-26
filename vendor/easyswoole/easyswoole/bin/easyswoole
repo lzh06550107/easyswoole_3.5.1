@@ -23,10 +23,10 @@ if(file_exists(EASYSWOOLE_ROOT.'/bootstrap.php')){
     require_once EASYSWOOLE_ROOT.'/bootstrap.php';
 }
 
-$caller = new Caller();
-$caller->setScript(current($argv));
-$caller->setCommand(next($argv));
-$caller->setParams($argv);
+$caller = new Caller(); // 实例化一个命令封装类
+$caller->setScript(current($argv)); // 设置当前命令脚本，如easyswoole
+$caller->setCommand(next($argv)); // 获取命令
+$caller->setParams($argv); // 获取命令参数
 reset($argv);
 
 $ret = CommandRunner::getInstance()->run($caller);
