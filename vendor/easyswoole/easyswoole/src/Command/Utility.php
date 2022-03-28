@@ -14,8 +14,15 @@ use EasySwoole\Command\Color;
 use EasySwoole\EasySwoole\Bridge\Bridge;
 use EasySwoole\Utility\File;
 
+/**
+ * 命令工具类
+ */
 class Utility
 {
+    /**
+     * 显示logo
+     * @return string
+     */
     public static function easySwooleLog()
     {
         return <<<LOGO
@@ -31,6 +38,12 @@ class Utility
 LOGO;
     }
 
+    /**
+     * 格式化显示名称和值
+     * @param $name
+     * @param $value
+     * @return string
+     */
     static function displayItem($name, $value)
     {
         if ($value === true) {
@@ -45,11 +58,20 @@ LOGO;
         return "\e[32m" . str_pad($name, 30, ' ', STR_PAD_RIGHT) . "\e[34m" . $value . "\e[0m";
     }
 
+    /**
+     * 从源中复制文件到指定的位置，用户需要确认是否替换
+     * @param $source
+     * @param $destination
+     * @param $confirm
+     * @return void
+     */
     public static function releaseResource($source, $destination,$confirm = false)
     {
         $filename = basename($destination);
-        clearstatcache();
-        $replace = true;
+        clearstatcache(); // 清除文件状态缓存
+        $replace = true; // 是否替换已经存在的文件
+
+        // 如果文件存在，则询问用户是否替换
         if (is_file($destination)) {
             echo Color::danger("{$filename} has already existed, do you want to replace it? [ Y / N (default) ] : ");
             $answer = strtolower(trim(strtoupper(fgets(STDIN))));
@@ -57,8 +79,9 @@ LOGO;
                 $replace = false;
             }
         }
+
         if ($replace) {
-            if($confirm){
+            if($confirm){ // 如果需要用户确认是否替换，则需要获取用户的确认
                 echo Color::danger("do you want to release {$filename}? [ Y / N (default) ] : ");
                 $answer = strtolower(trim(strtoupper(fgets(STDIN))));
                 if (!in_array($answer, ['y', 'yes'])) {
@@ -69,13 +92,17 @@ LOGO;
         }
     }
 
+    /**
+     * 清空控制台中缓存
+     * @return void
+     */
     public static function opCacheClear()
     {
         if (function_exists('apc_clear_cache')) {
-            apc_clear_cache();
+            apc_clear_cache(); // 清除用户/系统缓存
         }
         if (function_exists('opcache_reset')) {
-            opcache_reset();
+            opcache_reset(); // 该函数将重置整个字节码缓存。 在调用 opcache_reset() 之后，所有的脚本将会重新载入并且在下次被点击的时候重新解析。
         }
     }
 

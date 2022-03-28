@@ -3,15 +3,23 @@
 
 namespace EasySwoole\EasySwoole\Utility;
 
-
 use EasySwoole\EasySwoole\Logger;
 use EasySwoole\Log\LoggerInterface;
 use EasySwoole\Trigger\Location;
 use EasySwoole\Trigger\TriggerInterface;
 
+/**
+ * 默认触发器
+ */
 class DefaultTrigger implements TriggerInterface
 {
-
+    /**
+     * 触发器触发错误，该函数会打印错误到控制台
+     * @param $msg
+     * @param int $errorCode
+     * @param Location|null $location
+     * @return mixed|void
+     */
     public function error($msg, int $errorCode = E_USER_ERROR, Location $location = null)
     {
         if ($location == null) {
@@ -25,6 +33,11 @@ class DefaultTrigger implements TriggerInterface
         Logger::getInstance()->log("{$msg} at file:{$location->getFile()} line:{$location->getLine()}", $this->errorMapLogLevel($errorCode), 'trigger');
     }
 
+    /**
+     * 触发器触发异常，该函数会打印错误到控制台
+     * @param \Throwable $throwable
+     * @return mixed|void
+     */
     public function throwable(\Throwable $throwable)
     {
         $msg = "{$throwable->getMessage()} at file:{$throwable->getFile()} line:{$throwable->getLine()}";

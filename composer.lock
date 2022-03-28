@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4490ce1652d84a0e8add77cf900033ba",
+    "content-hash": "f5a5874bc69a6591a3ddc22426fd21cc",
     "packages": [
         {
             "name": "doctrine/instantiator",
@@ -1066,6 +1066,59 @@
                 "source": "https://github.com/easy-swoole/spl/tree/1.4.1"
             },
             "time": "2022-02-02T12:04:48+00:00"
+        },
+        {
+            "name": "easyswoole/sync-invoker",
+            "version": "2.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/easy-swoole/sync-invoker.git",
+                "reference": "b20885079ce117097b7039be366de0e83ce911ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/easy-swoole/sync-invoker/zipball/b20885079ce117097b7039be366de0e83ce911ef",
+                "reference": "b20885079ce117097b7039be366de0e83ce911ef",
+                "shasum": ""
+            },
+            "require": {
+                "easyswoole/component": "^2.0",
+                "ext-swoole": "^4.4.5",
+                "opis/closure": "^3.5",
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "easyswoole/swoole-ide-helper": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "EasySwoole\\SyncInvoker\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "YF",
+                    "email": "291323003@qq.com"
+                }
+            ],
+            "description": "An efficient swoole framework",
+            "homepage": "https://www.easyswoole.com/",
+            "keywords": [
+                "async",
+                "easyswoole",
+                "framework",
+                "swoole"
+            ],
+            "support": {
+                "issues": "https://github.com/easy-swoole/sync-invoker/issues",
+                "source": "https://github.com/easy-swoole/sync-invoker/tree/2.0.5"
+            },
+            "time": "2021-01-25T09:35:20+00:00"
         },
         {
             "name": "easyswoole/task",

@@ -8,21 +8,28 @@
 
 namespace EasySwoole\Utility;
 
+/**
+ * 数组转换为文本表格
+ */
 class ArrayToTextTable
 {
-    const AlignLeft   = STR_PAD_RIGHT;
-    const AlignCenter = STR_PAD_BOTH;
-    const AlignRight  = STR_PAD_LEFT;
+    const AlignLeft   = STR_PAD_RIGHT; // 左对齐
+    const AlignCenter = STR_PAD_BOTH; // 居中对齐
+    const AlignRight  = STR_PAD_LEFT; // 右对齐
 
-    protected $data;
-    protected $keys;
+    protected $data; // 需要打印的数据
+    protected $keys; // 数据的全部key
     protected $widths;
-    protected $indentation;
-    protected $displayHeader = true;
-    protected $keysAlignment;
-    protected $valuesAlignment;
-    protected $formatter;
+    protected $indentation; // 缩进
+    protected $displayHeader = true; // 是否显示表头
+    protected $keysAlignment; // 键对齐方式
+    protected $valuesAlignment; // 值对齐方式
+    protected $formatter; // 格式化数据函数
 
+    /**
+     * 初始化
+     * @param $data
+     */
     public function __construct($data = [])
     {
         $this->setData($data)
@@ -32,11 +39,20 @@ class ArrayToTextTable
             ->setFormatter(null);
     }
 
+    /**
+     * 输出文本表格
+     * @return string
+     */
     public function __toString()
     {
         return $this->getTable();
     }
 
+    /**
+     * 数据生成文本表格
+     * @param $data
+     * @return string
+     */
     public function getTable($data = null)
     {
         if (!is_null($data))
@@ -159,6 +175,12 @@ class ArrayToTextTable
         return $data;
     }
 
+    /**
+     * 设置表宽度
+     * @param $key
+     * @param $value
+     * @return void
+     */
     private function setWidth($key, $value) {
         if (!isset($this->widths[$key])){
             $this->widths[$key] = 0;
@@ -177,6 +199,11 @@ class ArrayToTextTable
         return str_pad($input, $pad_length + $diff, $pad_string, $pad_type);
     }
 
+    /**
+     * 设置表格数据
+     * @param $data
+     * @return $this
+     */
     private function setData($data)
     {
         if (!is_array($data)){

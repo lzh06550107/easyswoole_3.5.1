@@ -3,7 +3,9 @@
 
 namespace EasySwoole\Task;
 
-
+/**
+ * 任务请求类，封装指令
+ */
 class Package
 {
     const ASYNC = 1;

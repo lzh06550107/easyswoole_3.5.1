@@ -8,21 +8,23 @@
 
 namespace EasySwoole\EasySwoole;
 
-
 use EasySwoole\Component\Event;
 use EasySwoole\Component\Singleton;
 use EasySwoole\EasySwoole\Utility\DefaultTrigger;
 use EasySwoole\Trigger\Location;
 use EasySwoole\Trigger\TriggerInterface;
 
+/**
+ * 触发器管理器
+ */
 class Trigger
 {
     use Singleton;
 
-    private $trigger;
+    private $trigger; // 触发器对象
 
-    private $onError;
-    private $onException;
+    private $onError; // 错误事件监听器
+    private $onException; // 异常事件监听器
 
     function __construct(?TriggerInterface $trigger = null)
     {

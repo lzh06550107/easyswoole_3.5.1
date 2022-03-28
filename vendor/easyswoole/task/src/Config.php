@@ -3,21 +3,23 @@
 
 namespace EasySwoole\Task;
 
-
 use EasySwoole\Spl\SplBean;
 use EasySwoole\Task\AbstractInterface\TaskQueueInterface;
 
+/**
+ * 任务配置类
+ */
 class Config extends SplBean
 {
     protected $tempDir;
     protected $workerNum = 3;
     protected $serverName = 'EasySwoole';
-    protected $maxRunningNum = 128;
-    protected $maxPackageSize = 1024 * 1024 * 2;//2M
+    protected $maxRunningNum = 128; // 最大运行任务数
+    protected $maxPackageSize = 1024 * 1024 * 2;//2M 包最大长度
     /**
      * @var float
      */
-    protected $timeout = 5.0;
+    protected $timeout = 5.0; // 任务执行超时时间
     protected $onException;
     /**
      * @var TaskQueueInterface

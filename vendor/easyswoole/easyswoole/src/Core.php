@@ -83,6 +83,11 @@ class Core
         }
     }
 
+    /**
+     * 设置运行模式
+     * @param string|null $mode
+     * @return string
+     */
     function runMode(?string $mode = null): string
     {
         if (!empty($mode)) {
@@ -91,6 +96,10 @@ class Core
         return $this->runMode;
     }
 
+    /**
+     * 应用初始化
+     * @return $this
+     */
     function initialize()
     {
         //先加载配置文件
@@ -104,9 +113,14 @@ class Core
         return $this;
     }
 
+    /**
+     * 创建应用服务各进程
+     * @return $this
+     */
     function createServer()
     {
         $conf = Config::getInstance()->getConf('MAIN_SERVER');
+        // 创建主进程服务
         ServerManager::getInstance()->createSwooleServer(
             $conf['PORT'], $conf['SERVER_TYPE'], $conf['LISTEN_ADDRESS'], $conf['SETTING'], $conf['RUN_MODEL'], $conf['SOCK_TYPE']
         );
@@ -342,7 +356,7 @@ class Core
 
     public function loadEnv()
     {
-        $mode = CommandManager::getInstance()->getOpt('mode');
+        $mode = CommandManager::getInstance()->getOpt('mode'); // 服务运行模式
         if (!empty($mode)) {
             $this->runMode($mode);
         }
@@ -351,7 +365,7 @@ class Core
         if (!file_exists($file)) {
             die(Color::error("can not load config file {$this->runMode}.php") . "\n");
         }
-        Config::getInstance()->loadFile($file);
+        Config::getInstance()->loadFile($file); // 加载配置文件
     }
 
     /**

@@ -4,7 +4,7 @@
 namespace EasySwoole\Crontab\Protocol;
 
 /**
- * 封包和解包帮助类
+ * 通讯协议
  */
 class Pack
 {

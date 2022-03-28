@@ -6,6 +6,9 @@ namespace EasySwoole\Task;
 
 use Swoole\Coroutine\Client;
 
+/**
+ * unix socket 客户端
+ */
 class UnixClient
 {
     private $client = null;

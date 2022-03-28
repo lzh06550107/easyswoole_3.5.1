@@ -8,24 +8,26 @@
 
 namespace EasySwoole\EasySwoole;
 
-
 use EasySwoole\Component\Event;
 use EasySwoole\Component\Singleton;
 use EasySwoole\Log\LoggerInterface;
 
+/**
+ * 日志管理器
+ */
 class Logger
 {
-    private $logger;
+    private $logger; // 日志记录器实例对象
 
-    private $callback;
+    private $callback; // 日志监听器
 
-    private $logConsole = true;
+    private $logConsole = true; // 设置记录日志到日志文件时是否在控制台打印日志
 
-    private $displayConsole = true;
+    private $displayConsole = true; // 设置是否开启在控制台打印日志
 
-    private $ignoreCategory = [];
+    private $ignoreCategory = []; // 忽略分类
 
-    private $logLevel = LoggerInterface::LOG_LEVEL_INFO;
+    private $logLevel = LoggerInterface::LOG_LEVEL_INFO; // 日志输出层级
 
     use Singleton;
 
@@ -79,6 +81,13 @@ class Logger
         }
     }
 
+    /**
+     * 输出日志通用方法
+     * @param string|null $msg 日志消息
+     * @param int $logLevel 日志层级
+     * @param string $category 日志分类
+     * @return void
+     */
     public function log(?string $msg, int $logLevel = LoggerInterface::LOG_LEVEL_DEBUG, string $category = 'debug')
     {
         if ($logLevel < $this->logLevel) {
@@ -89,20 +98,20 @@ class Logger
             return;
         }
 
-        if ($this->logConsole) {
+        if ($this->logConsole) { // 输出日志到控制台
             $this->console($msg, $logLevel, $category);
         }
 
-        $this->logger->log($msg, $logLevel, $category);
+        $this->logger->log($msg, $logLevel, $category); // 输出日志到文件
         $calls = $this->callback->all();
-        foreach ($calls as $call) {
+        foreach ($calls as $call) { // 如果存在日志监听器，则触发监听器
             call_user_func($call, $msg, $logLevel, $category);
         }
     }
 
     public function console(?string $msg, int $logLevel = LoggerInterface::LOG_LEVEL_DEBUG, string $category = 'debug')
     {
-        if($this->displayConsole){
+        if($this->displayConsole){ // 日志输出到控制台
             $this->logger->console($msg, $logLevel, $category);
         }
     }
