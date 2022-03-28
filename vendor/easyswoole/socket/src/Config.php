@@ -8,21 +8,23 @@
 
 namespace EasySwoole\Socket;
 
-
 use EasySwoole\Socket\AbstractInterface\ParserInterface;
 use EasySwoole\Socket\Exception\Exception;
 
+/**
+ * socket 配置类
+ */
 class Config
 {
     const UDP = 'UDP';
     const TCP = 'TCP';
     const WEB_SOCKET = 'WEB_SOCKET';
 
-    protected $type;
-    protected $onExceptionHandler = null;
-    protected $parser;
-    protected $maxPoolNum = 200;
-    protected $controllerPoolWaitTime = 1;
+    protected $type; // 服务类型，是udp/tcp/web_socket
+    protected $onExceptionHandler = null; // 异常处理器
+    protected $parser; // 协议解析器
+    protected $maxPoolNum = 200; // ??
+    protected $controllerPoolWaitTime = 1; // ??
 
     /**
      * @return mixed

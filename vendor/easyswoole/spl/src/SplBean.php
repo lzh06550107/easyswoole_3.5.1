@@ -8,13 +8,12 @@
 
 namespace EasySwoole\Spl;
 
-
-/*
- * 仅能获取protected 和public成员变量
- */
-
 use EasySwoole\Spl\Exception\Exception;
 
+/*
+ * 可序列化对象类
+ * 仅能获取protected 和public成员变量
+ */
 class SplBean implements \JsonSerializable
 {
     const FILTER_NOT_NULL = 1;

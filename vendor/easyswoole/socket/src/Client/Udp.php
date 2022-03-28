@@ -8,7 +8,9 @@
 
 namespace EasySwoole\Socket\Client;
 
-
+/**
+ * 封装Udp客户端连接
+ */
 class Udp
 {
     private $server_socket = -1;
@@ -17,9 +19,9 @@ class Udp
 
     function __construct($serSock,$address,$port)
     {
-        $this->server_socket = $serSock;
-        $this->address = $address;
-        $this->port = $port;
+        $this->server_socket = $serSock; // 连接的文件描述符
+        $this->address = $address; // 客户端地址
+        $this->port = $port; // 客户端端口
     }
 
     /**

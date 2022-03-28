@@ -8,16 +8,18 @@
 
 namespace EasySwoole\Socket\Bean;
 
-
 use EasySwoole\Spl\SplBean;
 
+/**
+ * 响应类
+ */
 class Response extends SplBean
 {
     const STATUS_RESPONSE_AND_CLOSE = 'RESPONSE_AND_CLOSE';//响应后关闭
     const STATUS_CLOSE = 'CLOSE';//不响应，直接关闭连接
     const STATUS_OK = 'OK';
 
-    protected $status = self::STATUS_OK;
+    protected $status = self::STATUS_OK; // 默认是OK
     protected $message = null;
     /*
      * 以下参数仅仅ws推送可用

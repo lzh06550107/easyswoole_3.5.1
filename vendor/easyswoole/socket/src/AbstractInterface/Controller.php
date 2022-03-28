@@ -8,7 +8,6 @@
 
 namespace EasySwoole\Socket\AbstractInterface;
 
-
 use EasySwoole\Socket\Bean\Caller;
 use EasySwoole\Socket\Bean\Response;
 use EasySwoole\Socket\Client\Tcp;
@@ -16,6 +15,9 @@ use EasySwoole\Socket\Client\Udp;
 use EasySwoole\Socket\Client\WebSocket;
 use EasySwoole\Socket\Config;
 
+/**
+ * 控制器抽象类
+ */
 abstract class Controller
 {
     private $response;
@@ -23,15 +25,15 @@ abstract class Controller
     private $config;
     private $server;
 
-    private $allowMethods = [];
-    private $defaultProperties = [];
+    private $allowMethods = []; // 子类中允许调用的方法
+    private $defaultProperties = []; // 收集子类public/protected属性的默认值
 
     function __construct()
     {
         //支持在子类控制器中以private，protected来修饰某个方法不可见
         $list = [];
-        $ref = new \ReflectionClass(static::class);
-        $public = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
+        $ref = new \ReflectionClass(static::class); // 创建子类的反射对象
+        $public = $ref->getMethods(\ReflectionMethod::IS_PUBLIC); // 获取子类所有公共方法
         foreach ($public as $item){
             array_push($list,$item->getName());
         }
@@ -74,7 +76,7 @@ abstract class Controller
     }
 
     /*
-     * 返回false的时候为拦截
+     * 请求处理前的回调方法，返回false的时候为拦截
      */
     protected function onRequest(?string $actionName):bool
     {
@@ -86,6 +88,12 @@ abstract class Controller
         return $this->response;
     }
 
+    /**
+     * 立即响应
+     * @param string $string
+     * @author LZH
+     * @since 2022/03/28
+     */
     protected function responseImmediately(string $string)
     {
         $client = $this->caller->getClient();
@@ -119,11 +127,11 @@ abstract class Controller
         $this->server = $server;
         $actionName = $request->getAction();
         try{
-            if($this->onRequest($actionName) !== false){
+            if($this->onRequest($actionName) !== false){ // 如果返回true，则继续执行请求方法
                 if(in_array($actionName,$this->allowMethods)){
                     $this->$actionName();
                 }else{
-                    $this->actionNotFound($actionName);
+                    $this->actionNotFound($actionName); // 请求方法不存在
                 }
             }
         }catch (\Throwable $throwable){
@@ -131,12 +139,12 @@ abstract class Controller
             $this->onException($throwable);
         }finally{
             try{
-                $this->afterAction($actionName);
+                $this->afterAction($actionName); // 请求方法执行完成后回调
             }catch (\Throwable $throwable){
                 $this->onException($throwable);
             }finally{
                 try{
-                    $this->gc();
+                    $this->gc(); // 恢复默认属性值
                 }catch (\Throwable $throwable){
                     $this->onException($throwable);
                 }

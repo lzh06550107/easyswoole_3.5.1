@@ -8,11 +8,13 @@
 
 namespace EasySwoole\Socket\Client;
 
-
+/**
+ * 封装Tcp客户端连接
+ */
 class Tcp
 {
-    protected $reactorId;
-    protected $fd;
+    protected $reactorId; // TCP 连接所在的 Reactor 线程 ID
+    protected $fd; // 连接的文件描述符
 
     function __construct($fd = null,$reactorId = null)
     {

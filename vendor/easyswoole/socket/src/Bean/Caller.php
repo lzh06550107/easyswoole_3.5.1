@@ -8,13 +8,15 @@
 
 namespace EasySwoole\Socket\Bean;
 
-
+/**
+ * 封装请求类
+ */
 class Caller
 {
-    private $args = [];
-    private $controllerClass = null;
-    private $action = null;
-    private $client;
+    private $args = []; // 请求参数
+    private $controllerClass = null; // 控制器类
+    private $action = null; // 动作名称
+    private $client; // 客户端连接实例
 
     /**
      * @return array
