@@ -8,7 +8,9 @@
 
 namespace EasySwoole\Http;
 
-
+/**
+ * url解析类
+ */
 class UrlParser
 {
     public static function pathInfo($path)

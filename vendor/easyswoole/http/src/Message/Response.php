@@ -10,11 +10,15 @@ namespace EasySwoole\Http\Message;
 
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * 服务端响应类实现
+ */
 class Response extends Message implements ResponseInterface
 {
     private $statusCode = 200;
     private $reasonPhrase = 'OK';
     private $cookies = [];
+    
     public function getStatusCode()
     {
         return $this->statusCode;

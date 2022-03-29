@@ -8,7 +8,9 @@
 
 namespace EasySwoole\Http\Message;
 
-
+/**
+ * http响应状态
+ */
 class Status
 {
     // Informational 1xx

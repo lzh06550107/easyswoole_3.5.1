@@ -8,12 +8,20 @@
 
 namespace EasySwoole\Http;
 
-
 use EasySwoole\Http\Message\Message;
 
+/**
+ * 工具类
+ */
 class Utility
 {
+    /**
+     * 打印请求或响应包
+     * @param Message $message
+     * @return string
+     */
     static function toString(Message $message){
+        
         if ($message instanceof Request) {
             $msg = trim($message->getMethod() . ' '
                     . $message->getRequestTarget())
@@ -36,6 +44,11 @@ class Utility
         return "{$msg}\r\n\r\n" . $message->getBody();
     }
 
+    /**
+     * 逗号分隔的header项转换为数组
+     * @param string $header
+     * @return array
+     */
     static function headerItemToArray(string $header):array
     {
         return array_map('trim', explode(',', $header));

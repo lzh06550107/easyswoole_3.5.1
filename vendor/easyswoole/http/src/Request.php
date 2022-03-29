@@ -8,32 +8,35 @@
 
 namespace EasySwoole\Http;
 
-
 use EasySwoole\Http\Message\ServerRequest;
 use EasySwoole\Http\Message\Stream;
 use EasySwoole\Http\Message\UploadFile;
 use EasySwoole\Http\Message\Uri;
 
+/**
+ * 适配器模式，swoole请求适配标准请求类
+ */
 class Request extends ServerRequest
 {
-    private $request;
+    private $request; // swoole请求对象
 
     function __construct(\Swoole\Http\Request $request = null)
     {
         if($request){
             $this->request = $request;
-            $this->initHeaders();
+            $this->initHeaders(); // 转储swoole请求头到标准请求对象中
             $protocol = str_replace('HTTP/', '', $request->server['server_protocol']) ;
             //为单元测试准备
             if($request->fd){
-                $body = new Stream($request->rawContent());
+                $body = new Stream($request->rawContent()); // 获取请求的原始内容
             }else{
                 $body = new Stream('');
             }
-            $uri = $this->initUri();
-            $files = $this->initFiles();
+            $uri = $this->initUri(); // 根据swoole请求对象初始化Uri对象
+            $files = $this->initFiles(); // 根据swoole请求对象来初始化标准上传文件对象
             $method = $request->server['request_method'];
             parent::__construct($method, $uri, null, $body, $protocol, $request->server);
+            // 初始化cookie/get/post
             $this->withCookieParams($this->initCookie())->withQueryParams($this->initGet())->withParsedBody($this->initPost())->withUploadedFiles($files);
         }
     }
@@ -61,6 +64,10 @@ class Request extends ServerRequest
         return $this->request;
     }
 
+    /**
+     * 根据swoole请求对象初始化Uri对象
+     * @return Uri
+     */
     private function initUri()
     {
         $uri = new Uri();
@@ -83,6 +90,9 @@ class Request extends ServerRequest
         return $uri;
     }
 
+    /**
+     * 把swoole请求对象中的请求头，转储到标准请求对象中
+     */
     private function initHeaders()
     {
         $headers = isset($this->request->header) ? $this->request->header :[];
@@ -91,6 +101,10 @@ class Request extends ServerRequest
         }
     }
 
+    /**
+     * 初始化上传文件
+     * @return array
+     */
     private function initFiles()
     {
         if(isset($this->request->files)){
@@ -158,7 +172,7 @@ class Request extends ServerRequest
 
     public function __destruct()
     {
-        $this->getBody()->close();
+        $this->getBody()->close(); // 需要关闭资源流
         $this->request = null;
     }
 

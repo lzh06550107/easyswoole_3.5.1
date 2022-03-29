@@ -11,9 +11,12 @@ namespace EasySwoole\Http;
 use EasySwoole\Http\Message\Response as MessageResponse;
 use EasySwoole\Http\Message\Status;
 
+/**
+ * 适配器模式，swoole响应适配标准响应类
+ */
 class Response extends MessageResponse
 {
-    private $response;
+    private $response; // swoole响应对象
     const STATUS_NOT_END = 0;
     const STATUS_LOGICAL_END = 1;
     const STATUS_REAL_END = 2;
@@ -30,6 +33,9 @@ class Response extends MessageResponse
         $this->withAddedHeader('Server','EasySwoole');
     }
 
+    /**
+     * 逻辑结束
+     */
     function end(){
         $this->isEndResponse = self::STATUS_LOGICAL_END;
     }
@@ -70,6 +76,10 @@ class Response extends MessageResponse
         return $ret;
     }
 
+    /**
+     * 判断是否结束
+     * @return int
+     */
     function isEndResponse()
     {
         return $this->isEndResponse;

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace EasySwoole\Http\GlobalParam;
-
 
 use EasySwoole\Component\Context\ContextManager;
 use EasySwoole\Http\Request;

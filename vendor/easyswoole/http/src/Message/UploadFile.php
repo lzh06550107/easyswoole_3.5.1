@@ -8,20 +8,30 @@
 
 namespace EasySwoole\Http\Message;
 
-
 use EasySwoole\Http\Exception\FileException;
 use EasySwoole\Utility\File;
 use Psr\Http\Message\UploadedFileInterface;
 
+/**
+ * 文件上传实现类
+ */
 class UploadFile implements UploadedFileInterface
 {
-    private $tempName;
-    private $stream;
-    private $size;
-    private $error;
-    private $clientFileName;
-    private $clientMediaType;
+    private $tempName; // 临时文件路径
+    private $stream; // 文件流
+    private $size; // 文件大小
+    private $error; // 上传文件错误状态
+    private $clientFileName; // 文件原始名称
+    private $clientMediaType; // 文件类型
 
+    /**
+     * 创建上传文件对象
+     * @param $tempName
+     * @param $size
+     * @param $errorStatus
+     * @param $clientFilename
+     * @param $clientMediaType
+     */
     function __construct( $tempName,$size, $errorStatus, $clientFilename = null, $clientMediaType = null)
     {
         $this->tempName = $tempName;
@@ -42,6 +52,11 @@ class UploadFile implements UploadedFileInterface
         return $this->stream;
     }
 
+    /**
+     * 移动文件到指定的路径
+     * @param $targetPath
+     * @throws FileException
+     */
     public function moveTo($targetPath)
     {
         if (!(is_string($targetPath) && false === empty($targetPath))) {
@@ -53,7 +68,7 @@ class UploadFile implements UploadedFileInterface
         }
 
         $dir = dirname($targetPath);
-        if (!File::createDirectory($dir)) {
+        if (!File::createDirectory($dir)) { // 目录不存在，则创建
             throw new FileException(sprintf('Directory "%s" was not created', $dir));
         }
 

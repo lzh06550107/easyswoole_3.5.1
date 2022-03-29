@@ -8,18 +8,21 @@
 
 namespace EasySwoole\Http\Message;
 
-
 use Psr\Http\Message\UriInterface;
 
+/**
+ * Uri类实现
+ */
 class Uri implements UriInterface
 {
-    private $host;
+    private $host; 
     private $userInfo;
     private $port;
     private $path;
     private $query;
     private $fragment;
     private $scheme;
+    
     function __construct($url = '')
     {
         if($url !== ''){

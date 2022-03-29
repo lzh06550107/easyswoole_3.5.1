@@ -1,14 +1,15 @@
 <?php
 
-
 namespace EasySwoole\Session;
-
 
 use EasySwoole\Utility\File;
 
+/**
+ * 用文件保存会话信息
+ */
 class FileSession implements SessionHandlerInterface
 {
-    protected $dir;
+    protected $dir; // 在会话目录中，一个会话一个文件
 
     function __construct(string $sessionDir)
     {
@@ -24,7 +25,7 @@ class FileSession implements SessionHandlerInterface
     {
         $file = "{$this->dir}/{$sessionId}";
         if(!file_exists($file)){
-            if(file_put_contents($file,'') === false){
+            if(file_put_contents($file,'') === false){ // 测试是否可以写入文件
                 return false;
             }
         }
@@ -60,8 +61,8 @@ class FileSession implements SessionHandlerInterface
 
         foreach ($list['files'] as $file){
             $time = fileatime($file);
-            if($expire >$time){
-                unlink($file);
+            if($expire >$time){ 
+                unlink($file); // 删除过期的文件
             }
         }
 

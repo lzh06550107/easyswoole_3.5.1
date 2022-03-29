@@ -1,14 +1,15 @@
 <?php
 
-
 namespace EasySwoole\Spl;
 
-
+/**
+ * 支持数组访问，计算数组大小和可迭代
+ * ArrayIterator迭代器会把对象或数组封装为一个可以通过foreach来操作的类
+ */
 class SplStrictArray implements \ArrayAccess ,\Countable ,\IteratorAggregate
 {
     private $class;
     private $data = [];
-
 
     function __construct(string $itemClass)
     {

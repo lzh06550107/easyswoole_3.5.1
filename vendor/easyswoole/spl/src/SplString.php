@@ -8,7 +8,9 @@
 
 namespace EasySwoole\Spl;
 
-
+/**
+ * 用于处理字符串
+ */
 class SplString extends SplStream
 {
 
@@ -17,29 +19,56 @@ class SplString extends SplStream
         parent::__construct( $str );
     }
 
+    /**
+     * 向流写入字符串
+     * @param string $string
+     * @return $this
+     */
     function setString( string $string ) : SplString
     {
-        parent::truncate();
-        parent::rewind();
-        parent::write( $string );
+        parent::truncate(); // 清空流
+        parent::rewind(); // 重置流指针到流开头
+        parent::write( $string ); // 向流写入字符串
         return $this;
     }
 
+    /**
+     * 按指定的长度切分字符串
+     * @param int $length
+     * @return SplArray
+     */
     function split( int $length = 1 ) : SplArray
     {
         return new SplArray( str_split( $this->__toString(), $length ) );
     }
 
+    /**
+     * 把流中字符串按分隔符切分并保存到数组对象中
+     * @param string $delimiter
+     * @return SplArray
+     */
     function explode( string $delimiter ) : SplArray
     {
         return new SplArray( explode( $delimiter, $this->__toString() ) );
     }
 
+    /**
+     * 截取从指定位置开始指定长度的字符串
+     * @param int $start
+     * @param int $length
+     * @return $this
+     */
     function subString( int $start, int $length ) : SplString
     {
         return $this->setString( substr( $this->__toString(), $start, $length ) );
     }
 
+    /**
+     * 对文本的编码类型进行转换
+     * @param string $desEncoding
+     * @param $detectList
+     * @return $this
+     */
     function encodingConvert( string $desEncoding, $detectList
     = [
         'UTF-8',
@@ -51,19 +80,24 @@ class SplString extends SplStream
         "UCS-2",
     ] ) : SplString
     {
-        $fileType = mb_detect_encoding( $this->__toString(), $detectList );
+        $fileType = mb_detect_encoding( $this->__toString(), $detectList ); // 检测字符编码类型
         if( $fileType != $desEncoding ){
             $this->setString( mb_convert_encoding( $this->__toString(), $desEncoding, $fileType ) );
         }
         return $this;
     }
 
+    /**
+     * 字符转换的便捷方法，字符串编码转换为utf-8
+     * @return $this
+     */
     function utf8() : SplString
     {
         return $this->encodingConvert( "UTF-8" );
     }
 
     /*
+     * 字符转换的便捷方法，unicode字符串编码转换为utf-8
      * special function for unicode
      */
     function unicodeToUtf8() : SplString
@@ -75,6 +109,10 @@ class SplString extends SplStream
         return $this->setString( $string );
     }
 
+    /**
+     * 字符转换的便捷方法，字符串编码转换为unicode
+     * @return $this
+     */
     function toUnicode() : SplString
     {
         $raw = (string)$this->encodingConvert( "UCS-2" );
@@ -93,6 +131,12 @@ class SplString extends SplStream
         return $this->setString( $string );
     }
 
+    /**
+     * 字符串比较
+     * @param string $str
+     * @param int $ignoreCase
+     * @return int
+     */
     function compare( string $str, int $ignoreCase = 0 ) : int
     {
         if( $ignoreCase ){
@@ -102,56 +146,112 @@ class SplString extends SplStream
         }
     }
 
+    /**
+     * 清空字符串左边的指定字符串
+     * @param string $charList
+     * @return $this
+     */
     function lTrim( string $charList = " \t\n\r\0\x0B" ) : SplString
     {
         return $this->setString( ltrim( $this->__toString(), $charList ) );
     }
 
+    /**
+     * 清空字符串右边的指定字符串
+     * @param string $charList
+     * @return $this
+     */
     function rTrim( string $charList = " \t\n\r\0\x0B" ) : SplString
     {
         return $this->setString( rtrim( $this->__toString(), $charList ) );
     }
 
+    /**
+     * 清空掉字符串左右两边的指定字符串
+     * @param string $charList
+     * @return $this
+     */
     function trim( string $charList = " \t\n\r\0\x0B" ) : SplString
     {
         return $this->setString( trim( $this->__toString(), $charList ) );
     }
 
+    /**
+     * 使用指定的字符串长度来填充流中字符串
+     * @param int $length
+     * @param string|null $padString
+     * @param int $pad_type
+     * @return $this
+     */
     function pad( int $length, string $padString = null, int $pad_type = STR_PAD_RIGHT ) : SplString
     {
         return $this->setString( str_pad( $this->__toString(), $length, $padString, $pad_type ) );
     }
 
+    /**
+     * 重复一个字符串
+     * @param int $times
+     * @return $this
+     */
     function repeat( int $times ) : SplString
     {
         return $this->setString( str_repeat( $this->__toString(), $times ) );
     }
 
+    /**
+     * 获取字符串长度
+     * @return int
+     */
     function length() : int
     {
         return strlen( $this->__toString() );
     }
 
+    /**
+     * 将字符串转化为大写
+     * @return $this
+     */
     function upper() : SplString
     {
         return $this->setString( strtoupper( $this->__toString() ) );
     }
 
+    /**
+     * 将字符串转化为小写
+     * @return $this
+     */
     function lower() : SplString
     {
         return $this->setString( strtolower( $this->__toString() ) );
     }
 
+    /**
+     * 从字符串中去除 HTML 和 PHP 标记1
+     * @param string|null $allowable_tags
+     * @return $this
+     */
     function stripTags( string $allowable_tags = null ) : SplString
     {
         return $this->setString( strip_tags( $this->__toString(), $allowable_tags ) );
     }
 
+    /**
+     * 子字符串替换
+     * @param string $find
+     * @param string $replaceTo
+     * @return $this
+     */
     function replace( string $find, string $replaceTo ) : SplString
     {
         return $this->setString( str_replace( $find, $replaceTo, $this->__toString() ) );
     }
 
+    /**
+     * 获取指定目标的中间字符串
+     * @param string $startStr
+     * @param string $endStr
+     * @return $this
+     */
     function between( string $startStr, string $endStr ) : SplString
     {
         $explode_arr = explode( $startStr, $this->__toString() );
@@ -163,6 +263,12 @@ class SplString extends SplStream
         }
     }
 
+    /**
+     * 按照正则规则查找字符串
+     * @param $regex
+     * @param bool $rawReturn
+     * @return mixed|null
+     */
     public function regex( $regex, bool $rawReturn = false )
     {
         preg_match( $regex, $this->__toString(), $result );
@@ -177,6 +283,12 @@ class SplString extends SplStream
         }
     }
 
+    /**
+     * 是否存在指定字符串
+     * @param string $find
+     * @param bool $ignoreCase
+     * @return bool
+     */
     public function exist( string $find, bool $ignoreCase = true ) : bool
     {
         if( $ignoreCase ){
@@ -233,7 +345,7 @@ class SplString extends SplStream
 
 
     /**
-     * 用数组逐个字符
+     * 用数组依次替换字符串
      * @param  string $search
      * @param  array  $replace
      */
@@ -288,7 +400,9 @@ class SplString extends SplStream
      */
     public function start( string $prefix ) : SplString
     {
+        // 向其中 每个正则表达式语法中的字符前增加一个反斜线。 这通常用于你有一些运行时字符串 需要作为正则表达式进行匹配的时候
         $quoted = preg_quote( $prefix, '/' );
+        // 替换字符串流中的所有该字符串，然后再前面追加
         return $this->setString( $prefix.preg_replace( '/^(?:'.$quoted.')+/u', '', $this->__toString() ) );
     }
 

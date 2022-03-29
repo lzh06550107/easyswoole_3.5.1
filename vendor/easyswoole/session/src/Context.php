@@ -1,9 +1,10 @@
 <?php
 
-
 namespace EasySwoole\Session;
 
-
+/**
+ * 会话上下文，用来保存从文件读取的会话内容
+ */
 class Context
 {
     protected $data = [];

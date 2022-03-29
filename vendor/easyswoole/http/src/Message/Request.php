@@ -8,15 +8,17 @@
 
 namespace EasySwoole\Http\Message;
 
-
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
 
+/**
+ * 客户端请求类实现
+ */
 class Request extends Message implements RequestInterface
 {
-    private $uri;
-    private $method;
-    private $target;
+    private $uri; // Uri类对象
+    private $method; // 请求方法
+    private $target; // 请求相对路径
 
     function __construct($method = 'GET', Uri $uri = null, array $headers = null, Stream $body = null, $protocolVersion = '1.1')
     {
@@ -29,6 +31,10 @@ class Request extends Message implements RequestInterface
         parent::__construct($headers, $body, $protocolVersion);
     }
 
+    /**
+     * 根据uri来拼装目标路径
+     * @return mixed|string
+     */
     public function getRequestTarget()
     {
         if (!empty($this->target)) {
@@ -48,23 +54,41 @@ class Request extends Message implements RequestInterface
         return $target;
     }
 
+    /**
+     * 设置目标路径
+     * @param $requestTarget
+     * @return $this|Request
+     */
     public function withRequestTarget($requestTarget)
     {
         $this->target = $requestTarget;
         return $this;
     }
 
+    /**
+     * 获取请求方法
+     * @return mixed|string
+     */
     public function getMethod()
     {
         return $this->method;
     }
 
+    /**
+     * 设置请求方法
+     * @param $method
+     * @return $this|Request
+     */
     public function withMethod($method)
     {
         $this->method = strtoupper($method);
         return $this;
     }
 
+    /**
+     * 获取uri
+     * @return Uri|UriInterface
+     */
     public function getUri()
     {
         if($this->uri == null){
@@ -73,15 +97,21 @@ class Request extends Message implements RequestInterface
         return $this->uri;
     }
 
+    /**
+     * 
+     * @param UriInterface $uri
+     * @param $preserveHost
+     * @return $this|Request
+     */
     public function withUri(UriInterface $uri, $preserveHost = false)
     {
         if ($uri === $this->uri) {
             return $this;
         }
         $this->uri = $uri;
-        if (!$preserveHost) {
+        if (!$preserveHost) { // 不保留主机
             $host = $this->uri->getHost();
-            if (!empty($host)) {
+            if (!empty($host)) { // 
                 if (($port = $this->uri->getPort()) !== null) {
                     $host .= ':' . $port;
                 }
