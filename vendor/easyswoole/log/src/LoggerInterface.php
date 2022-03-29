@@ -3,7 +3,9 @@
 
 namespace EasySwoole\Log;
 
-
+/**
+ * 日志接口
+ */
 interface LoggerInterface
 {
     const LOG_LEVEL_DEBUG = 0;

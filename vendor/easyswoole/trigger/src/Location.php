@@ -3,11 +3,13 @@
 
 namespace EasySwoole\Trigger;
 
-
+/**
+ * 位置封装类
+ */
 class Location
 {
-    private $file;
-    private $line;
+    private $file; // 文件名称
+    private $line; // 行号
 
     /**
      * @return mixed

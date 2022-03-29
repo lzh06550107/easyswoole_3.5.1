@@ -18,6 +18,7 @@ return array(
     'EasySwoole\\Utility\\' => array($vendorDir . '/easyswoole/utility/src'),
     'EasySwoole\\Trigger\\' => array($vendorDir . '/easyswoole/trigger/src'),
     'EasySwoole\\Task\\' => array($vendorDir . '/easyswoole/task/src'),
+    'EasySwoole\\SyncInvoker\\' => array($vendorDir . '/easyswoole/sync-invoker/src'),
     'EasySwoole\\Spl\\Test\\' => array($vendorDir . '/easyswoole/spl/test'),
     'EasySwoole\\Spl\\' => array($vendorDir . '/easyswoole/spl/src'),
     'EasySwoole\\Socket\\' => array($vendorDir . '/easyswoole/socket/src'),

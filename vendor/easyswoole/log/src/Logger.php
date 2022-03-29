@@ -3,19 +3,28 @@
 
 namespace EasySwoole\Log;
 
-
+/**
+ * 日志记录器实现类
+ */
 class Logger implements LoggerInterface
 {
-    private $logDir;
+    private $logDir; // 日志存储目录
 
     function __construct(string $logDir = null)
     {
         if(empty($logDir)){
-            $logDir = getcwd();
+            $logDir = getcwd(); // 如果没有传入日志存储目录，则使用当前目录
         }
         $this->logDir = $logDir;
     }
 
+    /**
+     * 记录日志到文件中
+     * @param string|null $msg
+     * @param int $logLevel
+     * @param string $category
+     * @return string
+     */
     function log(?string $msg,int $logLevel = self::LOG_LEVEL_DEBUG,string $category = 'debug')
     {
         $prefix = date('Ym');
@@ -27,6 +36,13 @@ class Logger implements LoggerInterface
         return $str;
     }
 
+    /**
+     * 记录日志到控制台
+     * @param string|null $msg
+     * @param int $logLevel
+     * @param string $category
+     * @return void
+     */
     function console(?string $msg,int $logLevel = self::LOG_LEVEL_DEBUG,string $category = 'debug')
     {
         $date = date('Y-m-d H:i:s');

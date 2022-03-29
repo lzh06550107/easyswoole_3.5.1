@@ -7,7 +7,7 @@ namespace EasySwoole\Crontab\Protocol;
 use EasySwoole\Spl\SplBean;
 
 /**
- * 定时任务的命令类型类
+ * 定时任务的命令请求类，封装指令
  */
 class Command extends SplBean
 {

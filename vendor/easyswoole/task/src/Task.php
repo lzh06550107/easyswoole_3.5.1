@@ -140,15 +140,24 @@ class Task
         return  $ret;
     }
 
+    /**
+     * 异步执行任务
+     * @param $task 任务闭包
+     * @param callable|null $finishCallback 任务回调闭包
+     * @param $taskWorkerId 任务进程索引
+     * @param float|null $timeout 超时时间
+     * @return int|null
+     */
     public function async($task,callable $finishCallback = null,$taskWorkerId = null,float $timeout = null):?int
     {
         if($taskWorkerId === null){
-            $taskWorkerId = $this->randomWorkerId();
+            $taskWorkerId = $this->randomWorkerId(); // 随机工作进程
         }
+
         $package = new Package();
-        $package->setType($package::ASYNC);
-        $package->setTask($task);
-        $package->setOnFinish($finishCallback);
+        $package->setType($package::ASYNC); // 异步调用
+        $package->setTask($task); // 任务闭包
+        $package->setOnFinish($finishCallback); // 任务回调闭包
         return $this->sendAndRecv($package,$taskWorkerId,$timeout);
     }
 
@@ -177,6 +186,13 @@ class Task
         return rand(0,$this->config->getWorkerNum() - 1);
     }
 
+    /**
+     * 发送并接收响应
+     * @param Package $package
+     * @param int $id 任务进程索引
+     * @param float|null $timeout 任务执行超时时间
+     * @return int|mixed
+     */
     private function sendAndRecv(Package $package,int $id,float $timeout = null)
     {
         if($timeout === null){
@@ -185,7 +201,7 @@ class Task
         if($timeout > 0){
             $package->setExpire(microtime(true) + $timeout);
         }else{
-            $package->setExpire(-1);
+            $package->setExpire(-1); // 不超时
         }
         $client = new UnixClient($this->idToUnixName($id),$this->getConfig()->getMaxPackageSize());
         $client->send(Protocol::pack(\Opis\Closure\serialize($package)));

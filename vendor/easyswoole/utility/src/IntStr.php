@@ -3,7 +3,9 @@
 
 namespace EasySwoole\Utility;
 
-
+/**
+ * 62进制转换
+ */
 class IntStr
 {
     public const intMax = 9223372036854775668;

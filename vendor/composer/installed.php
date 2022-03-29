@@ -1,22 +1,22 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => NULL,
+        'reference' => 'd288c8d362ea08cc27630db35ff13c563dd00d2f',
         'name' => '__root__',
         'dev' => true,
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => NULL,
+            'reference' => 'd288c8d362ea08cc27630db35ff13c563dd00d2f',
             'dev_requirement' => false,
         ),
         'doctrine/instantiator' => array(
@@ -188,6 +188,15 @@
             'install_path' => __DIR__ . '/../easyswoole/spl',
             'aliases' => array(),
             'reference' => '3d02bceaf1031a78f959d41dab04e37121f9c58c',
+            'dev_requirement' => false,
+        ),
+        'easyswoole/sync-invoker' => array(
+            'pretty_version' => '2.0.5',
+            'version' => '2.0.5.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../easyswoole/sync-invoker',
+            'aliases' => array(),
+            'reference' => 'b20885079ce117097b7039be366de0e83ce911ef',
             'dev_requirement' => false,
         ),
         'easyswoole/task' => array(

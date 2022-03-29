@@ -8,9 +8,11 @@
 
 namespace EasySwoole\Utility;
 
-
 use EasySwoole\Utility\Mime\MimeDetector;
 
+/**
+ *
+ */
 class MimeType
 {
     /*

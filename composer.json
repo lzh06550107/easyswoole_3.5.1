@@ -1,6 +1,7 @@
 {
     "require": {
-        "easyswoole/easyswoole": "^3.5"
+        "easyswoole/easyswoole": "^3.5",
+        "easyswoole/sync-invoker": "^2.0"
     },
     "autoload": {
         "psr-4": {

@@ -2,9 +2,11 @@
 
 namespace EasySwoole\Utility;
 
-
 use Swoole\Coroutine;
 
+/**
+ * 雪花算法
+ */
 class SnowFlake
 {
     private static $lastTimestamp = 0;

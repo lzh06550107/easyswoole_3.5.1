@@ -14,6 +14,7 @@ use \FilesystemIterator;
 class FileSystem
 {
     /**
+     * 检查文件或者目录是否存在
      * @param string $path
      * @return bool
      */
@@ -23,6 +24,7 @@ class FileSystem
     }
 
     /**
+     * 检查问或者目录是否不存在
      * @param string $path
      * @return bool
      */
@@ -32,6 +34,7 @@ class FileSystem
     }
 
     /**
+     * 是否用锁读取文件内容
      * @param string $path
      * @param bool $lock
      * @return false|string
@@ -46,6 +49,7 @@ class FileSystem
     }
 
     /**
+     * 使用共享锁读取文件
      * @param string $path
      * @return false|string
      */
@@ -57,12 +61,12 @@ class FileSystem
             return $contents;
         }
         try {
-            if (!flock($handle, LOCK_SH)) {
+            if (!flock($handle, LOCK_SH)) { // 共享锁锁住文件
                 return $contents;
             }
-            clearstatcache(true, $path);
+            clearstatcache(true, $path); // 清除文件缓存
             $contents = fread($handle, $this->size($path) ?: 1);
-            flock($handle, LOCK_UN);
+            flock($handle, LOCK_UN); // 释放文件锁
         } finally {
             fclose($handle);
         }
@@ -70,6 +74,7 @@ class FileSystem
     }
 
     /**
+     * 根据文件内容生成md5
      * @param string $path
      * @return false|string
      */
@@ -79,6 +84,7 @@ class FileSystem
     }
 
     /**
+     * 是否使用排它锁写入内容到文件
      * @param string $path
      * @param string $contents
      * @param bool $lock
@@ -90,6 +96,7 @@ class FileSystem
     }
 
     /**
+     * 替换指定路径文件内容
      * @param string $path
      * @param string $content
      */
@@ -104,6 +111,7 @@ class FileSystem
     }
 
     /**
+     * 在头部追加内容到指定的文件路径
      * @param string $path
      * @param string $data
      * @return false|int
@@ -118,6 +126,7 @@ class FileSystem
     }
 
     /**
+     * 在尾部追加内容到指定的文件路径
      * @param string $path
      * @param string $data
      * @return false|int
@@ -128,6 +137,7 @@ class FileSystem
     }
 
     /**
+     * 获取或者设置文件权限
      * @param string $path
      * @param int|null $mode
      * @return bool|string
@@ -141,6 +151,7 @@ class FileSystem
     }
 
     /**
+     * 删除指定路径文件
      * @param string|array $paths
      * @return bool
      */
@@ -161,6 +172,7 @@ class FileSystem
     }
 
     /**
+     * 重命名文件
      * @param string $path
      * @param string $target
      * @return bool
@@ -171,6 +183,7 @@ class FileSystem
     }
 
     /**
+     * 复制文件
      * @param string $path
      * @param string $target
      * @return bool
@@ -181,6 +194,7 @@ class FileSystem
     }
 
     /**
+     * 获取文件名称，不包含后缀的文件名
      * @param string $path
      * @return string
      */
@@ -190,6 +204,7 @@ class FileSystem
     }
 
     /**
+     * 获取文件名称，包含后缀的文件名
      * @param string $path
      * @return string
      */
@@ -199,6 +214,7 @@ class FileSystem
     }
 
     /**
+     * 获取文件的目录路径
      * @param string $path
      * @return string
      */
@@ -208,6 +224,7 @@ class FileSystem
     }
 
     /**
+     * 获取文件后缀名
      * @param string $path
      * @return string
      */
@@ -217,6 +234,7 @@ class FileSystem
     }
 
     /**
+     * 返回指定文件或目录的类型，文件还是目录或者其它类型
      * @param string $path
      * @return string
      */
@@ -226,6 +244,7 @@ class FileSystem
     }
 
     /**
+     * 返回文件大小的字节数
      * @param string $path
      * @return false|int
      */
@@ -235,6 +254,7 @@ class FileSystem
     }
 
     /**
+     * 以 Unix 时间戳形式返回文件内容的上次修改时间
      * @param string $path
      * @return int
      */
@@ -244,6 +264,7 @@ class FileSystem
     }
 
     /**
+     * 判断是否是目录
      * @param string $directory
      * @return bool
      */
@@ -253,6 +274,7 @@ class FileSystem
     }
 
     /**
+     * 判断文件是否可读
      * @param string $path
      * @return bool
      */
@@ -262,6 +284,7 @@ class FileSystem
     }
 
     /**
+     * 判断文件是否可写
      * @param string $path
      * @return bool
      */
@@ -271,6 +294,7 @@ class FileSystem
     }
 
     /**
+     * 判断文件名是否是一个正规的文件
      * @param string $file
      * @return bool
      */
@@ -280,7 +304,8 @@ class FileSystem
     }
 
     /**
-     * @param string $pattern
+     * 返回一个包含匹配指定模式的文件名或目录的数组
+     * @param string $pattern 检索模式
      * @param int $flags
      * @return array|false
      */
@@ -290,6 +315,7 @@ class FileSystem
     }
 
     /**
+     * 确保路径目录存在，不存在则自动递归创建
      * @param string $path
      * @param int $mode
      * @param bool $recursive
@@ -304,6 +330,7 @@ class FileSystem
     }
 
     /**
+     * 递归创建目录
      * @param string $path
      * @param int $mode
      * @param bool $recursive
@@ -319,6 +346,7 @@ class FileSystem
     }
 
     /**
+     * 重命名目录
      * @param string $from
      * @param string $to
      * @param bool $overwrite
@@ -375,8 +403,9 @@ class FileSystem
     }
 
     /**
+     * 递归删除指定目录的文件和目录
      * @param string $directory
-     * @param bool $preserve
+     * @param bool $preserve 是否删除目录
      * @return bool
      */
     public function deleteDirectory(string $directory, bool $preserve = false): bool
@@ -396,7 +425,7 @@ class FileSystem
             // just looping through and waxing all of the files in this directory
             // and calling directories recursively, so we delete the real path.
             else {
-                $this->delete($item->getPathname());
+                $this->delete($item->getPathname()); // 删除文件
             }
         }
         if (!$preserve) {
@@ -406,6 +435,7 @@ class FileSystem
     }
 
     /**
+     * 清理整个目录
      * @param string $directory
      * @return bool
      */

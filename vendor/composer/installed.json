@@ -1119,6 +1119,62 @@
             "install-path": "../easyswoole/spl"
         },
         {
+            "name": "easyswoole/sync-invoker",
+            "version": "2.0.5",
+            "version_normalized": "2.0.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/easy-swoole/sync-invoker.git",
+                "reference": "b20885079ce117097b7039be366de0e83ce911ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/easy-swoole/sync-invoker/zipball/b20885079ce117097b7039be366de0e83ce911ef",
+                "reference": "b20885079ce117097b7039be366de0e83ce911ef",
+                "shasum": ""
+            },
+            "require": {
+                "easyswoole/component": "^2.0",
+                "ext-swoole": "^4.4.5",
+                "opis/closure": "^3.5",
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "easyswoole/swoole-ide-helper": "^1.0"
+            },
+            "time": "2021-01-25T09:35:20+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "EasySwoole\\SyncInvoker\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "YF",
+                    "email": "291323003@qq.com"
+                }
+            ],
+            "description": "An efficient swoole framework",
+            "homepage": "https://www.easyswoole.com/",
+            "keywords": [
+                "async",
+                "easyswoole",
+                "framework",
+                "swoole"
+            ],
+            "support": {
+                "issues": "https://github.com/easy-swoole/sync-invoker/issues",
+                "source": "https://github.com/easy-swoole/sync-invoker/tree/2.0.5"
+            },
+            "install-path": "../easyswoole/sync-invoker"
+        },
+        {
             "name": "easyswoole/task",
             "version": "1.1.2",
             "version_normalized": "1.1.2.0",

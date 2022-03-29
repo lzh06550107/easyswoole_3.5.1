@@ -47,6 +47,7 @@ class ComposerStaticInit4998e8343d14685c7c7bff79ef765d7e
             'EasySwoole\\Utility\\' => 19,
             'EasySwoole\\Trigger\\' => 19,
             'EasySwoole\\Task\\' => 16,
+            'EasySwoole\\SyncInvoker\\' => 23,
             'EasySwoole\\Spl\\Test\\' => 20,
             'EasySwoole\\Spl\\' => 15,
             'EasySwoole\\Socket\\' => 18,
@@ -136,6 +137,10 @@ class ComposerStaticInit4998e8343d14685c7c7bff79ef765d7e
         'EasySwoole\\Task\\' => 
         array (
             0 => __DIR__ . '/..' . '/easyswoole/task/src',
+        ),
+        'EasySwoole\\SyncInvoker\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/easyswoole/sync-invoker/src',
         ),
         'EasySwoole\\Spl\\Test\\' => 
         array (

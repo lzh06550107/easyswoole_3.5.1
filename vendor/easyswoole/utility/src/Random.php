@@ -2,8 +2,17 @@
 
 namespace EasySwoole\Utility;
 
+/**
+ * 随机数帮助类
+ */
 class Random
 {
+    /**
+     * 获取指定长度的字符串
+     * @param $length
+     * @param $alphabet
+     * @return false|string
+     */
     static function character($length = 6, $alphabet = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789')
     {
         mt_srand();
@@ -16,11 +25,21 @@ class Random
         return substr(str_shuffle($alphabet), 0, $length);
     }
 
+    /**
+     * 获取指定长度的数字字符串
+     * @param $length
+     * @return false|string
+     */
     static function number($length = 6)
     {
         return static::character($length, '0123456789');
     }
 
+    /**
+     * 从数据中随机获取一项
+     * @param array $data
+     * @return mixed|null
+     */
     static function arrayRandOne(array $data)
     {
         if (empty($data)) {

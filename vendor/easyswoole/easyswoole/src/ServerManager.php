@@ -76,7 +76,15 @@ class ServerManager
         return true;
     }
 
-
+    /**
+     * 为主服务添加子服务
+     * @param string $serverName
+     * @param int $port
+     * @param int $type
+     * @param string $listenAddress
+     * @param array $setting
+     * @return EventRegister
+     */
     public function addServer(string $serverName,int $port,int $type = SWOOLE_TCP,string $listenAddress = '0.0.0.0',array $setting = []):EventRegister
     {
         $eventRegister = new EventRegister();

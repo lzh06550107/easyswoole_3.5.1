@@ -15,7 +15,7 @@ class Config extends SplBean
     protected $processName; // 进程名称
     /** @var string */
     protected $processGroup = null; // 进程组名称
-    protected $arg;
+    protected $arg; // 传递给同步调用工作进程的参数
     protected $redirectStdinStdout = false; // 是否重定向进程输入和输出
     protected $pipeType = self::PIPE_TYPE_SOCK_DGRAM;
     protected $enableCoroutine = false; // 进程是否开启协程
