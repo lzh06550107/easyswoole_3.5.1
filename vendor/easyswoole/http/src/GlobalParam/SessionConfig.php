@@ -1,19 +1,21 @@
 <?php
 
-
 namespace EasySwoole\Http\GlobalParam;
 
 use EasySwoole\Spl\SplBean;
 
+/**
+ * 会话配置类
+ */
 class SessionConfig extends SplBean
 {
-    protected $cookieExpire = 0;
-    protected $cookiePath = '/';
-    protected $cookieDomain = '';
-    protected $cookieSecure = false;
-    protected $cookieHttponly = false;
-    protected $cookieSameSite = '';
-    protected $sessionName = 'es_session';
+    protected $cookieExpire = 0; // cookie过期时间
+    protected $cookiePath = '/'; // cookie路径
+    protected $cookieDomain = ''; // cookie域名
+    protected $cookieSecure = false; // 是否开启cookie安全
+    protected $cookieHttponly = false; // 是否cookie 只有http可读
+    protected $cookieSameSite = ''; // 
+    protected $sessionName = 'es_session'; // cookie中session字段名称
 
     public function getCookieExpire(): int
     {

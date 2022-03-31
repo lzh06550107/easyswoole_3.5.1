@@ -6,7 +6,7 @@ use FastRoute\BadRouteException;
 use FastRoute\RouteParser;
 
 /**
- * Parses route strings of the following form:
+ * Parses route strings of the following form:标准的路由解析器
  *
  * "/user/{name}[/{id:[0-9]+}]"
  */
@@ -25,14 +25,14 @@ REGEX;
     public function parse($route)
     {
         $routeWithoutClosingOptionals = rtrim($route, ']');
-        $numOptionals = strlen($route) - strlen($routeWithoutClosingOptionals);
+        $numOptionals = strlen($route) - strlen($routeWithoutClosingOptionals); // 获取路由有多少个可选项
 
         // Split on [ while skipping placeholders
         $segments = preg_split('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \[~x', $routeWithoutClosingOptionals);
         if ($numOptionals !== count($segments) - 1) {
             // If there are any ] in the middle of the route, throw a more specific error message
             if (preg_match('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \]~x', $routeWithoutClosingOptionals)) {
-                throw new BadRouteException('Optional segments can only occur at the end of a route');
+                throw new BadRouteException('Optional segments can only occur at the end of a route'); // 可选项只能在路由末尾
             }
             throw new BadRouteException("Number of opening '[' and closing ']' does not match");
         }
@@ -51,7 +51,7 @@ REGEX;
     }
 
     /**
-     * Parses a route string that does not contain optional segments.
+     * Parses a route string that does not contain optional segments.解析路由中不包括可选项的片段
      *
      * @param string
      * @return mixed[]

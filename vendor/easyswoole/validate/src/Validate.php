@@ -59,12 +59,12 @@ use EasySwoole\Validate\Functions\Url;
  */
 class Validate
 {
-    protected $columns = [];
+    protected $columns = []; // 要验证的列项
 
     /** @var null|Error */
-    protected $error;
+    protected $error; // 验证失败的错误对象
 
-    protected $verifiedData = [];
+    protected $verifiedData = []; // 要被验证的数据，SplArray封装
 
     /** @var null|SplArray */
     protected $verifyData;
@@ -126,11 +126,19 @@ class Validate
         $this->addFunction(new Url());
     }
 
+    /**
+     * 获取验证错误
+     * @return Error|null
+     */
     public function getError(): ?Error
     {
         return $this->error;
     }
 
+    /**
+     * 获取要验证的数据
+     * @return SplArray|null
+     */
     public function getVerifyData(): ?SplArray
     {
         return $this->verifyData;
@@ -138,11 +146,15 @@ class Validate
 
     /**
      * 添加一个待验证字段
+     * @param string $name 验证字段名称
+     * @param string|null $alias 字段别名，显示错误信息时使用
+     * @param bool $reset 是否重置验证字段
+     * @return Rule 验证规则
      */
     public function addColumn(string $name, ?string $alias = null, bool $reset = false): Rule
     {
         if (!isset($this->columns[$name]) || $reset) {
-            $rule = new Rule();
+            $rule = new Rule(); // 规则注册表
             $this->columns[$name] = [
                 'alias' => $alias,
                 'rule' => $rule,
@@ -170,6 +182,14 @@ class Validate
         return $this->columns[$name] ?? [];
     }
 
+    /**
+     * 静态方法快速创建一个验证器对象
+     * @param array $rules 验证规则
+     * @param array $message 验证错误消息提示
+     * @param array $alias 验证字段的别名
+     * @return static
+     * @throws Runtime
+     */
     public static function make(array $rules = [], array $message = [], array $alias = []): self
     {
         $errMsgMap = [];
@@ -185,8 +205,8 @@ class Validate
                 continue;
             }
 
-            $fieldName = substr($field, 0, $pos);
-            $fieldRule = substr($field, $pos + 1);
+            $fieldName = substr($field, 0, $pos); // 字段名称
+            $fieldRule = substr($field, $pos + 1); // 字段规则
 
             if (!$fieldName) {
                 throw new Runtime(sprintf('Error message[%s] does not specify a field', $msg));
@@ -210,11 +230,11 @@ class Validate
             /** @var Rule $validateRule */
             $validateRule = $instance->addColumn($key, $alias[$key] ?? null);
             // eg: rule 'required|max:25|between:1,100'
-            $rule = explode('|', $rule);
+            $rule = explode('|', $rule); // 切分多个验证规则
             foreach ($rule as $action) {
                 $actionArgs = [];
 
-                if (strpos($action, ':')) {
+                if (strpos($action, ':')) { // 获取验证规则参数字符串
                     // eg max:25
                     list($action, $arg) = explode(':', $action, 2);
 
@@ -222,7 +242,7 @@ class Validate
                         $actionArgs[] = $arg;
                     } else {
                         // eg between:1,100
-                        $arg = explode(',', $arg);
+                        $arg = explode(',', $arg); // 获取验证规则各个参数
                         $actionArgs = array_merge($actionArgs, $arg);
 //                        $actionArgs[] = $arg;
                     }
@@ -234,7 +254,7 @@ class Validate
                 }
 
                 $actionArgs[] = $errMsg;
-                $validateRule->{$action}(...$actionArgs);
+                $validateRule->{$action}(...$actionArgs); // 调用验证规则
             }
         }
 
@@ -254,8 +274,8 @@ class Validate
         $this->verifyData = $spl;
 
         foreach ($this->columns as $column => $item) {
-            $columnData = $spl->get($column);
-            $ruleMap = $item['rule']->getRuleMap();
+            $columnData = $spl->get($column); // 获取该列验证项
+            $ruleMap = $item['rule']->getRuleMap(); // 获取注册的所有验证规则
             //多维数组
             if (strpos($column, '*') !== false && is_array($columnData)) {
                 foreach ($columnData as $datum) {
@@ -275,6 +295,7 @@ class Validate
     }
 
     /**
+     * 运行规则
      * @param $itemData
      * @param $rules
      * @param $column
@@ -286,17 +307,19 @@ class Validate
         if (isset($rules['optional']) && ($itemData === null || $itemData === '')) {
             return null;
         }
+        
         foreach ($rules as $rule => $ruleConf) {
+            
             $check = strtolower($rule);
 
-            if (!isset($this->functions[$check])) {
+            if (!isset($this->functions[$check])) { // 验证是否存在该规则
                 throw new Runtime("unsupport rule {$rule}");
             }
 
             /** @var AbstractValidateFunction $func */
             $func = $this->functions[$check];
             if ($func->validate($itemData, $ruleConf['arg'], $column, $this) === false) {
-                $this->error = new Error(
+                $this->error = new Error( // 错误对象
                     $column,
                     $itemData,
                     $this->columns[$column]['alias'],
@@ -322,6 +345,7 @@ class Validate
     }
 
     /**
+     * 直接添加验证函数
      * @param AbstractValidateFunction $function
      * @param bool $overlay 是否允许覆盖
      * @return $this

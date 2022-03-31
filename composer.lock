@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f5a5874bc69a6591a3ddc22426fd21cc",
+    "content-hash": "0937741daa757ed3bbf8d9655561ea82",
     "packages": [
         {
             "name": "doctrine/instantiator",
@@ -528,6 +528,114 @@
             "time": "2021-07-14T03:16:33+00:00"
         },
         {
+            "name": "easyswoole/db-migrate",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/easy-swoole/database-migrate.git",
+                "reference": "c06b5bec0e99a5b25f181bee52d68bf4c0e3bea5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/easy-swoole/database-migrate/zipball/c06b5bec0e99a5b25f181bee52d68bf4c0e3bea5",
+                "reference": "c06b5bec0e99a5b25f181bee52d68bf4c0e3bea5",
+                "shasum": ""
+            },
+            "require": {
+                "easyswoole/command": "^1.1",
+                "easyswoole/component": "^2.0",
+                "easyswoole/ddl": "^1.0",
+                "easyswoole/mysqli": "^2.2",
+                "easyswoole/spl": "^1.0",
+                "easyswoole/utility": "^1.0",
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "easyswoole/phpunit": "^1.0",
+                "swoole/ide-helper": "^4.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "EasySwoole\\DatabaseMigrate\\": "src/",
+                    "EasySwoole\\DatabaseMigrate\\Tests\\": "tests"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Heelie",
+                    "email": "heelie.hj@gmail.com"
+                }
+            ],
+            "description": "An efficient swoole framework",
+            "homepage": "https://www.easyswoole.com/",
+            "keywords": [
+                "database",
+                "db-migrate",
+                "easyswoole",
+                "framework",
+                "migrate",
+                "swoole"
+            ],
+            "support": {
+                "issues": "https://github.com/easy-swoole/database-migrate/issues",
+                "source": "https://github.com/easy-swoole/database-migrate/tree/1.0.1"
+            },
+            "time": "2021-04-20T08:58:53+00:00"
+        },
+        {
+            "name": "easyswoole/ddl",
+            "version": "1.0.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/easy-swoole/ddl.git",
+                "reference": "8971c34115ea62d4565efbc6910ea743e8bc8013"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/easy-swoole/ddl/zipball/8971c34115ea62d4565efbc6910ea743e8bc8013",
+                "reference": "8971c34115ea62d4565efbc6910ea743e8bc8013",
+                "shasum": ""
+            },
+            "require": {
+                "easyswoole/spl": "^1.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "EasySwoole\\DDL\\": "src/",
+                    "EasySwoole\\DDL\\Test\\": "test/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "YF",
+                    "email": "291323003@qq.com"
+                }
+            ],
+            "description": "An efficient swoole framework",
+            "homepage": "https://www.easyswoole.com/",
+            "keywords": [
+                "async",
+                "easyswoole",
+                "framework",
+                "swoole"
+            ],
+            "support": {
+                "issues": "https://github.com/easy-swoole/ddl/issues",
+                "source": "https://github.com/easy-swoole/ddl/tree/1.0.10"
+            },
+            "time": "2021-04-19T06:08:32+00:00"
+        },
+        {
             "name": "easyswoole/doctrine-annotations",
             "version": "1.0.1",
             "source": {
@@ -818,6 +926,58 @@
                 "source": "https://github.com/easy-swoole/log/tree/1.1.1"
             },
             "time": "2021-02-02T07:08:50+00:00"
+        },
+        {
+            "name": "easyswoole/mysqli",
+            "version": "2.2.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/easy-swoole/mysqli.git",
+                "reference": "9c4aac7c111c0dc073b53a40006606e44c11079c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/easy-swoole/mysqli/zipball/9c4aac7c111c0dc073b53a40006606e44c11079c",
+                "reference": "9c4aac7c111c0dc073b53a40006606e44c11079c",
+                "shasum": ""
+            },
+            "require": {
+                "easyswoole/spl": "^1.2"
+            },
+            "require-dev": {
+                "easyswoole/phpunit": "^1.0",
+                "easyswoole/swoole-ide-helper": "^1.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "EasySwoole\\Mysqli\\": "src/",
+                    "EasySwoole\\Mysqli\\Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "YF",
+                    "email": "291323003@qq.com"
+                }
+            ],
+            "description": "An efficient swoole framework",
+            "homepage": "https://www.easyswoole.com/",
+            "keywords": [
+                "async",
+                "easyswoole",
+                "framework",
+                "swoole"
+            ],
+            "support": {
+                "issues": "https://github.com/easy-swoole/mysqli/issues",
+                "source": "https://github.com/easy-swoole/mysqli/tree/2.2.11"
+            },
+            "time": "2021-09-22T06:40:09+00:00"
         },
         {
             "name": "easyswoole/parsedown",
@@ -3516,5 +3676,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.1.0"
 }

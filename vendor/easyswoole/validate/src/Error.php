@@ -9,22 +9,22 @@ namespace EasySwoole\Validate;
  */
 class Error
 {
-    private $field;
+    private $field; // 字段名称
 
-    private $fieldData;
+    private $fieldData; // 字段数据
 
-    private $fieldAlias;
+    private $fieldAlias; // 字段别名
 
-    private $errorRule;
+    private $errorRule; // 验证规则名称
 
-    private $errorRuleMsg;
+    private $errorRuleMsg; // 验证规则错误消息
 
-    private $errorRuleArg;
+    private $errorRuleArg; // 验证规则参数
 
     /**
      * @var null|Validate
      */
-    private $validate;
+    private $validate; // 验证器对象
 
     private $ruleMsgMapping = [
         'activeUrl' => ':fieldName必须是可访问的网址',

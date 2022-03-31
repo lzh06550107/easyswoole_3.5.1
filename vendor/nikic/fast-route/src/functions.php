@@ -47,6 +47,7 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
             throw new \LogicException('Must specify "cacheFile" option');
         }
 
+        // 如果路由缓存文件存在，则直接从文件加载
         if (!$options['cacheDisabled'] && file_exists($options['cacheFile'])) {
             $dispatchData = require $options['cacheFile'];
             if (!is_array($dispatchData)) {
@@ -55,6 +56,7 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
             return new $options['dispatcher']($dispatchData);
         }
 
+        // 如果路由缓存文件不存在，则需要收集路由并写入缓存文件中
         $routeCollector = new $options['routeCollector'](
             new $options['routeParser'], new $options['dataGenerator']
         );

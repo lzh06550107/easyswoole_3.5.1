@@ -8,10 +8,12 @@
 
 namespace EasySwoole\Http\AbstractInterface;
 
-
 use EasySwoole\Http\Request;
 use EasySwoole\Http\Response;
 
+/**
+ * REST 控制器抽象类
+ */
 abstract class REST extends Controller
 {
     /*

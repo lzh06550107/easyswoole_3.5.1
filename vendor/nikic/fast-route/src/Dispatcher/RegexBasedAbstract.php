@@ -19,6 +19,7 @@ abstract class RegexBasedAbstract implements Dispatcher
 
     public function dispatch($httpMethod, $uri)
     {
+        // 如果静态路由存在，则返回该路由
         if (isset($this->staticRouteMap[$httpMethod][$uri])) {
             $handler = $this->staticRouteMap[$httpMethod][$uri];
             return [self::FOUND, $handler, []];

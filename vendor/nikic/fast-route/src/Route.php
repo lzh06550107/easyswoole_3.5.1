@@ -2,22 +2,25 @@
 
 namespace FastRoute;
 
+/**
+ * 动态路由对象封装
+ */
 class Route
 {
     /** @var string */
-    public $httpMethod;
+    public $httpMethod; // 请求方法
 
     /** @var string */
-    public $regex;
+    public $regex; // 正在表达式
 
     /** @var array */
-    public $variables;
+    public $variables; // 路由参数
 
     /** @var mixed */
-    public $handler;
+    public $handler; // 路由处理器
 
     /**
-     * Constructs a route (value object).
+     * Constructs a route (value object). 创建一个路由对象
      *
      * @param string $httpMethod
      * @param mixed  $handler
@@ -33,7 +36,7 @@ class Route
     }
 
     /**
-     * Tests whether this route matches the given string.
+     * Tests whether this route matches the given string.测试当前路由是否匹配给定的字符串
      *
      * @param string $str
      *

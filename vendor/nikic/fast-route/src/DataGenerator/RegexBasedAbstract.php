@@ -6,10 +6,13 @@ use FastRoute\BadRouteException;
 use FastRoute\DataGenerator;
 use FastRoute\Route;
 
+/**
+ * 基于正则表达式的抽象类
+ */
 abstract class RegexBasedAbstract implements DataGenerator
 {
     /** @var mixed[][] */
-    protected $staticRoutes = [];
+    protected $staticRoutes = []; // 收集静态路由，第一个键是方法类型，第二个键是静态路由名称
 
     /** @var Route[][] */
     protected $methodToRegexToRoutesMap = [];
@@ -24,6 +27,12 @@ abstract class RegexBasedAbstract implements DataGenerator
      */
     abstract protected function processChunk($regexToRoutesMap);
 
+    /**
+     * 通过路由解析器解析后添加到路由收集器中
+     * @param $httpMethod
+     * @param $routeData
+     * @param $handler
+     */
     public function addRoute($httpMethod, $routeData, $handler)
     {
         if ($this->isStaticRoute($routeData)) {
@@ -70,6 +79,7 @@ abstract class RegexBasedAbstract implements DataGenerator
     }
 
     /**
+     * 静态路由
      * @param mixed[]
      * @return bool
      */
@@ -78,11 +88,17 @@ abstract class RegexBasedAbstract implements DataGenerator
         return count($routeData) === 1 && is_string($routeData[0]);
     }
 
+    /**
+     * 收集静态路由
+     * @param $httpMethod
+     * @param $routeData
+     * @param $handler
+     */
     private function addStaticRoute($httpMethod, $routeData, $handler)
     {
         $routeStr = $routeData[0];
 
-        if (isset($this->staticRoutes[$httpMethod][$routeStr])) {
+        if (isset($this->staticRoutes[$httpMethod][$routeStr])) { // 不能重复注册
             throw new BadRouteException(sprintf(
                 'Cannot register two routes matching "%s" for method "%s"',
                 $routeStr, $httpMethod
@@ -91,7 +107,7 @@ abstract class RegexBasedAbstract implements DataGenerator
 
         if (isset($this->methodToRegexToRoutesMap[$httpMethod])) {
             foreach ($this->methodToRegexToRoutesMap[$httpMethod] as $route) {
-                if ($route->matches($routeStr)) {
+                if ($route->matches($routeStr)) { // 动态路由和静态路由重复
                     throw new BadRouteException(sprintf(
                         'Static route "%s" is shadowed by previously defined variable route "%s" for method "%s"',
                         $routeStr, $route->regex, $httpMethod
@@ -103,6 +119,12 @@ abstract class RegexBasedAbstract implements DataGenerator
         $this->staticRoutes[$httpMethod][$routeStr] = $handler;
     }
 
+    /**
+     * 收集动态路由
+     * @param $httpMethod
+     * @param $routeData
+     * @param $handler
+     */
     private function addVariableRoute($httpMethod, $routeData, $handler)
     {
         list($regex, $variables) = $this->buildRegexForRoute($routeData);

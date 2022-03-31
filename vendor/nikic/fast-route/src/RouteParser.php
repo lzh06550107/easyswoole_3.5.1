@@ -2,6 +2,9 @@
 
 namespace FastRoute;
 
+/**
+ * 路由解析器接口
+ */
 interface RouteParser
 {
     /**

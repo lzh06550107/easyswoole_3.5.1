@@ -9,6 +9,9 @@ use EasySwoole\Http\Request;
 use EasySwoole\Http\Response;
 use FastRoute\RouteCollector;
 
+/**
+ * 路由管理器
+ */
 class Router extends AbstractRouter
 {
     function initialize(RouteCollector $routeCollector)

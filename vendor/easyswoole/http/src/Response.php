@@ -44,7 +44,7 @@ class Response extends MessageResponse
     {
         $ret = false;
         if($this->isEndResponse <= self::STATUS_REAL_END){
-            $this->isEndResponse = self::STATUS_REAL_END;
+            $this->isEndResponse = self::STATUS_REAL_END; // 表示已经发送，不能再次写入
             //结束处理
             $status = $this->getStatusCode();
             $this->response->status($status);
@@ -65,7 +65,8 @@ class Response extends MessageResponse
             }
 
             if($this->sendFile != null){
-                $this->response->sendfile($this->sendFile);
+                // 发送文件到浏览器
+                $this->response->sendfile($this->sendFile); // 调用 sendfile 前不得使用 write 方法发送 Http-Chunk;调用 sendfile 后底层会自动执行 end
             }else{
                 $this->response->end($write);
             }
@@ -87,7 +88,7 @@ class Response extends MessageResponse
 
     function write(string $str){
         if(!$this->isEndResponse()){
-            if ($this->isChunk){
+            if ($this->isChunk){ // 启用 Http Chunk 分段向浏览器发送相应内容
                 $this->getSwooleResponse()->write($str);
             }else{
                 $this->getBody()->write($str);
@@ -98,6 +99,12 @@ class Response extends MessageResponse
         }
     }
 
+    /**
+     * 重定向
+     * @param $url
+     * @param $status
+     * @return bool
+     */
     function redirect($url,$status = Status::CODE_MOVED_TEMPORARILY):bool
     {
         if(!$this->isEndResponse()){
@@ -130,21 +137,29 @@ class Response extends MessageResponse
         return $this->response;
     }
 
-
+    /**
+     * 响应文件
+     * @param string $sendFilePath
+     */
     function sendFile(string $sendFilePath)
     {
         $this->sendFile = $sendFilePath;
     }
 
+    /**
+     * 分离响应对象
+     * @return int|null
+     */
     public function detach():?int
     {
         $fd = $this->response->fd;
         $this->isEndResponse = self::STATUS_RESPONSE_DETACH;
-        $this->response->detach();
+        $this->response->detach(); // 分离响应对象。使用此方法后，$response 对象销毁时不会自动 end，与 Http\Response::create 和 Server->send 配合使用
         return $fd;
     }
 
     /**
+     * 是否分块响应
      * @param bool $isChunk
      */
     public function setIsChunk(bool $isChunk): void
@@ -152,12 +167,21 @@ class Response extends MessageResponse
         $this->isChunk = $isChunk;
     }
 
+    /**
+     * 分离后，可根据id重新创建Response对象
+     * @param int $fd
+     * @return Response
+     */
     static function createFromFd(int $fd):Response
     {
         $resp = \Swoole\Http\Response::create($fd);
         return new Response($resp);
     }
 
+    /**
+     * 以字符串形式输出响应对象
+     * @return string
+     */
     final public function __toString():string
     {
         // TODO: Implement __toString() method.

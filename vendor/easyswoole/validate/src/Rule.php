@@ -20,7 +20,7 @@ class Rule
 
     /**
      * 给定的URL是否可以成功通讯
-     * @param null|string $msg
+     * @param null|string $msg 用户传入错误消息
      * @return $this
      */
     public function activeUrl($msg = null)
@@ -35,7 +35,7 @@ class Rule
 
     /**
      * 给定的参数是否是字母 即[a-zA-Z]
-     * @param null|string $msg
+     * @param null|string $msg 用户传入错误消息
      * @return $this
      */
     public function alpha($msg = null)
@@ -48,6 +48,11 @@ class Rule
         return $this;
     }
 
+    /**
+     * 字母和数字
+     * @param null|string $msg 用户传入错误消息
+     * @return $this
+     */
     public function alphaNum($msg = null)
     {
         $this->ruleMap['alphaNum'] = [
@@ -77,7 +82,7 @@ class Rule
      * 给定的参数是否在 $min $max 之间
      * @param int $min 最小值 不包含该值
      * @param int $max 最大值 不包含该值
-     * @param null|string $msg
+     * @param null|string $msg 用户传入错误消息
      * @return $this
      */
     public function between($min, $max, $msg = null)
@@ -94,7 +99,7 @@ class Rule
 
     /**
      * 给定参数是否为布尔值
-     * @param null|string $msg
+     * @param null|string $msg 用户传入错误消息
      * @return $this
      */
     public function bool($msg = null)
@@ -109,8 +114,8 @@ class Rule
 
     /**
      * 自定义验证
-     * @param AbstractValidateFunction $rule
-     * @param null $msg
+     * @param AbstractValidateFunction $rule 用户自定义验证函数
+     * @param null $msg 用户传入错误消息
      * @param mixed ...$args
      * @return $this
      */
@@ -127,7 +132,7 @@ class Rule
     /**
      * 给定参数是否为小数格式
      * @param null|int $precision 规定小数点位数 null 为不规定
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function decimal(?int $precision = null, $msg = null)
@@ -142,8 +147,8 @@ class Rule
 
     /**
      * 给定参数是否在某日期之前
-     * @param null|string $msg
-     * @param null|string $date
+     * @param null|string $msg 用户传入错误消息
+     * @param null|string $date 某日期
      * @return $this
      */
     public function dateBefore(?string $date = null, $msg = null)
@@ -158,8 +163,8 @@ class Rule
 
     /**
      * 给定参数是否在某日期之后
-     * @param null|string $msg
-     * @param null|string $date
+     * @param null|string $msg 用户传入错误消息
+     * @param null|string $date 某日期
      * @return $this
      */
     public function dateAfter(?string $date = null, $msg = null)
@@ -174,9 +179,9 @@ class Rule
 
     /**
      * 验证值是否相等
-     * @param $compare
-     * @param $strict
-     * @param null|string $msg
+     * @param $compare 另一个比较对象
+     * @param $strict 是否是严格比较
+     * @param null|string $msg 用户传入错误消息
      * @return $this
      */
     public function equal($compare, bool $strict = false, $msg = null)
@@ -191,9 +196,9 @@ class Rule
 
     /**
      * 验证值是否不相等
-     * @param $compare
-     * @param $strict
-     * @param null|string $msg
+     * @param $compare 另一个比较对象
+     * @param $strict 是否是严格比较
+     * @param null|string $msg 用户传入错误消息
      * @return $this
      */
     public function different($compare, bool $strict = false, $msg = null)
@@ -208,9 +213,9 @@ class Rule
 
     /**
      * 验证值是否相等
-     * @param $fieldName
-     * @param $strict
-     * @param null|string $msg
+     * @param $fieldName 另一个字段名称
+     * @param $strict 是否是严格比较
+     * @param null|string $msg 用户传入错误消息
      * @return $this
      */
     public function equalWithColumn($fieldName, bool $strict = false, $msg = null)
@@ -225,9 +230,9 @@ class Rule
 
     /**
      * 验证值是否不相等
-     * @param $fieldName
-     * @param $strict
-     * @param null|string $msg
+     * @param $fieldName 另一个字段名称
+     * @param $strict 是否是严格比较
+     * @param null|string $msg 用户传入错误消息
      * @return $this
      */
     public function differentWithColumn($fieldName, bool $strict = false, $msg = null)
@@ -242,8 +247,8 @@ class Rule
 
     /**
      * bar字段必须小于foo字段
-     * @param $fieldName
-     * @param null $msg
+     * @param $fieldName 另一个字段名称
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function lessThanWithColumn($fieldName, $msg = null)
@@ -258,8 +263,8 @@ class Rule
 
     /**
      * bar字段必须大于foo字段
-     * @param $fieldName
-     * @param null $msg
+     * @param $fieldName 另一个字段名称
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function greaterThanWithColumn($fieldName, $msg = null)
@@ -274,7 +279,7 @@ class Rule
 
     /**
      * 验证值是否一个浮点数
-     * @param null|string $msg
+     * @param null|string $msg 用户传入错误消息
      * @return $this
      */
     public function float($msg = null)
@@ -289,7 +294,7 @@ class Rule
 
     /**
      * 调用自定义的闭包验证
-     * @param null|string $msg
+     * @param null|string $msg 用户传入错误消息
      * @return $this
      */
     public function func(callable $func, $msg = null)
@@ -304,8 +309,8 @@ class Rule
 
     /**
      * 值是否在数组中
-     * @param bool $isStrict
-     * @param null|string $msg
+     * @param bool $isStrict 是否严格比较
+     * @param null|string $msg 用户传入错误消息
      * @return $this
      */
     public function inArray(array $array, $isStrict = false, $msg = null)
@@ -320,7 +325,7 @@ class Rule
 
     /**
      * 是否一个整数值
-     * @param null|string $msg
+     * @param null|string $msg 用户传入错误消息
      * @return $this
      */
     public function integer($msg = null)
@@ -335,7 +340,7 @@ class Rule
 
     /**
      * 是否一个有效的IP
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function isIp($msg = null)
@@ -350,7 +355,7 @@ class Rule
 
     /**
      * 是否不为空
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function notEmpty($msg = null)
@@ -365,7 +370,7 @@ class Rule
 
     /**
      * 是否一个数字值
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function numeric($msg = null)
@@ -380,8 +385,8 @@ class Rule
 
     /**
      * 不在数组中
-     * @param bool $isStrict
-     * @param null $msg
+     * @param bool $isStrict 是否严格比较
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function notInArray(array $array, $isStrict = false, $msg = null)
@@ -396,7 +401,7 @@ class Rule
 
     /**
      * 验证数组或字符串的长度
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function length(int $len, $msg = null)
@@ -411,7 +416,7 @@ class Rule
 
     /**
      * 验证数组或字符串的长度(中文版)
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function mbLength(int $len, $msg = null)
@@ -426,7 +431,7 @@ class Rule
 
     /**
      * 验证数组或字符串的长度是否超出
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function lengthMax(int $lengthMax, $msg = null)
@@ -441,7 +446,7 @@ class Rule
 
     /**
      * 验证数组或字符串的长度是否超出(中文版)
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function mbLengthMax(int $lengthMax, $msg = null)
@@ -456,7 +461,7 @@ class Rule
 
     /**
      * 验证数组或字符串的长度是否达到
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function lengthMin(int $lengthMin, $msg = null)
@@ -471,7 +476,7 @@ class Rule
 
     /**
      * 验证数组或字符串的长度是否达到(中文版)
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function mbLengthMin(int $lengthMin, $msg = null)
@@ -486,7 +491,7 @@ class Rule
 
     /**
      * 验证数组或字符串的长度是否在一个范围内
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function betweenLen(int $min, int $max, $msg = null)
@@ -504,7 +509,7 @@ class Rule
 
     /**
      * 验证数组或字符串的长度是否在一个范围内(中文版)
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function betweenMbLen(int $min, int $max, $msg = null)
@@ -522,8 +527,8 @@ class Rule
 
     /**
      * 验证值不大于(相等视为不通过)
-     * @param mixed $max
-     * @param null|string $msg
+     * @param mixed $max 指定的值
+     * @param null|string $msg 用户传入错误消息
      * @return $this
      */
     public function max($max, ?string $msg = null)
@@ -538,8 +543,8 @@ class Rule
 
     /**
      * 验证值不小于(相等视为不通过)
-     * @param mixed $min
-     * @param null|string $msg
+     * @param mixed $min 指定的值
+     * @param null|string $msg 用户传入错误消息
      * @return $this
      */
     public function min($min, ?string $msg = null): Rule
@@ -556,7 +561,7 @@ class Rule
      * 验证值是合法的金额
      * 100 | 100.1 | 100.01
      * @param null|int $precision 小数点位数
-     * @param string|null $msg
+     * @param string|null $msg 用户传入错误消息
      * @return $this
      */
     public function money(?int $precision = null, string $msg = null)
@@ -585,8 +590,8 @@ class Rule
 
     /**
      * 正则表达式验证
-     * @param $reg
-     * @param null $msg
+     * @param $reg 正则表达式
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function regex($reg, $msg = null)
@@ -601,7 +606,7 @@ class Rule
 
     /**
      * 必须存在值
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function required($msg = null)
@@ -616,7 +621,7 @@ class Rule
 
     /**
      * 值是一个合法的时间戳
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function timestamp($msg = null)
@@ -632,7 +637,7 @@ class Rule
     /**
      * 时间戳在某指定日期之前
      * @param string $date 传入任意可被strtotime解析的字符串
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function timestampBeforeDate($date, $msg = null)
@@ -648,7 +653,7 @@ class Rule
     /**
      * 时间戳在某指定日期之后
      * @param string $date 传入任意可被strtotime解析的字符串
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function timestampAfterDate($date, $msg = null)
@@ -664,7 +669,7 @@ class Rule
     /**
      * 指定时间戳在某时间戳之前
      * @param int|string $beforeTimestamp 在该时间戳之前
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function timestampBefore($beforeTimestamp, $msg = null)
@@ -680,7 +685,7 @@ class Rule
     /**
      * 指定时间戳在某时间戳之后
      * @param int|string $afterTimestamp 在该时间戳之后
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function timestampAfter($afterTimestamp, $msg = null)
@@ -695,7 +700,7 @@ class Rule
 
     /**
      * 值是一个合法的链接
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function url($msg = null)
@@ -710,7 +715,7 @@ class Rule
 
     /**
      * 值是一个合法的链接
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function allDigital($msg = null)
@@ -725,9 +730,9 @@ class Rule
 
     /**
      * 允许上传的文件
-     * @param array $type
-     * @param bool $isStrict
-     * @param null $msg
+     * @param array $type 文件类型
+     * @param bool $isStrict 是否严格
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function allowFile(array $type, $isStrict = false, $msg = null)
@@ -742,9 +747,9 @@ class Rule
 
     /**
      * 允许上传文件的类型
-     * @param array $type
-     * @param bool $isStrict
-     * @param null $msg
+     * @param array $type 文件类型
+     * @param bool $isStrict 是否严格
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function allowFileType(array $type, $isStrict = false, $msg = null)
@@ -758,7 +763,7 @@ class Rule
     }
 
     /**
-     * @param null $msg
+     * @param null $msg 用户传入错误消息
      * @return $this
      */
     public function isArray($msg = null)
@@ -771,6 +776,12 @@ class Rule
         return $this;
     }
 
+    /**
+     * 设置指定规则的错误消息
+     * @param string $rule 规则名称
+     * @param string $msg 用户传入错误消息
+     * @return $this
+     */
     public function setRuleMsg(string $rule,string $msg): Rule
     {
         if(isset($this->ruleMap[$rule])){

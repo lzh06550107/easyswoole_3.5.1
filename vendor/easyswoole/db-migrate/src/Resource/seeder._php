@@ -1,0 +1,26 @@
+<?php
+
+use EasySwoole\DatabaseMigrate\MigrateManager;
+
+/**
+ * filling data
+ *
+ * Class SeederClassName
+ */
+class SeederClassName
+{
+    /**
+     * seeder run
+     * @return void
+     * @throws Throwable
+     * @throws \EasySwoole\Mysqli\Exception\Exception
+     */
+    public function run()
+    {
+        // todo::connection databases and insert data
+        // example
+        $client = MigrateManager::getInstance()->getClient();
+        $client->queryBuilder()->insert("example_table", ["a" => "b"]);
+        $client->execBuilder();
+    }
+}

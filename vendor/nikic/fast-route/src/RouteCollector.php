@@ -2,6 +2,9 @@
 
 namespace FastRoute;
 
+/**
+ * 路由收集器
+ */
 class RouteCollector
 {
     /** @var RouteParser */
@@ -14,7 +17,7 @@ class RouteCollector
     protected $currentGroupPrefix;
 
     /**
-     * Constructs a route collector.
+     * Constructs a route collector.构建一个路由收集器
      *
      * @param RouteParser   $routeParser
      * @param DataGenerator $dataGenerator
@@ -27,9 +30,9 @@ class RouteCollector
     }
 
     /**
-     * Adds a route to the collection.
+     * Adds a route to the collection.添加一个路由到集合
      *
-     * The syntax used in the $route string depends on the used route parser.
+     * The syntax used in the $route string depends on the used route parser.添加的路由语法依赖使用的路由解析器
      *
      * @param string|string[] $httpMethod
      * @param string $route
@@ -47,7 +50,7 @@ class RouteCollector
     }
 
     /**
-     * Create a route group with a common prefix.
+     * Create a route group with a common prefix.使用通用前缀来创建一个路由组
      *
      * All routes created in the passed callback will have the given group prefix prepended.
      *
@@ -63,7 +66,7 @@ class RouteCollector
     }
 
     /**
-     * Adds a GET route to the collection
+     * Adds a GET route to the collection，添加一个GET路由
      * 
      * This is simply an alias of $this->addRoute('GET', $route, $handler)
      *
@@ -76,7 +79,7 @@ class RouteCollector
     }
 
     /**
-     * Adds a POST route to the collection
+     * Adds a POST route to the collection，添加一个POST路由
      * 
      * This is simply an alias of $this->addRoute('POST', $route, $handler)
      *
@@ -89,7 +92,7 @@ class RouteCollector
     }
 
     /**
-     * Adds a PUT route to the collection
+     * Adds a PUT route to the collection，添加一个PUT路由
      * 
      * This is simply an alias of $this->addRoute('PUT', $route, $handler)
      *
@@ -102,7 +105,7 @@ class RouteCollector
     }
 
     /**
-     * Adds a DELETE route to the collection
+     * Adds a DELETE route to the collection，添加一个DELETE路由
      * 
      * This is simply an alias of $this->addRoute('DELETE', $route, $handler)
      *
@@ -115,7 +118,7 @@ class RouteCollector
     }
 
     /**
-     * Adds a PATCH route to the collection
+     * Adds a PATCH route to the collection，添加一个PATCH路由
      * 
      * This is simply an alias of $this->addRoute('PATCH', $route, $handler)
      *
@@ -128,7 +131,7 @@ class RouteCollector
     }
 
     /**
-     * Adds a HEAD route to the collection
+     * Adds a HEAD route to the collection，添加一个HEAD路由
      *
      * This is simply an alias of $this->addRoute('HEAD', $route, $handler)
      *

@@ -7,11 +7,11 @@ namespace Composer\Autoload;
 class ComposerStaticInit4998e8343d14685c7c7bff79ef765d7e
 {
     public static $files = array (
-        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
-        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
+        'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
         '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
         '538ca81a9a966a6716601ecf48f4eaef' => __DIR__ . '/..' . '/opis/closure/functions.php',
-        'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
+        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
+        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -55,6 +55,8 @@ class ComposerStaticInit4998e8343d14685c7c7bff79ef765d7e
             'EasySwoole\\Session\\' => 19,
             'EasySwoole\\Phpunit\\' => 19,
             'EasySwoole\\ParserDown\\' => 22,
+            'EasySwoole\\Mysqli\\Tests\\' => 24,
+            'EasySwoole\\Mysqli\\' => 18,
             'EasySwoole\\Log\\' => 15,
             'EasySwoole\\Http\\Tests\\' => 22,
             'EasySwoole\\Http\\' => 16,
@@ -62,6 +64,10 @@ class ComposerStaticInit4998e8343d14685c7c7bff79ef765d7e
             'EasySwoole\\EasySwoole\\' => 22,
             'EasySwoole\\DoctrineAnnotation\\Tests\\' => 36,
             'EasySwoole\\DoctrineAnnotation\\' => 30,
+            'EasySwoole\\DatabaseMigrate\\Tests\\' => 33,
+            'EasySwoole\\DatabaseMigrate\\' => 27,
+            'EasySwoole\\DDL\\Test\\' => 20,
+            'EasySwoole\\DDL\\' => 15,
             'EasySwoole\\Crontab\\' => 19,
             'EasySwoole\\Config\\Test\\' => 23,
             'EasySwoole\\Config\\' => 18,
@@ -170,6 +176,14 @@ class ComposerStaticInit4998e8343d14685c7c7bff79ef765d7e
         array (
             0 => __DIR__ . '/..' . '/easyswoole/parsedown/src',
         ),
+        'EasySwoole\\Mysqli\\Tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/easyswoole/mysqli/tests',
+        ),
+        'EasySwoole\\Mysqli\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/easyswoole/mysqli/src',
+        ),
         'EasySwoole\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/easyswoole/log/src',
@@ -197,6 +211,22 @@ class ComposerStaticInit4998e8343d14685c7c7bff79ef765d7e
         'EasySwoole\\DoctrineAnnotation\\' => 
         array (
             0 => __DIR__ . '/..' . '/easyswoole/doctrine-annotations/src',
+        ),
+        'EasySwoole\\DatabaseMigrate\\Tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/easyswoole/db-migrate/tests',
+        ),
+        'EasySwoole\\DatabaseMigrate\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/easyswoole/db-migrate/src',
+        ),
+        'EasySwoole\\DDL\\Test\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/easyswoole/ddl/test',
+        ),
+        'EasySwoole\\DDL\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/easyswoole/ddl/src',
         ),
         'EasySwoole\\Crontab\\' => 
         array (
