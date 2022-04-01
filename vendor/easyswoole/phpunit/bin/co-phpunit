@@ -16,9 +16,10 @@ if (!file_exists($file)) {
 }
 
 $command = new PhpunitCommand();
-CommandManager::getInstance()->addCommand($command);
+CommandManager::getInstance()->addCommand($command); // 添加到命令管理器中
 
-array_splice($argv, 1, 0, $command->commandName());
+array_splice($argv, 1, 0, $command->commandName()); // 在参数数组前面插入命令名称
+
 $caller = new \EasySwoole\Command\Caller();
 $caller->setScript(current($argv));
 $caller->setCommand(next($argv));

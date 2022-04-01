@@ -1,8 +1,6 @@
 <?php
 
-
 namespace EasySwoole\Annotation\Tests;
-
 
 use EasySwoole\Annotation\ValueParser;
 use PHPUnit\Framework\TestCase;

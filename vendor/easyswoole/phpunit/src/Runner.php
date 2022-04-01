@@ -1,8 +1,6 @@
 <?php
 
-
 namespace EasySwoole\Phpunit;
-
 
 use PHPUnit\TextUI\Command;
 use Swoole\ExitException;
@@ -13,13 +11,14 @@ class Runner
 {
     public static function run($noCoroutine = true)
     {
-        if ($noCoroutine) {
+        if ($noCoroutine) { // 如果不开启协程，则
             return Command::main(false);
         }
 
-
+        // 如果开启协程，则实例化调度器对象，采用协程容器去执行测试用例
         $exitCode = null;
         $scheduler = new Scheduler();
+        // 添加一个协程来运行单元测试
         $scheduler->add(function () use (&$exitCode) {
             try {
                 $exitCode = Command::main(false);
@@ -31,11 +30,11 @@ class Runner
                     throw $throwable;
                 }
             } finally {
-                Timer::clearAll();
+                Timer::clearAll(); // 清空事件循环所有定时器
             }
         });
-        $scheduler->start();
+        $scheduler->start(); // 启动调度器
 
-        return $exitCode;
+        return $exitCode; // 返回退出码
     }
 }
