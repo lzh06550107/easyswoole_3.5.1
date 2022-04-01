@@ -7,7 +7,7 @@ use EasySwoole\DatabaseMigrate\Command\AbstractInterface\CommandAbstract;
 use EasySwoole\DatabaseMigrate\MigrateManager;
 
 /**
- * Class StatusCommand
+ * Class StatusCommand，展示成功迁移的数据记录，即为迁移表内的数据记录
  * @package EasySwoole\DatabaseMigrate\Command\Migrate
  * @author heelie.hj@gmail.com
  * @date 2020/9/4 22:14:56
@@ -32,6 +32,7 @@ final class StatusCommand extends CommandAbstract
     }
 
     /**
+     * 打印迁移记录表中所有记录
      * @return string|null
      * @throws \EasySwoole\Mysqli\Exception\Exception
      * @throws \Throwable
@@ -44,17 +45,22 @@ final class StatusCommand extends CommandAbstract
         $this->checkLenFunc();
         if (count($allMigrateInfo) == 0) return null;
         $tmpData = [];
+        
         foreach (array_keys(current($allMigrateInfo)) as $key) {
             $$key          = ($this->strlen)($key);
             $tmpData[$key] = $key;
         }
+        
         array_unshift($allMigrateInfo, $tmpData);
+        
         foreach ($allMigrateInfo as $item) {
             foreach ($item as $key => $value) {
                 (($this->strlen)($value) > $$key) and ($$key = ($this->strlen)($value));
             }
         }
+        
         $isolation = '';
+        
         foreach ($tmpData as $key) {
             $isolation .= '+' . str_pad('', $$key + 2, '-');
         }
@@ -71,6 +77,7 @@ final class StatusCommand extends CommandAbstract
     }
 
     /**
+     * 获取迁移表中所有的数据记录
      * @return array|bool|null
      * @throws \EasySwoole\Mysqli\Exception\Exception
      * @throws \Throwable
@@ -82,6 +89,9 @@ final class StatusCommand extends CommandAbstract
         return MigrateManager::getInstance()->query($sql);
     }
 
+    /**
+     * 是否存在多字节长度计算函数
+     */
     public function checkLenFunc()
     {
         if (function_exists('mb_strlen')) {

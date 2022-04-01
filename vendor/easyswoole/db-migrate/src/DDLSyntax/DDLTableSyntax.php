@@ -7,7 +7,7 @@ use EasySwoole\DatabaseMigrate\MigrateManager;
 use EasySwoole\Mysqli\Exception\Exception;
 
 /**
- * Class DDLTableSyntax
+ * Class DDLTableSyntax，DDL表帮助类，根据表来生成DDL表操作语句
  * @package EasySwoole\DatabaseMigrate\DDLSyntax
  * @author heelie.hj@gmail.com
  * @date 2020/8/22 00:58:27
@@ -15,6 +15,7 @@ use EasySwoole\Mysqli\Exception\Exception;
 class DDLTableSyntax
 {
     /**
+     * 根据表结构来生成DDL表操作语句
      * @param string $tableSchema
      * @param string $tableName
      * @return string
@@ -28,6 +29,7 @@ class DDLTableSyntax
     }
 
     /**
+     * 获取指定表的信息
      * @param string $tableSchema
      * @param string $tableName
      * @return array
@@ -51,6 +53,7 @@ class DDLTableSyntax
     }
 
     /**
+     * 生成DDL表的操作语句
      * @param array $table
      * @return string
      */

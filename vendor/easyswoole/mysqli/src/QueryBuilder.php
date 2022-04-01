@@ -277,7 +277,7 @@ class QueryBuilder
 
     /**
      * 构建UNION语句
-     * @param $cond
+     * @param $cond 另一个查询构建器或者字符串查询语句
      * @param $isUnionAll
      * @return  $this
      */
@@ -292,7 +292,7 @@ class QueryBuilder
     }
 
     /**
-     * LockInShareModel锁定(InnoDb)
+     * LockInShareModel锁定(InnoDb)，加共享锁
      * @param bool $isLock
      * @return QueryBuilder
      * @throws Exception
@@ -308,9 +308,10 @@ class QueryBuilder
     }
 
     /**
-     * SELECT FOR UPDATE锁定(InnoDb)
+     * SELECT FOR UPDATE锁定(InnoDb)，加排它锁
+     * 可以利用 sys.innodb_lock_waits 这个表查询当前锁等待，死锁等情况
      * @param bool $isLock
-     * @param string|null $option NOWAIT,WAIT 5,SKIP LOCKED
+     * @param string|null $option NOWAIT,WAIT 5,SKIP LOCKED ;NOWAIT：获取不到锁就返回失败；SKIP LOCKED：
      * @return $this
      * @throws Exception
      */
@@ -329,8 +330,8 @@ class QueryBuilder
     }
 
     /**
-     * 锁表模式(读/写)
-     * @param $method
+     * 锁表模式(读/写)，锁表模式
+     * @param $method 可以是read或者write
      * @return $this
      * @throws Exception
      */
@@ -424,6 +425,7 @@ class QueryBuilder
     }
 
     /**
+     * 设置锁选项
      * @param string $option NOWAIT,WAIT 5,SKIP LOCKED
      * @return $this
      */
@@ -544,7 +546,14 @@ class QueryBuilder
         $this->reset();
         return $this;
     }
-    //多行插入为INSERT INTO ... VALUES (...) , (...)
+
+    /**
+     * 多行插入为INSERT INTO ... VALUES (...) , (...)
+     * @param $tableName 表名称
+     * @param $insertData 要插入数据
+     * @param $option 要插入数据对应字段
+     * @return $this
+     */
     public function insertAll($tableName, $insertData, $option = [])
     {
         $allowFields = $option['field'] ?? [];
@@ -579,6 +588,7 @@ class QueryBuilder
 
     /**
      * onDuplicate插入
+     * 当在 insert 语句末尾指定了 on duplicate key update 语句时，如果新插入的新数据中 a列 的值已经在数据库中存在，则会执行后面的 update 语句
      * @param $updateColumns
      * @param null $lastInsertId
      * @return $this
@@ -618,7 +628,7 @@ class QueryBuilder
     }
 
     /**
-     * 插入多行数据
+     * 插入多行数据，插入列和数据列要对应
      * @param string $tableName 插入的表名称
      * @param array $multiInsertData 需要插入的数据
      * @param array|null $dataKeys 插入数据对应的字段名
@@ -837,21 +847,36 @@ class QueryBuilder
         return $this->_isSubQuery;
     }
 
+    /**
+     * 开启事务
+     */
     public function startTransaction()
     {
         $this->raw('start transaction');
     }
 
+    /**
+     * 提交事务
+     */
     public function commit()
     {
         $this->raw('commit');
     }
 
+    /**
+     * 回滚事务
+     */
     public function rollback()
     {
         $this->raw("rollback");
     }
 
+    /**
+     * 原生语句查询
+     * @param $sql 带占位符的原生sql语句
+     * @param $param 参数
+     * @return $this
+     */
     public function raw($sql, $param = [])
     {
         $this->_query = $sql;

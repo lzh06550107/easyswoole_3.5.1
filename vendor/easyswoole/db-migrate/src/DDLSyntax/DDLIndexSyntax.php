@@ -7,7 +7,7 @@ use EasySwoole\DatabaseMigrate\Utility\Util;
 use EasySwoole\Mysqli\Exception\Exception;
 
 /**
- * Class DDLIndexSyntax
+ * Class DDLIndexSyntax，生成DDL索引操作
  * @package EasySwoole\DatabaseMigrate\DDLSyntax
  * @author heelie.hj@gmail.com
  * @date 2020/8/24 23:49:54
@@ -15,6 +15,7 @@ use EasySwoole\Mysqli\Exception\Exception;
 class DDLIndexSyntax
 {
     /**
+     * 根据表的索引来生成DDL索引操作语句
      * @param string $tableSchema
      * @param string $tableName
      * @return string
@@ -30,6 +31,7 @@ class DDLIndexSyntax
     }
 
     /**
+     * 获取表的索引信息
      * @param string $tableSchema
      * @param string $tableName
      * @return array|bool|null
@@ -53,6 +55,7 @@ class DDLIndexSyntax
     }
 
     /**
+     * 生成表的DDL索引操作语句
      * @param $indAttrs
      * @return string
      */

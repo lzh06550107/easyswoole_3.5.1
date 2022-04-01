@@ -6,7 +6,7 @@ use EasySwoole\DatabaseMigrate\MigrateManager;
 use EasySwoole\DDL\Enum\DataType;
 
 /**
- * Class DDLColumnSyntax
+ * Class DDLColumnSyntax，生成DDL列操作
  * @package EasySwoole\DatabaseMigrate\DDLSyntax
  * @author heelie.hj@gmail.com
  * @date 2020/8/22 21:12:14
@@ -59,7 +59,8 @@ class DDLColumnSyntax
     ];
 
     /**
-     * @param string $tableSchema
+     * 根据表的列结构来生成DDL表操作语句
+     * @param string $tableSchema 
      * @param string $tableName
      * @return string
      * @throws \EasySwoole\Mysqli\Exception\Exception
@@ -73,6 +74,7 @@ class DDLColumnSyntax
     }
 
     /**
+     * 获取表结构所有列信息
      * @param string $tableSchema
      * @param string $tableName
      * @return array|bool|null
@@ -103,6 +105,11 @@ class DDLColumnSyntax
         return MigrateManager::getInstance()->query($sql);
     }
 
+    /**
+     * 生成列的DDL操作语句
+     * @param $colAttrs
+     * @return string
+     */
     private static function genColumnDDLSyntax($colAttrs): string
     {
         // setColumnType

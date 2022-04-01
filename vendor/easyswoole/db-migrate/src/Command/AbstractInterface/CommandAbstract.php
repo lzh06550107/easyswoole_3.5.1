@@ -7,7 +7,7 @@ use EasySwoole\Command\AbstractInterface\CommandInterface;
 use EasySwoole\DatabaseMigrate\Utility\CommandManager;
 
 /**
- * Class CommandAbstract
+ * Class CommandAbstract 迁移命令抽象类
  * @package EasySwoole\DatabaseMigrate\Command\AbstractInterface
  * @author heelie.hj@gmail.com
  * @date 2020/9/19 00:05:27

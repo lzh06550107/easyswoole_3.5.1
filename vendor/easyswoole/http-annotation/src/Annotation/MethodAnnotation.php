@@ -1,6 +1,5 @@
 <?php
 
-
 namespace EasySwoole\HttpAnnotation\Annotation;
 
 use EasySwoole\HttpAnnotation\AnnotationTag\Api;
@@ -9,22 +8,26 @@ use EasySwoole\HttpAnnotation\AnnotationTag\CircuitBreaker;
 use EasySwoole\HttpAnnotation\AnnotationTag\InjectParamsContext;
 use EasySwoole\HttpAnnotation\AnnotationTag\Method;
 
+/**
+ * 方法注释
+ */
 class MethodAnnotation extends AnnotationBean
 {
     protected $__name;
 
-    protected $api;
-    protected $apiAuth = [];
-    protected $apiDescription;
-    protected $apiFail = [];
-    protected $apiFailParam = [];
-    protected $apiRequestExample = [];
-    protected $apiSuccess = [];
-    protected $apiSuccessParam = [];
-    protected $circuitBreaker;
-    protected $injectParamsContext;
-    protected $method;
-    protected $param = [];
+    protected $api; // Api注解标签
+    protected $apiAuth = []; // ApiAuth注解标签
+    protected $apiDescription; // ApiDescription注解标签
+    protected $apiFail = []; // ApiFail注解标签
+    protected $apiFailParam = []; // ApiFailParam注解标签
+    protected $apiRequestExample = []; // ApiRequestExample注解标签
+    protected $apiSuccess = []; // ApiSuccess注解标签
+    protected $apiSuccessParam = []; // ApiSuccessParam注解标签
+    protected $circuitBreaker; // CircuitBreaker注解标签
+    protected $injectParamsContext; // InjectParamsContext注解标签
+    protected $method; // Method注解标签
+    // 参数覆盖优先顺序 @Param > @ApiAuth > @ApiGroupAuth
+    protected $param = []; // 参数注解标签，总共有三个Param、ApiAuth、ApiGroupAuth
 
     function __construct(string $name)
     {
@@ -74,8 +77,7 @@ class MethodAnnotation extends AnnotationBean
     {
         return $this->apiFail;
     }
-
-
+    
     public function getApiFailParam(?string $name = null)
     {
         if($name){

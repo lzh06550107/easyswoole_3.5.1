@@ -14,7 +14,7 @@ class MigrateManager
     use Singleton;
 
     /** @var Config */
-    protected $config; // 迁移配置
+    protected $config; // 迁移配置和数据库配置
 
     /** @var Client */
     protected $client; // mysql客户端配置

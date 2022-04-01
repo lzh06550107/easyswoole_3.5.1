@@ -4,7 +4,7 @@
 namespace EasySwoole\HttpAnnotation\AnnotationTag;
 
 /**
- * Class ApiGroupDescription
+ * Class ApiGroupDescription，api分组描述
  * @package EasySwoole\HttpAnnotation\AnnotationTag
  * @Annotation
  */

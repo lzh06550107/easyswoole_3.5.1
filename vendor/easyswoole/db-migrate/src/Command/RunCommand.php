@@ -9,7 +9,7 @@ use EasySwoole\DatabaseMigrate\MigrateManager;
 use EasySwoole\DatabaseMigrate\Utility\Util;
 
 /**
- * Class RunCommand
+ * Class RunCommand，对所有未迁移的文件执行迁移操作
  * @package EasySwoole\DatabaseMigrate\Command\Migrate
  * @author heelie.hj@gmail.com
  * @date 2020/9/4 22:19:27
@@ -43,19 +43,19 @@ final class RunCommand extends CommandAbstract
         sort($waitMigrationFiles);
 
         $outMsg  = [];
-        $batchNo = $this->getBatchNo();
+        $batchNo = $this->getBatchNo(); // 获取批次号
         $config  = MigrateManager::getInstance()->getConfig();
         foreach ($waitMigrationFiles as $file) {
             $outMsg[]  = "<brown>Migrating: </brown>{$file}";
             $startTime = microtime(true);
             $className = Util::migrateFileNameToClassName($file);
             $ref = new \ReflectionClass($className);
-            $sql = call_user_func([$ref->newInstance(), 'up']);
-            if ($sql && MigrateManager::getInstance()->query($sql)) {
+            $sql = call_user_func([$ref->newInstance(), 'up']); // 获取迁移的sql语句
+            if ($sql && MigrateManager::getInstance()->query($sql)) { // 执行迁移的sql语句
                 MigrateManager::getInstance()->insert($config->getMigrateTable(),
                     [
-                        "migration" => $file,
-                        "batch" => $batchNo
+                        "migration" => $file, // 迁移文件名称
+                        "batch" => $batchNo // 执行批次号
                     ]
                 );
             }
@@ -66,6 +66,7 @@ final class RunCommand extends CommandAbstract
     }
 
     /**
+     * 收集所有还未迁移的文件
      * @return array
      * @throws \EasySwoole\Mysqli\Exception\Exception
      * @throws \Throwable
@@ -79,7 +80,7 @@ final class RunCommand extends CommandAbstract
         }
         $config = MigrateManager::getInstance()->getConfig();
         $sql = 'SELECT `migration` FROM ' . $config->getMigrateTable() . ' ORDER BY batch ASC,migration ASC';
-        $alreadyMigrationFiles = MigrateManager::getInstance()->query($sql);
+        $alreadyMigrationFiles = MigrateManager::getInstance()->query($sql); // 获取所有已经执行迁移的文件
         $alreadyMigrationFiles = array_column($alreadyMigrationFiles, 'migration');
 
         foreach ($allMigrationFiles as $key => $file) {
@@ -92,6 +93,7 @@ final class RunCommand extends CommandAbstract
     }
 
     /**
+     * 获取迁移执行批次号
      * @return int
      * @throws \EasySwoole\Mysqli\Exception\Exception
      * @throws \Throwable

@@ -9,7 +9,7 @@ use EasySwoole\DatabaseMigrate\MigrateManager;
 use EasySwoole\DatabaseMigrate\Utility\Util;
 
 /**
- * Class RollbackCommand
+ * Class RollbackCommand，回滚迁移记录，默认回滚上一次的迁移，指定操作相关参数可以从status命令中查看
  * @package EasySwoole\DatabaseMigrate\Command\Migrate
  * @author heelie.hj@gmail.com
  * @date 2020/9/19 00:30:42
@@ -28,8 +28,8 @@ final class RollbackCommand extends CommandAbstract
 
     public function help(CommandHelpInterface $commandHelp): CommandHelpInterface
     {
-        $commandHelp->addActionOpt('-b, --batch', 'rollback migrate batch no');
-        $commandHelp->addActionOpt('-i, --id', 'rollback migrate id');
+        $commandHelp->addActionOpt('-b, --batch', 'rollback migrate batch no'); // 批次号
+        $commandHelp->addActionOpt('-i, --id', 'rollback migrate id'); // 迁移号
         return $commandHelp;
     }
 
@@ -38,7 +38,7 @@ final class RollbackCommand extends CommandAbstract
      */
     public function exec(): ?string
     {
-        $waitRollbackFiles = $this->getRollbackFiles();
+        $waitRollbackFiles = $this->getRollbackFiles(); // 获取回滚的迁移文件
 
         $outMsg = [];
 
@@ -49,9 +49,9 @@ final class RollbackCommand extends CommandAbstract
             $startTime = microtime(true);
             $className = Util::migrateFileNameToClassName($file);
             $ref = new \ReflectionClass($className);
-            $sql = call_user_func([$ref->newInstance(), 'down']);
-            if ($sql && MigrateManager::getInstance()->query($sql)) {
-                MigrateManager::getInstance()->delete($config->getMigrateTable(), ["id" => $id]);
+            $sql = call_user_func([$ref->newInstance(), 'down']); // 调用回滚方法获取回滚sql语句
+            if ($sql && MigrateManager::getInstance()->query($sql)) { // 执行回滚sql语句
+                MigrateManager::getInstance()->delete($config->getMigrateTable(), ["id" => $id]); // 回滚需要删除迁移记录
             }
             $outMsg[] = "<green>Migrated:  </green>{$file} (" . round(microtime(true) - $startTime, 2) . " seconds)";
         }
@@ -59,6 +59,12 @@ final class RollbackCommand extends CommandAbstract
         return Color::render(implode(PHP_EOL, $outMsg));
     }
 
+    /**
+     * 获取回滚的迁移文件
+     * @return array|string
+     * @throws \EasySwoole\Mysqli\Exception\Exception
+     * @throws \Throwable
+     */
     private function getRollbackFiles()
     {
         $config    = MigrateManager::getInstance()->getConfig();
@@ -68,7 +74,7 @@ final class RollbackCommand extends CommandAbstract
             $sql .= " `batch`={$batch} ";
         } elseif (($id = $this->getOpt(['i', 'id'])) && is_numeric($id)) {
             $sql .= " `id`={$id} ";
-        } else {
+        } else { // 默认是回滚上一次批次号
             $sql .= " `batch`=(SELECT MAX(`batch`) FROM `{$tableName}` )";
         }
         $sql .= " order by id desc";
@@ -76,7 +82,7 @@ final class RollbackCommand extends CommandAbstract
         if (empty($readyRollbackFiles)) {
             return Color::success('No files to be rollback.');
         }
-        $readyRollbackFiles = array_column($readyRollbackFiles, 'migration', 'id');
+        $readyRollbackFiles = array_column($readyRollbackFiles, 'migration', 'id'); // 获取所有回滚的迁移文件
 
         foreach ($readyRollbackFiles as $id => $file) {
             $file = $config->getMigratePath() . $file . ".php";

@@ -1,14 +1,15 @@
 <?php
 
-
 namespace EasySwoole\HttpAnnotation\Utility;
-
 
 use EasySwoole\Command\AbstractInterface\CommandHelpInterface;
 use EasySwoole\Command\AbstractInterface\CommandInterface;
 use EasySwoole\Command\Color;
 use EasySwoole\Command\CommandManager;
 
+/**
+ * 命令行生成离线文档，允许通过注解控制器的注解标签，生成文档
+ */
 class DocCommand implements CommandInterface
 {
     public function commandName(): string
@@ -23,8 +24,8 @@ class DocCommand implements CommandInterface
 
     public function help(CommandHelpInterface $commandHelp): CommandHelpInterface
     {
-        $commandHelp->addActionOpt('--dir', 'scanned directory or file');
-        $commandHelp->addActionOpt('--extra', 'import ext MD file');
+        $commandHelp->addActionOpt('--dir', 'scanned directory or file'); // 指定控制器所在目录
+        $commandHelp->addActionOpt('--extra', 'import ext MD file'); // 导入额外的md文件
         return $commandHelp;
     }
 
@@ -50,7 +51,7 @@ class DocCommand implements CommandInterface
         $string = $doc->scan2Html($dir, $extra);
 
         if (!empty($string)) {
-            file_put_contents('easyDoc.html', $string);
+            file_put_contents('easyDoc.html', $string); // 写入文件中
             $ret = Color::success('The generated file is easyDoc.html') . PHP_EOL;
         } else {
             $ret = Color::error('There is no API to generate') . PHP_EOL;

@@ -7,7 +7,7 @@ namespace EasySwoole\HttpAnnotation\AnnotationTag;
 use EasySwoole\Annotation\AbstractAnnotationTag;
 
 /**
- * Class ApiFail
+ * Class ApiFail，api接口失败返回结构样例
  * @package EasySwoole\HttpAnnotation\AnnotationTag
  * @Annotation
  */

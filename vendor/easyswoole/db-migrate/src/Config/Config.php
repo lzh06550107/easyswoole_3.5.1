@@ -14,47 +14,48 @@ use EasySwoole\Mysqli\Config as MysqliConfig;
  */
 class Config extends MysqliConfig
 {
-    /** @var string default migrate table name */
+    /** @var string default migrate table name，迁移记录的数据库表名 */
     protected $migrate_table = "migrations";
 
-    /** @var string migrate path */
+    /** @var string migrate path，迁移文件目录的绝对路径 */
     protected $migrate_path;
 
-    /** @var string migrate template file path */
+    /** @var string migrate template file path，迁移模板文件的绝对路径 */
     protected $migrate_template = __DIR__ . '/../Resource/migrate._php';
 
-    /** @var string migrate template class name */
+    /** @var string migrate template class name， 迁移模板类的类名 */
     protected $migrate_template_class_name = 'MigratorClassName';
 
-    /** @var string migrate template table name */
+    /** @var string migrate template table name，迁移模板类的表名 */
     protected $migrate_template_table_name = 'MigratorTableName';
 
-    /** @var string create migrate template file path */
+    /** @var string create migrate template file path，迁移模板创建表的模板文件的绝对路径 */
     protected $migrate_create_template = __DIR__ . '/../Resource/migrate_create._php';
 
-    /** @var string alter migrate template file path */
+    /** @var string alter migrate template file path，迁移模板修改表的模板文件的绝对路径 */
     protected $migrate_alter_template = __DIR__ . '/../Resource/migrate_alter._php';
 
-    /** @var string drop migrate template file path */
+    /** @var string drop migrate template file path，迁移模板删除表的模板文件的绝对路径 */
     protected $migrate_drop_template = __DIR__ . '/../Resource/migrate_drop._php';
 
 
-    /** @var string seeder path */
+    /** @var string seeder path，数据填充目录绝对路径 */
     protected $seeder_path;
 
-    /** @var string seeder template class name */
+    /** @var string seeder template class name，数据填充模板类的类名 */
     protected $seeder_template_class_name = 'SeederClassName';
 
-    /** @var string seeder template file path */
+    /** @var string seeder template file path，数据填充模板文件的绝对路径 */
     protected $seeder_template = __DIR__ . '/../Resource/seeder._php';
 
 
-    /** @var string generate migrate template file path */
+    /** @var string generate migrate template file path，逆向生成迁移文件的模板文件绝对路径 */
     protected $migrate_generate_template = __DIR__ . '/../Resource/migrate_generate._php';
 
-    /** @var string migrate template class name */
+    /** @var string migrate template class name，逆向生成迁移模板SQL语句的DDL代码块 */
     protected $migrate_template_ddl_syntax = 'DDLSyntax';
 
+    // 如果没有配置迁移路径和数据路径，则使用运行命令的当前目录
     protected function initialize(): void
     {
         if (empty($this->migrate_path)) {

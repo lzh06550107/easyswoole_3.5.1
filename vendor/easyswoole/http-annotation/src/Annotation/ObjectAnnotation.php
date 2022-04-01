@@ -1,30 +1,34 @@
 <?php
 
-
 namespace EasySwoole\HttpAnnotation\Annotation;
 
 use EasySwoole\HttpAnnotation\AnnotationTag\ApiGroup;
 use EasySwoole\HttpAnnotation\AnnotationTag\ApiGroupDescription;
 use EasySwoole\HttpAnnotation\AnnotationTag\Controller;
 
+/**
+ * 收集类这一层级注解
+ */
 class ObjectAnnotation extends AnnotationBean
 {
     /** @var ApiGroup|null */
-    protected $apiGroup;
+    protected $apiGroup; // 收集 ApiGroup 注解标签
+
     /** @var ApiGroupDescription|null */
-    protected $apiGroupDescription;
+    protected $apiGroupDescription; // 收集 ApiGroupDescription 注解标签
+
     /** @var Controller|null */
-    protected $controller;
+    protected $controller; // 收集 Controller 注解标签
 
-    protected $apiGroupAuth = [];
+    protected $apiGroupAuth = []; // 收集 ApiGroupAuth 注解标签，可以存在多个
 
-    protected $param = [];
+    protected $param = []; // 收集 Param 注解标签，可以存在多个
 
-    protected $__methods = [];
+    protected $__methods = []; // 收集该类的所有方法注解，即 MethodAnnotation
 
-    protected $__properties = [];
+    protected $__properties = []; // 收集该类的所有属性注解，即 PropertyAnnotation
 
-
+    
     function getGroupAuthTag(?string $paramName = null)
     {
         if($paramName){

@@ -5,7 +5,7 @@ namespace EasySwoole\HttpAnnotation\AnnotationTag;
 
 
 /**
- * Class ApiRequestExample
+ * Class ApiRequestExample api接口演示路径
  * @package EasySwoole\HttpAnnotation\AnnotationTag
  * @Annotation
  */

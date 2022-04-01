@@ -10,7 +10,7 @@ use EasySwoole\DatabaseMigrate\Utility\Util;
 use Throwable;
 
 /**
- * Class ResetCommand
+ * Class ResetCommand，根据迁移表的记录，一次性回滚所有迁移
  * @package EasySwoole\DatabaseMigrate\Command\Migrate
  * @author heelie.hj@gmail.com
  * @date 2020/9/19 00:25:14
@@ -49,9 +49,9 @@ final class ResetCommand extends CommandAbstract
             $startTime = microtime(true);
             $className = Util::migrateFileNameToClassName($file);
             $ref = new \ReflectionClass($className);
-            $sql = call_user_func([$ref->newInstance(), 'down']);
+            $sql = call_user_func([$ref->newInstance(), 'down']); // 执行回滚方法
             if ($sql && MigrateManager::getInstance()->query($sql)) {
-                MigrateManager::getInstance()->delete($config->getMigrateTable(), ["id" => $id]);
+                MigrateManager::getInstance()->delete($config->getMigrateTable(), ["id" => $id]); // 回滚需要删除迁移记录
             }
             $outMsg[] = "<green>Migrated:  </green>{$file} (" . round(microtime(true) - $startTime, 2) . " seconds)";
         }
@@ -59,15 +59,22 @@ final class ResetCommand extends CommandAbstract
         return Color::render(implode(PHP_EOL, $outMsg));
     }
 
+    /**
+     * 获取所有的回滚文件
+     * @return array|string
+     * @throws Throwable
+     * @throws \EasySwoole\Mysqli\Exception\Exception
+     */
     private function getRollbackFiles()
     {
         $config    = MigrateManager::getInstance()->getConfig();
         $tableName = $config->getMigrateTable();
         $sql       = "SELECT `id`,`migration` FROM `{$tableName}` ORDER BY `id` DESC ";
-        $readyRollbackFiles = MigrateManager::getInstance()->query($sql);
+        $readyRollbackFiles = MigrateManager::getInstance()->query($sql); // 执行sql语句
         if (empty($readyRollbackFiles)) {
             return Color::success('No files to be rollback.');
         }
+        // 获取所有迁移文件
         $readyRollbackFiles = array_column($readyRollbackFiles, 'migration', 'id');
 
         foreach ($readyRollbackFiles as $id => $file) {

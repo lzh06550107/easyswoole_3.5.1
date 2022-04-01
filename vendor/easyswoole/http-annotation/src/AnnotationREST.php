@@ -1,12 +1,13 @@
 <?php
 
-
 namespace EasySwoole\HttpAnnotation;
-
 
 use EasySwoole\Http\Request;
 use EasySwoole\Http\Response;
 
+/**
+ * restful规范控制器
+ */
 class AnnotationREST extends AnnotationController
 {
     /*

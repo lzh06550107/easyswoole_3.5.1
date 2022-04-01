@@ -43,7 +43,7 @@ class CommandManager
         if (!is_array($name)) {
             return BaseCommandManager::getInstance()->getOpt($name, $default);
         }
-        foreach ($name as $item) {
+        foreach ($name as $item) { // 某些参数项有简称和全称，只要找到一个就行
             if ($opt = BaseCommandManager::getInstance()->getOpt($item)) {
                 return $opt;
             }

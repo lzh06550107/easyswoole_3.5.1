@@ -3,9 +3,12 @@
 
 namespace EasySwoole\Annotation;
 
-
+/**
+ * 值解析器
+ */
 class ValueParser
 {
+    // 替换注解中变量的值
     public static function parser(?string $raw):array
     {
         $params = static::explodeSubject($raw);
@@ -47,6 +50,7 @@ class ValueParser
                 $temp .= $char;
             }
         }
+        
         /*
          * 追加最后的参数值
          */
@@ -86,7 +90,7 @@ class ValueParser
         }
         if(substr($value,0,5) == 'eval('  && substr($value,-1,1) == ')'){
             $value =  substr($value,5,strlen($value) - 6);
-            return eval("return {$value} ;");
+            return eval("return {$value} ;"); // 在当前环境执行
         }if($value == 'true'){
              $value = true;
         }else if($value == 'false'){

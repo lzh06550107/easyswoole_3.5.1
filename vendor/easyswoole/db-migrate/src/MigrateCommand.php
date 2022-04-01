@@ -28,7 +28,7 @@ use Throwable;
 use function Swoole\Coroutine\run;
 
 /**
- * Class MigrateCommand
+ * Class MigrateCommand，迁移一级命令
  * @package EasySwoole\DatabaseMigrate\Command
  * @author heelie.hj@gmail.com
  * @date 2020/9/4 22:16:48
@@ -36,27 +36,35 @@ use function Swoole\Coroutine\run;
 class MigrateCommand extends CommandAbstract
 {
     private $command = [
-        'create'   => CreateCommand::class,
-        'generate' => GenerateCommand::class,
-        'reset'    => ResetCommand::class,
-        'rollback' => RollbackCommand::class,
-        'run'      => RunCommand::class,
-        'seed'     => SeedCommand::class,
-        'status'   => StatusCommand::class,
+        'create'   => CreateCommand::class, // 创建一个迁移模板
+        'generate' => GenerateCommand::class, // 对已存在的表生成适配当前迁移工具的迁移模板
+        'reset'    => ResetCommand::class, // 根据迁移表的记录，一次性回滚所有迁移
+        'rollback' => RollbackCommand::class, // 回滚迁移记录，默认回滚上一次的迁移
+        'run'      => RunCommand::class, // 对所有未迁移的文件执行迁移操作
+        'seed'     => SeedCommand::class, // 数据填充工具
+        'status'   => StatusCommand::class, // 展示成功迁移的数据，即为迁移表内的数据
     ];
 
+    /**
+     * 该方法仅仅是一个代理作用
+     * @return string
+     */
     public function commandName(): string
     {
         try {
-            $option = $this->getArg(0);
+            $option = $this->getArg(0); // 根据参数获取二级命令
             if (isset($this->command[$option])) {
-                return $this->callOptionMethod($option, __FUNCTION__);
+                return $this->callOptionMethod($option, __FUNCTION__); // 调用commandName方法
             }
         } catch (Throwable $throwable) {
         }
         return 'migrate';
     }
 
+    /**
+     * 该方法仅仅是一个代理作用
+     * @return string
+     */
     public function desc(): string
     {
         try {
@@ -94,6 +102,11 @@ class MigrateCommand extends CommandAbstract
         return $commandHelp;
     }
 
+    /**
+     * 执行命令
+     * @return string|null
+     * @throws ReflectionException
+     */
     public function exec(): ?string
     {
         $closure = function () use (&$result) {
@@ -110,6 +123,7 @@ class MigrateCommand extends CommandAbstract
     }
 
     /**
+     * 调用二级命令
      * @param $option
      * @param $method
      * @param $args
@@ -129,6 +143,11 @@ class MigrateCommand extends CommandAbstract
         return call_user_func([$ref->newInstance(), $method], ...$args);
     }
 
+    /**
+     * 检查迁移表是否存在
+     * @throws Throwable
+     * @throws \EasySwoole\Mysqli\Exception\Exception
+     */
     private function checkDefaultMigrateTable()
     {
         $config      = MigrateManager::getInstance()->getConfig();
@@ -137,6 +156,11 @@ class MigrateCommand extends CommandAbstract
         empty($tableExists) and $this->createDefaultMigrateTable();
     }
 
+    /**
+     * 创建默认迁移表
+     * @throws Throwable
+     * @throws \EasySwoole\Mysqli\Exception\Exception
+     */
     private function createDefaultMigrateTable()
     {
         $config = MigrateManager::getInstance()->getConfig();
@@ -150,7 +174,7 @@ class MigrateCommand extends CommandAbstract
             $table->normal('ind_batch', 'batch');
         });
 
-        if (MigrateManager::getInstance()->query($sql) === false) {
+        if (MigrateManager::getInstance()->query($sql) === false) { // 执行失败抛出异常
             throw new RuntimeException('Create default migrate table fail.' . PHP_EOL . ' SQL: ' . $sql);
         }
     }

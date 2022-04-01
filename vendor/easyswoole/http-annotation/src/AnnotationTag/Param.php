@@ -6,43 +6,48 @@ namespace EasySwoole\HttpAnnotation\AnnotationTag;
 use EasySwoole\Annotation\AbstractAnnotationTag;
 
 /**
- * Class Param
+ * Class Param，基础参数注解，作用域在控制器的 actionMethod 与 onRequest 均为有效
  * @package EasySwoole\HttpAnnotation\AnnotationTag
  * @Annotation
  */
 class Param extends AbstractAnnotationTag
 {
     /**
-     * @var string
+     * @var string，参数名称
      */
     public $name;
 
+    /**
+     * @var callable 该字段是用于对某个参数值不为 null 时进行预处理。 preHandler 需要是一个 callable
+     */
     public $preHandler;
 
     /**
-     * @var string
+     * @var string 参数类型 type字段可选值为：string、int、double、real、float、bool、json、array
      */
     public $type;
     /**
-     * @var string
+     * @var string 该字段主要用户自动生成文档时，参数的描述说明
      */
     public $description;
 
     /**
-     * @var array
+     * @var array 从何处获取参数，允许值为：POST、GET、COOKIE、HEADER、FILE、DI、CONTEXT、RAW、JSON、SESSION、ROUTER_PARAMS
      */
     public $from = [];
 
-
+    /**
+     * @var 参数默认值
+     */
     public $defaultValue = null;
 
     /**
-     * @var string
+     * @var string 参数别名
      */
     public $alias = null;
 
     /**
-     * @var bool
+     * @var bool 参数是否过时
      */
     public $deprecated;
 
@@ -257,6 +262,7 @@ class Param extends AbstractAnnotationTag
         return 'Param';
     }
 
+    // Param对象实际上是对Easyswoole/Validate参数验证组件验证规则的封装，底层是调用该组件进行参数校验。
     function __onParser()
     {
         foreach ($this->allowValidateRule as $ruleName) {

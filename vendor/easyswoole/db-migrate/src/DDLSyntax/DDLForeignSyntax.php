@@ -6,9 +6,13 @@ use EasySwoole\DatabaseMigrate\MigrateManager;
 use EasySwoole\DatabaseMigrate\Utility\Util;
 use EasySwoole\Mysqli\Exception\Exception;
 
+/**
+ * 生成DDL外键操作
+ */
 class DDLForeignSyntax
 {
     /**
+     * 根据表的外键来生成DDL索引操作语句
      * @param string $tableSchema
      * @param string $tableName
      * @return string
@@ -24,6 +28,7 @@ class DDLForeignSyntax
     }
 
     /**
+     * 获取表的外键信息
      * @param string $tableSchema
      * @param string $tableName
      * @return mixed|void
@@ -49,6 +54,7 @@ class DDLForeignSyntax
     }
 
     /**
+     * 获取表的外键约束
      * @param string $constraintSchema
      * @param string $constraintName
      * @param string $tableName
@@ -72,6 +78,13 @@ class DDLForeignSyntax
         return MigrateManager::getInstance()->query($sql);
     }
 
+    /**
+     * 生成表的DDL外键操作语句
+     * @param $indAttrs
+     * @return string
+     * @throws Exception
+     * @throws \Throwable
+     */
     private static function genForeignDDLSyntax($indAttrs): string
     {
         $tableName            = current($indAttrs)['TABLE_NAME'];

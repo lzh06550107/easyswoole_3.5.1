@@ -1,11 +1,12 @@
 <?php
 
-
 namespace EasySwoole\HttpAnnotation\Annotation;
-
 
 use EasySwoole\Component\Singleton;
 
+/**
+ * 注释的缓存管理器，数据保存在内存中，类名称和解析该类的所有注释对象的映射关系
+ */
 class Cache
 {
     private $data = [];

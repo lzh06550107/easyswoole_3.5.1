@@ -7,15 +7,15 @@ use EasySwoole\Annotation\AbstractAnnotationTag;
 use EasySwoole\HttpAnnotation\Exception\Annotation\InvalidTag;
 
 /**
- * Class Inject
+ * Class Inject，可注入类并且传入构造函数参数
  * @package EasySwoole\HttpAnnotation\AnnotationTag
  * @Annotation
  */
 class Inject extends AbstractAnnotationTag
 {
-    public $className;
+    public $className; // 类全路径，必填且是字符串且该类存在
 
-    public $args = [];
+    public $args = []; // 传入构造器参数
 
     public function tagName(): string
     {

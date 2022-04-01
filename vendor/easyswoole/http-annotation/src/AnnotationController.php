@@ -1,8 +1,6 @@
 <?php
 
-
 namespace EasySwoole\HttpAnnotation;
-
 
 use EasySwoole\Component\Context\ContextManager;
 use EasySwoole\Component\Di as IOC;
@@ -25,6 +23,9 @@ use EasySwoole\Validate\Validate;
 use Swoole\Coroutine;
 use Swoole\Coroutine\Channel;
 
+/**
+ * 注释控制器基类，它重写了父类的 __construct 和 __exec 方法，从而实现的注解支持
+ */
 class AnnotationController extends Controller
 {
     private $classAnnotation;
@@ -33,11 +34,13 @@ class AnnotationController extends Controller
     {
         parent::__construct();
         if($parser == null){
-            $parser = new Parser();
+            $parser = new Parser(); // 实例化注解解析器
         }
+        // 通过在构造函数中分析控制器反射类来获取类注释
         $this->classAnnotation = $parser->parseObject(new \ReflectionClass(static::class));
     }
 
+    // 通过在该方法中分析控制器反射类来获取类方法的注释
     protected function __exec()
     {
         /*

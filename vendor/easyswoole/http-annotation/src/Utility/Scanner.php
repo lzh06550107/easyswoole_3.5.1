@@ -3,7 +3,6 @@
 
 namespace EasySwoole\HttpAnnotation\Utility;
 
-
 use EasySwoole\Http\Message\Status;
 use EasySwoole\Http\Request;
 use EasySwoole\Http\Response;
@@ -17,10 +16,13 @@ use EasySwoole\HttpAnnotation\AnnotationTag\Controller;
 use EasySwoole\Utility\File;
 use FastRoute\RouteCollector;
 
+/**
+ * 扫描器
+ */
 class Scanner
 {
     /** @var Parser|ParserInterface|null */
-    protected $parser;
+    protected $parser; // 注解解析器
 
     function __construct(?ParserInterface $parser = null)
     {
@@ -38,12 +40,24 @@ class Scanner
         return $this->parser;
     }
 
+    /**
+     * 通过反射类来解析注解生成ObjectAnnotation对象
+     * @param string $class
+     * @return ObjectAnnotation
+     * @throws \ReflectionException
+     */
     function getObjectAnnotation(string $class): ObjectAnnotation
     {
         $ref = new \ReflectionClass($class);
         return $this->parser->parseObject($ref);
     }
 
+    /**
+     * 扫描控制器目录生成路由配置
+     * @param RouteCollector $routeCollector
+     * @param string $controllerPath
+     * @param string $controllerNameSpace
+     */
     function mappingRouter(RouteCollector $routeCollector, string $controllerPath, string $controllerNameSpace = 'App\\HttpController\\')
     {
         //用于psr规范去除命名空间
@@ -54,7 +68,7 @@ class Scanner
          * @var ObjectAnnotation $classAnnotation
          */
         foreach ($annotations as $class => $classAnnotation) {
-            $controllerAnnotation = $classAnnotation->getController();
+            $controllerAnnotation = $classAnnotation->getController(); // 收集类上的控制器注解
             /**
              * @var  $methodName
              * @var MethodAnnotation $method
@@ -82,32 +96,47 @@ class Scanner
         }
     }
 
+    /**
+     * 
+     * @param string $dirOrFile
+     * @return array
+     * @throws \ReflectionException
+     */
     function scanAnnotations(string $dirOrFile): array
     {
         $ret = [];
         $files = [];
+
         if (!is_dir($dirOrFile)) {
             $files[] = $dirOrFile;
         } else {
             $files = File::scanDirectory($dirOrFile)['files'];
         }
+
         foreach ($files as $file) {
             $fileExtension = pathinfo($file)['extension'] ?? '';
 
-            if (!$fileExtension || $fileExtension !== 'php') {
+            if (!$fileExtension || $fileExtension !== 'php') { // 必须是php文件
                 continue;
             }
 
-            $class = static::getFileDeclaredClass($file);
+            $class = static::getFileDeclaredClass($file); // 获取文件中声明的类全路径
             if (!$class) {
                 continue;
             }
 
-            $ret[$class] = $this->getObjectAnnotation($class);
+            $ret[$class] = $this->getObjectAnnotation($class); // 解析类中注解
         }
+        
         return $ret;
     }
 
+    /**
+     * 根据控制器标签和方法Api标签生成路由
+     * @param Controller|null $controller
+     * @param Api|null $api
+     * @return string|null
+     */
     public static function getRoutePath(?Controller $controller = null, ?Api $api = null): ?string
     {
         $prefix = $controller ? $controller->prefix : null;
@@ -131,6 +160,11 @@ class Scanner
         return $prefix . $path;
     }
 
+    /**
+     * 获取文件中声明的类
+     * @param string $file
+     * @return string|null
+     */
     public static function getFileDeclaredClass(string $file): ?string
     {
         $namespace = '';

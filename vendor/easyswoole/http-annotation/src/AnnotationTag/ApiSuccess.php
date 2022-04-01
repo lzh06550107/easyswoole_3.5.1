@@ -4,7 +4,7 @@
 namespace EasySwoole\HttpAnnotation\AnnotationTag;
 
 /**
- * Class ApiSuccess
+ * Class ApiSuccess，api接口成功返回结构样例
  * @package EasySwoole\HttpAnnotation\AnnotationTag
  * @Annotation
  */

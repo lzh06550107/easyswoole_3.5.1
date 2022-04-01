@@ -9,7 +9,7 @@ use EasySwoole\DatabaseMigrate\Validate\Validator;
 use Throwable;
 
 /**
- * Class Util
+ * Class Util，工具类
  * @package EasySwoole\DatabaseMigrate\Utility
  * @author heelie.hj@gmail.com
  * @date 2020/8/22 21:28:02
@@ -17,6 +17,7 @@ use Throwable;
 class Util
 {
     /**
+     * 下划线转换为驼峰
      * @param string $str
      * @return string
      */
@@ -28,6 +29,7 @@ class Util
     }
 
     /**
+     * 驼峰转换为下划线
      * @param string $str
      * @return string
      */
@@ -39,6 +41,7 @@ class Util
     }
 
     /**
+     * 二维数组的某一列值作为键，该列值相同的行封装在数组中
      * @param array $array
      * @param string $indexKey
      * @return array
@@ -55,19 +58,21 @@ class Util
     }
 
     /**
+     * 获取迁移文件最终名称
      * @param $migrateName
      * @return string
      * @throws Throwable
      */
     public static function genMigrateFileName($migrateName)
     {
-        if (Validator::isHumpName($migrateName)) {
+        if (Validator::isHumpName($migrateName)) { // 驼峰命名转换为下划线
             $migrateName = self::humpConvertLine($migrateName);
         }
         return self::getCurrentMigrateDate() . '_' . $migrateName . '.php';
     }
 
     /**
+     * 迁移文件日期
      * @return string
      * @throws Throwable
      */
@@ -77,6 +82,7 @@ class Util
     }
 
     /**
+     * 迁移文件名称转换为类名称
      * @param $fileName
      * @return string
      */
@@ -87,6 +93,7 @@ class Util
     }
 
     /**
+     * 获取所有的迁移文件
      * @return array
      */
     public static function getAllMigrateFiles(): array
@@ -96,6 +103,7 @@ class Util
     }
 
     /**
+     * 获取所有数据种子文件
      * @return array
      */
     public static function getAllSeederFiles(): array
@@ -105,6 +113,7 @@ class Util
     }
 
     /**
+     * 批量加载文件
      * @param $files
      */
     public static function requireOnce($files)

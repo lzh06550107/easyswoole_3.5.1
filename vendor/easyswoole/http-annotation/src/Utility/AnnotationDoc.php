@@ -1,8 +1,6 @@
 <?php
 
-
 namespace EasySwoole\HttpAnnotation\Utility;
-
 
 use EasySwoole\HttpAnnotation\Annotation\MethodAnnotation;
 use EasySwoole\HttpAnnotation\Annotation\ObjectAnnotation;
@@ -13,6 +11,9 @@ use EasySwoole\HttpAnnotation\AnnotationTag\Param;
 use EasySwoole\ParserDown\ParserDown;
 use EasySwoole\Validate\Error;
 
+/**
+ * 控制器输出文档
+ */
 class AnnotationDoc
 {
     private $scanner;
@@ -30,18 +31,24 @@ class AnnotationDoc
         return $this;
     }
 
+    /**
+     * 扫描指定的目录，和额外的md文件
+     * @param string $dirOrFile
+     * @param string|null $extMd
+     * @return array|false|string|string[]
+     */
     function scan2Html(string $dirOrFile, ?string $extMd = null)
     {
-        if ($extMd) {
+        if ($extMd) { // 如果指定了额外的md文档，则解析
             $md = new ParserDown();
             $extMd = $md->text($extMd);
         } else {
             $extMd = '';
         }
         $ret = file_get_contents(__DIR__ . "/docPage.tpl");
-        $ret = str_replace('{{$extra}}', $extMd, $ret);
+        $ret = str_replace('{{$extra}}', $extMd, $ret); // 替换模板中md文档内容
 
-        $ret = str_replace('{{$projectName}}', $this->projectName, $ret);
+        $ret = str_replace('{{$projectName}}', $this->projectName, $ret); // 替换项目名称
 
         $info = $this->buildAnnotationHtml($dirOrFile);
 
@@ -75,6 +82,11 @@ class AnnotationDoc
         return str_replace('{{$apiDoc}}', $info['html'], $ret);
     }
 
+    /**
+     * 扫描指定目录文件来构建注释文档
+     * @param string $dirOrFile 扫描目录
+     * @return array
+     */
     function buildAnnotationHtml(string $dirOrFile): array
     {
         $groupList = [];
@@ -82,7 +94,8 @@ class AnnotationDoc
         $htmls = [];
 
         /** @var ObjectAnnotation $objectAnnotation */
-        foreach ($list as $k => $objectAnnotation) {
+        foreach ($list as $k => $objectAnnotation) { // 遍历所有类注释
+            
             $html = '';
             $currentGroupName = $objectAnnotation->getApiGroupTag() ? $objectAnnotation->getApiGroupTag()->groupName : 'default';
 
