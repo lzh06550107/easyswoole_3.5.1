@@ -5,6 +5,9 @@ namespace EasySwoole\ORM\Concern;
 use EasySwoole\ORM\AbstractModel;
 use EasySwoole\ORM\Db\ClientInterface;
 
+/**
+ * 数据库连接操作类
+ */
 trait ConnectionInfo
 {
     /** @var string 连接池名称 */

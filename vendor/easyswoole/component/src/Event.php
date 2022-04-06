@@ -9,7 +9,7 @@
 namespace EasySwoole\Component;
 
 /**
- * 事件类容器，需要用户自定义事件管理器，但是还是存在问题，对同一事件注册多个监听器怎么办？？
+ * 事件类容器，需要用户自定义事件管理器，但是还是存在问题，对同一事件只能注册一个监听器
  */
 class Event extends Container
 {

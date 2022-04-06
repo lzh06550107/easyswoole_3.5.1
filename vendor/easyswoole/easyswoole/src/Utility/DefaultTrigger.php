@@ -9,7 +9,7 @@ use EasySwoole\Trigger\Location;
 use EasySwoole\Trigger\TriggerInterface;
 
 /**
- * 默认触发器
+ * 默认触发器，该触发器使用平台的日志输出器来打印日志
  */
 class DefaultTrigger implements TriggerInterface
 {

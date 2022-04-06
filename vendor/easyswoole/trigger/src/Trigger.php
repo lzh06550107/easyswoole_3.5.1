@@ -6,7 +6,7 @@ namespace EasySwoole\Trigger;
 use EasySwoole\Log\LoggerInterface;
 
 /**
- * 触发器实现类
+ * 触发器实现类，该触发器使用用户传入的日志输出器来打印到控制台
  */
 class Trigger implements TriggerInterface
 {

@@ -2,6 +2,9 @@
 
 namespace EasySwoole\ORM\Concern;
 
+/**
+ * 时间戳trait操作类，主要是数据创建和更新字段
+ */
 trait TimeStamp
 {
 

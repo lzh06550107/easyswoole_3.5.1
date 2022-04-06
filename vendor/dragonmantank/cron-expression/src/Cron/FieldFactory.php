@@ -5,18 +5,19 @@ namespace Cron;
 use InvalidArgumentException;
 
 /**
- * CRON field factory implementing a flyweight factory
+ * CRON field factory implementing a flyweight factory，CRON字段工厂实现轻量级工厂
  * @link http://en.wikipedia.org/wiki/Cron
  */
 class FieldFactory
 {
     /**
-     * @var array Cache of instantiated fields
+     * @var array Cache of instantiated fields，缓存初始化字段
      */
     private $fields = array();
 
     /**
      * Get an instance of a field object for a cron expression position
+     * 获取CRON表达式各个部分位置的字段对象实例
      *
      * @param int $position CRON expression position value to retrieve
      *

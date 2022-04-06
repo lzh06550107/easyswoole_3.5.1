@@ -32,8 +32,8 @@ class Trigger
             $trigger = new DefaultTrigger();
         }
         $this->trigger = $trigger;
-        $this->onError = new Event();
-        $this->onException = new Event();
+        $this->onError = new Event(); // 忽略事件名称，会调用所有监听器
+        $this->onException = new Event(); // 忽略事件名称，会调用所有监听器
     }
 
     public function error($msg,int $errorCode = E_USER_ERROR,Location $location = null)

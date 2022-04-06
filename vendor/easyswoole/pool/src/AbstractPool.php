@@ -3,7 +3,6 @@
 
 namespace EasySwoole\Pool;
 
-
 use EasySwoole\Pool\Exception\Exception;
 use EasySwoole\Pool\Exception\PoolEmpty;
 use EasySwoole\Utility\Random;
@@ -12,23 +11,26 @@ use Swoole\Coroutine\Channel;
 use Swoole\Table;
 use Swoole\Timer;
 
+/**
+ * 连接池抽象类
+ */
 abstract class AbstractPool
 {
-    private $createdNum = 0;
+    private $createdNum = 0; // 已经创建的对象数
     /** @var Channel */
-    private $poolChannel;
-    private $objHash = [];
+    private $poolChannel; // 连接池通道对象
+    private $objHash = []; // 池中保存对象hash值和bool值，如果对象取出，则不在池中值为false
     /** @var Config */
-    private $conf;
-    private $intervalCheckTimerId;
-    private $loadAverageTimerId;
+    private $conf; // 连接池配置对象
+    private $intervalCheckTimerId; // 间隔检测定时器id
+    private $loadAverageTimerId; // 负载阈值定时器id
     private $destroy = false;
-    private $context = [];
-    private $loadWaitTimes = 0;
-    private $loadUseTimes = 0;
+    private $context = []; // 协程上下文中保存在该池中对象
+    private $loadWaitTimes = 0; // 记录取出等待时间
+    private $loadUseTimes = 0; // 记录该连接池取出的次数
 
-    private $poolHash;
-    private $inUseObject = [];
+    private $poolHash; // 获取连接池对象hash值
+    private $inUseObject = []; // 记录连接池中对象是否在使用中，对象hash值和实例对象的映射关系
     private $statusTable;
 
 
@@ -45,7 +47,7 @@ abstract class AbstractPool
         }
         $this->conf = $conf;
         $this->statusTable = new Table(1024);
-        $this->statusTable->column('created',Table::TYPE_INT,10);
+        $this->statusTable->column('created',Table::TYPE_INT,10); // 池中创建的对象数
         $this->statusTable->column('pid',Table::TYPE_INT,10);
         $this->statusTable->column('inuse',Table::TYPE_INT,10);
         $this->statusTable->column('loadWaitTimes',Table::TYPE_FLOAT,10);
@@ -73,7 +75,7 @@ abstract class AbstractPool
             return true;
         }
         /*
-        * 懒惰模式，可以提前创建 pool对象，因此调用钱执行初始化检测
+        * 懒惰模式，可以提前创建 pool对象，因此调用前执行初始化检测
         */
         $this->init();
         /*
@@ -101,7 +103,7 @@ abstract class AbstractPool
                     throw $throwable;
                 }
             }
-            $this->poolChannel->push($obj);
+            $this->poolChannel->push($obj); // 重新入池
             return true;
         } else {
             return false;
@@ -127,11 +129,11 @@ abstract class AbstractPool
             $timeout = $this->getConfig()->getGetObjectTimeout();
         }
         $object = null;
-        if ($this->poolChannel->isEmpty()) {
+        if ($this->poolChannel->isEmpty()) { // 如果池中为空
             try {
                 $this->initObject();
             } catch (\Throwable $throwable) {
-                if ($tryTimes <= 0) {
+                if ($tryTimes <= 0) { // 异常情况下，允许指定次数的尝试
                     throw $throwable;
                 } else {
                     $tryTimes--;
@@ -145,9 +147,10 @@ abstract class AbstractPool
         // getObj 记录取出等待时间 5s周期内
         $this->loadWaitTimes += $take;
         $this->statusTable->set($this->poolHash(),[
-            'loadWaitTimes'=>$this->loadWaitTimes
+            'loadWaitTimes'=>$this->loadWaitTimes // 实时更新
         ]);
-        if (is_object($object)) {
+        
+        if (is_object($object)) { // 如果取出了对象
             $hash = $object->__objHash;
             //标记该对象已经被使用，不在pool中
             $this->objHash[$hash] = false;
@@ -159,7 +162,7 @@ abstract class AbstractPool
                         $this->unsetObj($object);
                         if ($tryTimes <= 0) {
                             return null;
-                        } else {
+                        } else { // 允许指定次数的尝试
                             $tryTimes--;
                             return $this->getObj($timeout, $tryTimes);
                         }
@@ -168,7 +171,7 @@ abstract class AbstractPool
                     $this->unsetObj($object);
                     if ($tryTimes <= 0) {
                         throw $throwable;
-                    } else {
+                    } else { // 允许指定次数的尝试
                         $tryTimes--;
                         return $this->getObj($timeout, $tryTimes);
                     }
@@ -188,7 +191,7 @@ abstract class AbstractPool
      */
     public function unsetObj($obj): bool
     {
-        if (!$this->isInPool($obj)) {
+        if (!$this->isInPool($obj)) { // 不在池中
             /*
              * 主动回收可能存在的上下文
              */
@@ -220,7 +223,7 @@ abstract class AbstractPool
     }
 
     /*
-     * 超过$idleTime未出队使用的，将会被回收。
+     * 超过$idleTime未出队使用的对象，将会被回收。
      */
     public function idleCheck(int $idleTime)
     {
@@ -268,7 +271,7 @@ abstract class AbstractPool
         $list = [];
         $time = time();
         foreach ($this->statusTable as $key => $item){
-            if($time - $item['lastAliveTime'] >= 2){
+            if($time - $item['lastAliveTime'] >= 2){ // 超过2s不活跃，则删除
                 $list[] = $key;
             }
         }
@@ -276,8 +279,8 @@ abstract class AbstractPool
             $this->statusTable->del($key);
         }
 
-        $this->idleCheck($this->getConfig()->getMaxIdleTime());
-        $this->keepMin($this->getConfig()->getMinObjectNum());
+        $this->idleCheck($this->getConfig()->getMaxIdleTime()); // 池中对象空闲检查
+        $this->keepMin($this->getConfig()->getMinObjectNum()); // 保持池中对象最小数
     }
 
     /**
@@ -318,6 +321,11 @@ abstract class AbstractPool
         return $this->conf;
     }
 
+    /**
+     * 获取连接池状态
+     * @param bool $currentWorker
+     * @return array
+     */
     public function status(bool $currentWorker = false):array
     {
         if($currentWorker){
@@ -331,6 +339,11 @@ abstract class AbstractPool
         }
     }
 
+    /**
+     * 初始化池中对象
+     * @return bool
+     * @throws \Throwable
+     */
     private function initObject(): bool
     {
         if ($this->destroy) {
@@ -343,6 +356,7 @@ abstract class AbstractPool
         $obj = null;
         $this->createdNum++;
         $this->statusTable->incr($this->poolHash(),'created');
+        // 超过池中可创建的最大对象数，则不能创建池中对象
         if ($this->createdNum > $this->getConfig()->getMaxObjectNum()) {
             $this->createdNum--;
             $this->statusTable->decr($this->poolHash(),'created');
@@ -352,10 +366,10 @@ abstract class AbstractPool
             $obj = $this->createObject();
             if (is_object($obj)) {
                 $hash = Random::character(12);
-                $this->objHash[$hash] = true;
-                $obj->__objHash = $hash;
+                $this->objHash[$hash] = true; // 对象在池中
+                $obj->__objHash = $hash; // 对象的hash是随机生成的
                 $obj->__lastUseTime = time();
-                $this->poolChannel->push($obj);
+                $this->poolChannel->push($obj); // 对象入池
                 return true;
             } else {
                 $this->createdNum--;
@@ -369,6 +383,11 @@ abstract class AbstractPool
         return false;
     }
 
+    /**
+     * 查询当前对象是否在池中
+     * @param $obj
+     * @return bool
+     */
     public function isPoolObject($obj): bool
     {
         if (isset($obj->__objHash)) {
@@ -378,6 +397,11 @@ abstract class AbstractPool
         }
     }
 
+    /**
+     * 查询当前对象是否在池中
+     * @param $obj
+     * @return bool
+     */
     public function isInPool($obj): bool
     {
         if ($this->isPoolObject($obj)) {
@@ -392,7 +416,7 @@ abstract class AbstractPool
      */
     function destroy()
     {
-        $this->destroy = true;
+        $this->destroy = true; // 池销毁标志
         /*
         * 懒惰模式，可以提前创建 pool对象，因此调用钱执行初始化检测
         */
@@ -407,10 +431,12 @@ abstract class AbstractPool
         }
 
         if($this->poolChannel){
+            // 销毁池中的对象
             while (!$this->poolChannel->isEmpty()) {
                 $item = $this->poolChannel->pop(0.01);
                 $this->unsetObj($item);
             }
+            // 销毁正在使用的对象
             foreach ($this->inUseObject as $item){
                 $this->unsetObj($item);
                 $this->inUseObject = [];
@@ -420,6 +446,7 @@ abstract class AbstractPool
             $this->poolChannel = null;
         }
 
+        // 清空内存中统计信息
         $list = [];
         foreach ($this->statusTable as $key => $value){
             $list[] = $key;
@@ -429,6 +456,10 @@ abstract class AbstractPool
         }
     }
 
+    /**
+     * 连接池重置
+     * @return $this
+     */
     function reset(): AbstractPool
     {
         $this->destroy();
@@ -439,33 +470,48 @@ abstract class AbstractPool
         return $this;
     }
 
+    /**
+     * 从池中获取指定的对象后，执行完回调函数后，立即回收对象
+     * @param callable $call 回调函数
+     * @param float|null $timeout 对象获取超时时间
+     * @return false|mixed
+     * @throws PoolEmpty
+     * @throws \Throwable
+     */
     public function invoke(callable $call, float $timeout = null)
     {
         $obj = $this->getObj($timeout);
         if ($obj) {
             try {
-                $ret = call_user_func($call, $obj);
+                $ret = call_user_func($call, $obj); // 调用闭包并传入从池中获取的对象
                 return $ret;
             } catch (\Throwable $throwable) {
                 throw $throwable;
             } finally {
-                $this->recycleObj($obj);
+                $this->recycleObj($obj); // 回收对象
             }
         } else {
             throw new PoolEmpty(static::class . " pool is empty");
         }
     }
 
+    /**
+     * 从池中获取指定的对象后，直到协程结束才回收对象
+     * @param float|null $timeout对象获取超时时间
+     * @return mixed
+     * @throws PoolEmpty
+     * @throws \Throwable
+     */
     public function defer(float $timeout = null)
     {
         $cid = Coroutine::getCid();
-        if (isset($this->context[$cid])) {
+        if (isset($this->context[$cid])) { // 如果协程上下文中存在，则直接返回对象
             return $this->context[$cid];
         }
         $obj = $this->getObj($timeout);
         if ($obj) {
             $this->context[$cid] = $obj;
-            Coroutine::defer(function () use ($cid) {
+            Coroutine::defer(function () use ($cid) { // 直到协程结束，才回收对象
                 if (isset($this->context[$cid])) {
                     $obj = $this->context[$cid];
                     unset($this->context[$cid]);
@@ -478,13 +524,20 @@ abstract class AbstractPool
         }
     }
 
+    /**
+     * 池初始化
+     * @throws \Throwable
+     */
     private function init()
     {
         if ((!$this->poolChannel) && (!$this->destroy)) {
             $this->poolChannel = new Channel($this->conf->getMaxObjectNum() + 8);
+
             if ($this->conf->getIntervalCheckTime() > 0) {
                 $this->intervalCheckTimerId = Timer::tick($this->conf->getIntervalCheckTime(), [$this, 'intervalCheck']);
             }
+
+            // 负载阈值定时器创建，5s检测一次，更新内存表中的统计信息
             $this->loadAverageTimerId = Timer::tick(5*1000,function (){
                 // 5s 定时检测
                 $loadWaitTime = $this->loadWaitTimes;
@@ -516,6 +569,7 @@ abstract class AbstractPool
                     }
                 }
             });
+
             //table记录初始化
             $this->statusTable->set($this->poolHash(),[
                 'pid'=>getmypid(),

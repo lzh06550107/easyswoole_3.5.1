@@ -3,11 +3,13 @@
 
 namespace EasySwoole\ORM\Db;
 
-
 use EasySwoole\Mysqli\Config as MysqlConfig;
 use EasySwoole\ORM\Exception\Exception;
 use EasySwoole\Pool\AbstractPool;
 
+/**
+ * 数据库连接池实现
+ */
 class MysqlPool extends AbstractPool
 {
     protected function createObject()
@@ -15,7 +17,7 @@ class MysqlPool extends AbstractPool
         /** @var Config $config */
         $config = $this->getConfig();
         $client = new MysqliClient(new MysqlConfig($config->toArray()));
-        if($client->connect()){
+        if($client->connect()){ // 建立连接
             $client->__lastPingTime = 0;
             return $client;
         }else{

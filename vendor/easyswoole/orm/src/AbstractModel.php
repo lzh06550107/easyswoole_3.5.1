@@ -1,6 +1,5 @@
 <?php
 
-
 namespace EasySwoole\ORM;
 
 use ArrayAccess;
@@ -33,12 +32,12 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
     private $lastQuery;
 
 
-    protected $tableName;
-    protected $tempTableName;
+    protected $tableName; // 表名称
+    protected $tempTableName; // 临时表名称
 
     /**
      * AbstractModel constructor.
-     * @param array $data
+     * @param array $data 传入模型数据
      * @throws Exception
      */
     public function __construct(array $data = [])

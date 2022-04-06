@@ -3,7 +3,9 @@
 
 namespace EasySwoole\ORM\Db;
 
-
+/**
+ * 注意，继承了池配置
+ */
 class Config extends \EasySwoole\Pool\Config
 {
     protected $host;
@@ -13,7 +15,7 @@ class Config extends \EasySwoole\Pool\Config
     protected $port = 3306;
     protected $timeout = 45;
     protected $charset = 'utf8';
-    protected $autoPing = 5;
+    protected $autoPing = 5; // 自动ping的时间间隔
 
     protected $strict_type = false; // 开启严格模式，返回的字段将自动转为数字类型
     protected $fetch_mode = false;

@@ -11,6 +11,9 @@ use EasySwoole\ORM\Utility\PreProcess;
 use EasySwoole\ORM\Utility\Schema\Table;
 use EasySwoole\ORM\Utility\TableObjectGeneration;
 
+/**
+ *
+ */
 trait Attribute
 {
     use ConnectionInfo;

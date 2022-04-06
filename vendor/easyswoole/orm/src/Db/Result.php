@@ -3,15 +3,17 @@
 
 namespace EasySwoole\ORM\Db;
 
-
+/**
+ * 保存查询结果
+ */
 class Result
 {
-    private $lastInsertId;
-    private $result;
-    private $lastError;
-    private $lastErrorNo;
-    private $affectedRows;
-    private $totalCount = 0;
+    private $lastInsertId; // 插入id
+    private $result; // 执行结果
+    private $lastError; // 错误消息
+    private $lastErrorNo; // 错误号
+    private $affectedRows; // 影响行数
+    private $totalCount = 0; // 符合条件的总记录数
 
 
     /**

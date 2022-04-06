@@ -15,6 +15,7 @@ use RuntimeException;
  * due to run, the next run date and previous run date of a CRON expression.
  * The determinations made by this class are accurate if checked run once per
  * minute (seconds are dropped from date time comparisons).
+ * CRON表达式解析器可以确定CRON表达式是否需要运行，以及下一次运行时间和上一次运行时间
  *
  * Schedule parts must map to:
  * minute [0-59], hour [0-23], day of month, month [1-12|JAN-DEC], day of week
@@ -24,14 +25,16 @@ use RuntimeException;
  */
 class CronExpression
 {
-    const MINUTE = 0;
-    const HOUR = 1;
-    const DAY = 2;
-    const MONTH = 3;
-    const WEEKDAY = 4;
-    const YEAR = 5;
+    // 表达式单位
+    const MINUTE = 0; // 分钟
+    const HOUR = 1; // 小时
+    const DAY = 2; // 天
+    const MONTH = 3; // 月
+    const WEEKDAY = 4; // 星期
+    const YEAR = 5; // 年
 
     /**
+     * CRON 表达式部分
      * @var array CRON expression parts
      */
     private $cronParts;
@@ -42,6 +45,7 @@ class CronExpression
     private $fieldFactory;
 
     /**
+     * 选择下一次运行时间的迭代次数
      * @var int Max iteration count when searching for next run date
      */
     private $maxIterationCount = 1000;
@@ -52,7 +56,7 @@ class CronExpression
     private static $order = array(self::YEAR, self::MONTH, self::DAY, self::WEEKDAY, self::HOUR, self::MINUTE);
 
     /**
-     * Factory method to create a new CronExpression.
+     * Factory method to create a new CronExpression.创建一个新的Cron表达式的工厂方法
      *
      * @param string $expression The CRON expression to create.  There are
      *                           several special predefined values which can be used to substitute the
@@ -86,7 +90,7 @@ class CronExpression
     }
 
     /**
-     * Validate a CronExpression.
+     * Validate a CronExpression.验证CRON表达式，如果抛出异常，说明存在问题
      *
      * @param string $expression The CRON expression to validate.
      *
@@ -105,7 +109,7 @@ class CronExpression
     }
 
     /**
-     * Parse a CRON expression
+     * Parse a CRON expression，解析一个CRON表达式
      *
      * @param string       $expression   CRON expression (e.g. '8 * * * *')
      * @param FieldFactory|null $fieldFactory Factory to create cron fields
@@ -117,7 +121,7 @@ class CronExpression
     }
 
     /**
-     * Set or change the CRON expression
+     * Set or change the CRON expression，设置或者改变CRON表达式
      *
      * @param string $value CRON expression (e.g. 8 * * * *)
      *
@@ -141,7 +145,7 @@ class CronExpression
     }
 
     /**
-     * Set part of the CRON expression
+     * Set part of the CRON expression，设置CRON表达式的各个部分
      *
      * @param int    $position The position of the CRON expression to set
      * @param string $value    The value to set
@@ -177,7 +181,7 @@ class CronExpression
     }
 
     /**
-     * Get a next run date relative to the current date or a specific date
+     * Get a next run date relative to the current date or a specific date，相对当前时间或者一个指定的时间获取下一次运行时间
      *
      * @param string|\DateTimeInterface $currentTime      Relative calculation date
      * @param int                       $nth              Number of matches to skip before returning a
@@ -244,7 +248,7 @@ class CronExpression
     }
 
     /**
-     * Get all or part of the CRON expression
+     * Get all or part of the CRON expression，获取CRON表达式指定部分
      *
      * @param string $part Specify the part to retrieve or NULL to get the full
      *                     cron schedule string.
@@ -277,6 +281,7 @@ class CronExpression
      * Determine if the cron is due to run based on the current date or a
      * specific date.  This method assumes that the current number of
      * seconds are irrelevant, and should be called once per minute.
+     * 基于当前时间或者指定的时间确定 cron 是否运行。 此方法假定当前秒数无关紧要，应每分钟调用一次。
      *
      * @param string|\DateTimeInterface $currentTime Relative calculation date
      * @param null|string               $timeZone    TimeZone to use instead of the system default
@@ -309,7 +314,7 @@ class CronExpression
     }
 
     /**
-     * Get the next or previous run date of the expression relative to a date
+     * Get the next or previous run date of the expression relative to a date，相对当前时间或者一个指定的时间获取下一次运行时间
      *
      * @param string|\DateTimeInterface $currentTime      Relative calculation date
      * @param int                       $nth              Number of matches to skip before returning
@@ -341,7 +346,7 @@ class CronExpression
         // We don't have to satisfy * or null fields
         $parts = array();
         $fields = array();
-        foreach (self::$order as $position) {
+        foreach (self::$order as $position) { // 按顺序来比对
             $part = $this->getExpression($position);
             if (null === $part || '*' === $part) {
                 continue;
@@ -357,7 +362,7 @@ class CronExpression
                 $satisfied = false;
                 // Get the field object used to validate this part
                 $field = $fields[$position];
-                // Check if this is singular or a list
+                // Check if this is singular or a list，是否是一个标量值或者一个列表
                 if (strpos($part, ',') === false) {
                     $satisfied = $field->isSatisfiedBy($nextRun, $part);
                 } else {

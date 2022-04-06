@@ -3,14 +3,16 @@
 
 namespace EasySwoole\Pool;
 
-
 use EasySwoole\Component\Singleton;
 
+/**
+ * 连接池管理器
+ */
 class Manager
 {
     use Singleton;
 
-    protected $container = [];
+    protected $container = []; // 池名称和池对象映射关系
 
     function register(AbstractPool $pool,string $name = null):Manager
     {
@@ -29,6 +31,9 @@ class Manager
         return null;
     }
 
+    /**
+     * 销毁所有连接池
+     */
     function resetAll()
     {
         /** @var AbstractPool $item */

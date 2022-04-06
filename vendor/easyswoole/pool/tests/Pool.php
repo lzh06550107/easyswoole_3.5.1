@@ -11,6 +11,9 @@ namespace EasySwoole\Pool\Tests;
 
 use EasySwoole\Pool\AbstractPool;
 
+/**
+ * 池工厂类
+ */
 class Pool extends AbstractPool
 {
     protected function createObject()

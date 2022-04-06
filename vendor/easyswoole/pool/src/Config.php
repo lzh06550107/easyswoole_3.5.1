@@ -3,20 +3,22 @@
 
 namespace EasySwoole\Pool;
 
-
 use EasySwoole\Pool\Exception\Exception;
 use EasySwoole\Spl\SplBean;
 
+/**
+ * 通用连接池配置类
+ */
 class Config extends SplBean
 {
-    protected $intervalCheckTime = 15*1000;
-    protected $maxIdleTime = 10;
-    protected $maxObjectNum = 20;
-    protected $minObjectNum = 5;
-    protected $getObjectTimeout = 3.0;
-    protected $loadAverageTime = 0.001;
+    protected $intervalCheckTime = 15*1000; // 设置 连接池定时器执行频率
+    protected $maxIdleTime = 10; // 设置 连接池对象最大闲置未使用时间 (秒)
+    protected $maxObjectNum = 20; // 设置 连接池最大对象数量
+    protected $minObjectNum = 5; // 设置 连接池最小对象数量
+    protected $getObjectTimeout = 3.0; // 设置 获取连接池中对象的超时时间
+    protected $loadAverageTime = 0.001; // 设置 负载阈值，记录的是平均每个链接取出的时间
 
-    protected $extraConf;
+    protected $extraConf; // 额外配置
 
     /**
      * @return float|int

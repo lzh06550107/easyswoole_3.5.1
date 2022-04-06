@@ -15,9 +15,9 @@ use Swoole\Coroutine\MySQL\Statement;
 
 class Cursor implements CursorInterface
 {
-    protected $statement;
-    protected $modelName;
-    protected $returnAsArray = false;
+    protected $statement; // 
+    protected $modelName; // 模型类名称
+    protected $returnAsArray = false; // 是否以数组形式返回结果
 
     public function __construct(Statement $statement)
     {
@@ -43,12 +43,12 @@ class Cursor implements CursorInterface
     public function fetch()
     {
         try{
-            $data = $this->statement->fetch();
+            $data = $this->statement->fetch(); // 从结果集中获取下一行数据
             if (!$this->returnAsArray && $data) {
                 if (is_null($this->modelName)) {
                     throw new Exception('ModelName can not be null');
                 }
-                $model = new $this->modelName($data);
+                $model = new $this->modelName($data); // 初始化模型对象
                 return $model;
             }
             return $data;

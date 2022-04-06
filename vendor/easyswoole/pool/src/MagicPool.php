@@ -3,10 +3,13 @@
 
 namespace EasySwoole\Pool;
 
-
+/**
+ * 通用池实现
+ */
 class MagicPool extends AbstractPool
 {
     protected $func;
+    
     function __construct(callable $func,Config $conf = null)
     {
         $this->func = $func;

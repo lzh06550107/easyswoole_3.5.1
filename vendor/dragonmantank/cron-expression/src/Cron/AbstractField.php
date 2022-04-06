@@ -3,30 +3,31 @@
 namespace Cron;
 
 /**
- * Abstract CRON expression field
+ * Abstract CRON expression field，CRON表达式字段的抽象类
  */
 abstract class AbstractField implements FieldInterface
 {
     /**
      * Full range of values that are allowed for this field type
+     * 此字段类型允许的完整值范围
      * @var array
      */
     protected $fullRange = [];
 
     /**
-     * Literal values we need to convert to integers
+     * Literal values we need to convert to integers，数字字符串字面值转换为整数
      * @var array
      */
     protected $literals = [];
 
     /**
-     * Start value of the full range
+     * Start value of the full range，此字段类型允许的完整值范围的起始值
      * @var integer
      */
     protected $rangeStart;
 
     /**
-     * End value of the full range
+     * End value of the full range，此字段类型允许的完整值范围的结束值
      * @var integer
      */
     protected $rangeEnd;
@@ -59,7 +60,7 @@ abstract class AbstractField implements FieldInterface
     }
 
     /**
-     * Check if a value is a range
+     * Check if a value is a range，判断给定的值是否是范围值
      *
      * @param string $value Value to test
      *
@@ -72,6 +73,7 @@ abstract class AbstractField implements FieldInterface
 
     /**
      * Check if a value is an increments of ranges
+     * 检查一个值是否是范围的增量，eg 3-59/15
      *
      * @param string $value Value to test
      *
@@ -115,15 +117,15 @@ abstract class AbstractField implements FieldInterface
     public function isInIncrementsOfRanges($dateValue, $value)
     {
         $chunks = array_map('trim', explode('/', $value, 2));
-        $range = $chunks[0];
-        $step = isset($chunks[1]) ? $chunks[1] : 0;
+        $range = $chunks[0]; // 范围表达式
+        $step = isset($chunks[1]) ? $chunks[1] : 0; // 递增步长
 
         // No step or 0 steps aren't cool
         if (is_null($step) || '0' === $step || 0 === $step) {
             return false;
         }
 
-        // Expand the * to a full range
+        // Expand the * to a full range，对于 * 则表示全范围
         if ('*' == $range) {
             $range = $this->rangeStart . '-' . $this->rangeEnd;
         }
@@ -133,10 +135,12 @@ abstract class AbstractField implements FieldInterface
         $rangeStart = $rangeChunks[0];
         $rangeEnd = isset($rangeChunks[1]) ? $rangeChunks[1] : $rangeStart;
 
+        // 如果超过了该字段允许的范围，则抛出异常
         if ($rangeStart < $this->rangeStart || $rangeStart > $this->rangeEnd || $rangeStart > $rangeEnd) {
             throw new \OutOfRangeException('Invalid range start requested');
         }
 
+        // 如果超过了该字段允许的范围，则抛出异常
         if ($rangeEnd < $this->rangeStart || $rangeEnd > $this->rangeEnd || $rangeEnd < $rangeStart) {
             throw new \OutOfRangeException('Invalid range end requested');
         }

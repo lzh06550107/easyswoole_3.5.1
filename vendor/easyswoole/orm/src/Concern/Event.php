@@ -2,7 +2,9 @@
 
 namespace EasySwoole\ORM\Concern;
 
-
+/**
+ * 数据库操作过程中事件监听
+ */
 trait Event
 {
 
