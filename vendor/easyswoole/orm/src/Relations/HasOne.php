@@ -8,17 +8,19 @@
 
 namespace EasySwoole\ORM\Relations;
 
-
 use EasySwoole\Mysqli\QueryBuilder;
 use EasySwoole\ORM\AbstractModel;
 use EasySwoole\ORM\Exception\Exception;
 use EasySwoole\ORM\Utility\FieldHandle;
 
+/**
+ * 一对一关联类
+ */
 class HasOne
 {
-    /** @var AbstractModel $fatherModel */
+    /** @var AbstractModel $fatherModel 父模型对象 */
     private $fatherModel;
-    private $childModelName;
+    private $childModelName; // 关联模型类名称
 
     public function __construct(AbstractModel $model, $class)
     {
@@ -27,6 +29,7 @@ class HasOne
     }
 
     /**
+     * 查询子表关联数据
      * @param $where callable 可以闭包调用where、order、field
      * @param $pk string 主表条件字段名
      * @param $insPk string 附表条件字段名
@@ -45,7 +48,7 @@ class HasOne
         }
 
         /** @var AbstractModel $ins */
-        $ins = $ref->newInstance();
+        $ins = $ref->newInstance(); // 实例化子模型类
         $builder = new QueryBuilder();
 
         // 如果父级设置客户端，则继承
@@ -53,14 +56,14 @@ class HasOne
             $ins->setExecClient($this->fatherModel->getExecClient());
         }
 
-        if ($pk === null) {
+        if ($pk === null) { // 默认是主表的主键字段
             $pk = $this->fatherModel->schemaInfo()->getPkFiledName();
         }
 
         // 代码执行到这一步 说明父级数据是肯定存在的
         $data = $this->fatherModel->toRawArray(false, false);
 
-        $pkVal = $this->fatherModel->$pk;
+        $pkVal = $this->fatherModel->$pk; // 获取该字段的值
 
         // 此pk不存在 data 中
         if (!array_key_exists($pk, $data)){
@@ -72,16 +75,16 @@ class HasOne
             return null;
         }
         
-        if ($insPk === null) {
+        if ($insPk === null) { // 默认是子表的主键字段
             $insPk = $ins->schemaInfo()->getPkFiledName();
         }
 
         $targetTable = $ins->schemaInfo()->getTable();
 
-        $builder->where("$insPk", $pkVal);
+        $builder->where("$insPk", $pkVal); // 在子表中查询
 
         if (!empty($where) && is_callable($where)){
-            call_user_func($where, $builder);
+            call_user_func($where, $builder); // 查询条件是闭包，则调用并传入查询构建器
         }
 
         $builder->getOne($targetTable, $builder->getField());
@@ -89,7 +92,7 @@ class HasOne
         $result = $ins->query($builder);
         if ($result) {
             $targetData = [];
-            foreach ($result[0] as $key => $value){
+            foreach ($result[0] as $key => $value){ // 一对一，只有一条数据
                 $targetData[$key] = $value;
             }
 
@@ -105,6 +108,7 @@ class HasOne
 
 
     /**
+     * 关联预查询
      * @param array $data 原始数据 进入这里的处理都是多条 all查询结果
      * @param $withName string 预查询字段名
      * @param $where

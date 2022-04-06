@@ -12,7 +12,7 @@ use EasySwoole\ORM\Utility\Schema\Table;
 use EasySwoole\ORM\Utility\TableObjectGeneration;
 
 /**
- *
+ * 属性操作类
  */
 trait Attribute
 {
@@ -31,7 +31,8 @@ trait Attribute
     private $resetQuery = true;
     private $duplicate = [];
     private $replace = false;
-    /** @var Table */
+
+    /** @var Table 表缓存*/
     private static $schemaInfoList;
     /** @var array 当前的数据 */
     private $data = [];
@@ -56,19 +57,19 @@ trait Attribute
 
     /**
      * 表结构信息
-     * @param bool $isCache
+     * @param bool $isCache 是否使用缓存
      * @return Table
      * @throws Exception
      */
     public function schemaInfo(bool $isCache = true): Table
     {
         // 是否有注入client
-        if($this->client instanceof ClientInterface){
+        if($this->client instanceof ClientInterface){ // 优先使用注入的客户端连接，从客户端连接获取连接管理器名称
             $connectionName = $this->client->connectionName();
         }else{
-            if ($this->tempConnectionName) {
+            if ($this->tempConnectionName) { // 其次，使用临时连接管理器名称
                 $connectionName = $this->tempConnectionName;
-            } else {
+            } else { // 最后，使用默认管理器名称
                 $connectionName = $this->connectionName;
             }
         }
@@ -83,12 +84,14 @@ trait Attribute
         if (isset(self::$schemaInfoList[$key]) && self::$schemaInfoList[$key] instanceof Table && $isCache == true) {
             return self::$schemaInfoList[$key];
         }
+
         if(empty($this->tableName())){
             throw new Exception("Table name is require for model ".static::class);
         }
+
         $tableObjectGeneration = new TableObjectGeneration($connection, $this->tableName(),$this->client);
         $schemaInfo = $tableObjectGeneration->generationTable();
-        self::$schemaInfoList[$key] = $schemaInfo;
+        self::$schemaInfoList[$key] = $schemaInfo; // 保存表对象信息
         return self::$schemaInfoList[$key];
     }
 
@@ -108,6 +111,7 @@ trait Attribute
     }
 
     /**
+     * 设置指定
      * @param mixed $offset
      * @param mixed $value
      * @return bool
@@ -140,8 +144,8 @@ trait Attribute
 
     /**
      * Model数据转数组格式返回
-     * @param bool|null $notNull
-     * @param bool|null $strict
+     * @param bool|null $notNull 过滤掉null值
+     * @param bool|null $strict 是否是严格模式，严格模式不会转换附加数据
      * @return array
      */
     public function toArray($notNull = null, $strict = null): array
@@ -155,7 +159,7 @@ trait Attribute
         }
 
         $temp = [];
-        foreach ($this->data as $key => $value){
+        foreach ($this->data as $key => $value){ // 经过属性获取器处理
             $temp[$key] = $this->getAttr($key);
         }
 
@@ -178,8 +182,8 @@ trait Attribute
 
     /**
      * 获取模型当前数据，不经过获取器
-     * @param bool|null $notNul
-     * @param bool|null $strict
+     * @param bool|null $notNul 过滤掉null值
+     * @param bool|null $strict 是否是严格模式，严格模式不会转换附加数据
      * @return array
      */
     public function toRawArray($notNull = null, $strict = null)
@@ -282,6 +286,10 @@ trait Attribute
         return $temp;
     }
 
+    /**
+     * 原始数据和附加数据转换为json字符串
+     * @return false|string
+     */
     public function __toString()
     {
         $data = array_merge($this->data, $this->_joinData ?? []);
@@ -289,6 +297,7 @@ trait Attribute
     }
 
     /**
+     * 设置属性值
      * @param $name
      * @param $value
      * @throws Exception
@@ -298,27 +307,41 @@ trait Attribute
         $this->setAttr($name, $value);
     }
 
+    /**
+     * 获取属性值
+     * @param $name
+     * @return mixed|null
+     */
     function __get($name)
     {
         return $this->getAttr($name);
     }
 
+    /**
+     * 判断属性是否存在
+     * @param $name 属性名称
+     * @return bool
+     */
     public function __isset($name)
     {
+        // 当前原始数据是否存在
         if (isset($this->data[$name])) return true;
 
         // 是否是附加字段
         if (isset($this->_joinData[$name])) return true;
 
+        // get属性获取器
         $method = 'get' . str_replace( ' ', '', ucwords( str_replace( ['-', '_'], ' ', $name ) ) ) . 'Attr';
         if (method_exists($this, $method)) return true;
 
-        if ( method_exists($this, $name) ) return true;
+        // 关联属性
+        if (method_exists($this, $name)) return true;
 
         return false;
     }
 
     /**
+     * 获取未应用修改器和获取器之前的原始数据
      * @return array
      */
     public function getOriginData(): array
@@ -354,28 +377,28 @@ trait Attribute
      * 设置属性
      * @param $attrName
      * @param $attrValue
-     * @param bool $setter
+     * @param bool $setter 是否是修改器
      * @return bool
      * @throws Exception
      */
     public function setAttr($attrName, $attrValue, $setter = true): bool
     {
-        if (isset($this->schemaInfo()->getColumns()[$attrName])) {
+        if (isset($this->schemaInfo()->getColumns()[$attrName])) { // 表中字段
             $col = $this->schemaInfo()->getColumns()[$attrName];
             $method = 'set' . str_replace( ' ', '', ucwords( str_replace( ['-', '_'], ' ', $attrName ) ) ) . 'Attr';
             if ($setter && method_exists($this, $method)) {
                 $attrValue = call_user_func([$this,$method],$attrValue, $this->data);
             }
 
-            if ($setter) {
+            if ($setter) { // 修改器方法不存在，则默认先进行json转换
                 $attrValue = $this->preCastToJson($attrName, $attrValue);
             }
 
-            $attrValue = PreProcess::dataValueFormat($attrValue, $col);
+            $attrValue = PreProcess::dataValueFormat($attrValue, $col); // 对象值格式化为字符串值
 
             $this->data[$attrName] = $attrValue;
             return true;
-        } else {
+        } else { // 附加字段
             if ($setter) {
                 $attrValue = $this->preCastToJson($attrName, $attrValue);
             }

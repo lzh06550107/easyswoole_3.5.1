@@ -22,10 +22,10 @@ use EasySwoole\ORM\Utility\Schema\Table;
  */
 class TableObjectGeneration
 {
-    protected $tableName;
-    protected $connection;
-    protected $tableColumns;
-    protected $client;
+    protected $tableName; // 表名称
+    protected $connection; // 连接管理器对象
+    protected $tableColumns; // 表列
+    protected $client; // 客户端连接对象
 
     public function __construct(ConnectionInterface $connection, $tableName, ?ClientInterface $client = null)
     {
@@ -35,6 +35,11 @@ class TableObjectGeneration
 
     }
 
+    /**
+     * 获取表列信息
+     * @return mixed
+     * @throws Exception
+     */
     public function getTableColumnsInfo()
     {
         $query = new QueryBuilder();
@@ -62,6 +67,11 @@ class TableObjectGeneration
         return $data->getResult();
     }
 
+    /**
+     * 生成表对象
+     * @return Table
+     * @throws Exception
+     */
     public function generationTable()
     {
         $this->getTableColumnsInfo();
@@ -75,6 +85,11 @@ class TableObjectGeneration
         return $table;
     }
 
+    /**
+     * 解析查询的表列信息
+     * @param $column
+     * @return Column
+     */
     protected function getTableColumn($column): Column
     {
         $columnTypeArr = explode(' ', $column['Type']);

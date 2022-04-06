@@ -26,25 +26,25 @@ trait RelationShip
 
     /**
      * 一对一关联
-     * @param string        $class
-     * @param callable|null $where
-     * @param null          $pk
-     * @param null          $insPk
+     * @param string        $class 关联模型类名称
+     * @param callable|null $where 可以闭包调用where、order、field
+     * @param null          $pk 主表条件字段名
+     * @param null          $insPk 附表条件字段名
      * @return mixed|null
      * @throws \Throwable
      */
     protected function hasOne(string $class, callable $where = null, $pk = null, $insPk = null)
     {
-        if ($this->preHandleWith === true){
+        if ($this->preHandleWith === true){ // 如果是预查询
             return [$class, $where, $pk, $insPk, '', 'hasOne'];
         }
-
-        $fileName = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'];
-        if (isset($this->_joinData[$fileName])) {
+        // 非预查询
+        $fileName = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function']; // 获取模型类中调用的方法名称
+        if (isset($this->_joinData[$fileName])) { // 如果附加数据中存在该字段数据，则直接返回
             return $this->_joinData[$fileName];
         }
-        $result = (new HasOne($this, $class))->result($where, $pk, $insPk);
-        $this->_joinData[$fileName] = $result;
+        $result = (new HasOne($this, $class))->result($where, $pk, $insPk); // 获取一对一关联数据模型对象
+        $this->_joinData[$fileName] = $result; // 保存在附加字段中
         return $result;
     }
 
@@ -62,12 +62,12 @@ trait RelationShip
         if ($this->preHandleWith === true){
             return [$class, $where, $pk, $joinPk, '', 'hasMany'];
         }
-        $fileName = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'];
-        if (isset($this->_joinData[$fileName])) {
+        $fileName = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function']; // 获取模型类中调用的方法名称
+        if (isset($this->_joinData[$fileName])) { // 如果附加数据中存在该字段数据，则直接返回
             return $this->_joinData[$fileName];
         }
-        $result = (new HasMany($this, $class))->result($where, $pk, $joinPk);
-        $this->_joinData[$fileName] = $result;
+        $result = (new HasMany($this, $class))->result($where, $pk, $joinPk); // 获取一对多关联数据模型对象集合
+        $this->_joinData[$fileName] = $result; // 保存在附加字段中
         return $result;
     }
 

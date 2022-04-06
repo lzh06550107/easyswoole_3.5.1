@@ -8,9 +8,11 @@
 
 namespace EasySwoole\ORM\Collection;
 
-
 use EasySwoole\ORM\AbstractModel;
 
+/**
+ * 集合类
+ */
 class Collection extends BaseCollection
 {
     /**

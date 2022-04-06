@@ -15,6 +15,9 @@ use EasySwoole\ORM\AbstractModel;
 use IteratorAggregate;
 use JsonSerializable;
 
+/**
+ * 集合基类
+ */
 class BaseCollection implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
 {
     /**
@@ -247,7 +250,7 @@ class BaseCollection implements ArrayAccess, Countable, IteratorAggregate, JsonS
             $chunks[] = new static($chunk);
         }
 
-        return new static($chunks);
+        return new static($chunks); // 集合项里面是集合对象
     }
 
     /**
@@ -261,12 +264,12 @@ class BaseCollection implements ArrayAccess, Countable, IteratorAggregate, JsonS
         foreach ($this->items as $key => $item) {
             $result = $callback($item, $key);
 
-            if (false === $result) {
+            if (false === $result) { // 回调返回false，则退出循环
                 break;
             }
 
             if (!is_object($item)) {
-                $this->items[$key] = $result;
+                $this->items[$key] = $result; // 重新写回
             }
         }
 

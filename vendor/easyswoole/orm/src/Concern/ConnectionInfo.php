@@ -10,7 +10,7 @@ use EasySwoole\ORM\Db\ClientInterface;
  */
 trait ConnectionInfo
 {
-    /** @var string 连接池名称 */
+    /** @var string 连接管理器名称 */
     protected $connectionName = 'default';
     /** @var null|string 临时连接名 */
     private $tempConnectionName = null;
