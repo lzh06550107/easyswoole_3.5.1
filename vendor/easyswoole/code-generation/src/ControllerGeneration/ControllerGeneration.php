@@ -8,7 +8,6 @@
 
 namespace EasySwoole\CodeGeneration\ControllerGeneration;
 
-
 use EasySwoole\CodeGeneration\ClassGeneration\ClassGeneration;
 use EasySwoole\CodeGeneration\ClassGeneration\MethodAbstract;
 use EasySwoole\CodeGeneration\ControllerGeneration\Method\Add;
@@ -34,6 +33,9 @@ use EasySwoole\HttpAnnotation\AnnotationTag\Param;
 use EasySwoole\Validate\Validate;
 use Nette\PhpGenerator\PhpNamespace;
 
+/**
+ * 控制器生成器
+ */
 class ControllerGeneration extends ClassGeneration
 {
     /**
@@ -44,8 +46,8 @@ class ControllerGeneration extends ClassGeneration
 
     function addClassData()
     {
-        $this->addUse($this->phpNamespace);
-        $this->addGenerationMethod(new Add($this));
+        $this->addUse($this->phpNamespace); // 指定生成控制器的命名空间
+        $this->addGenerationMethod(new Add($this)); //
         $this->addGenerationMethod(new Update($this));
         $this->addGenerationMethod(new GetOne($this));
         $this->addGenerationMethod(new GetList($this));
@@ -65,27 +67,31 @@ class ControllerGeneration extends ClassGeneration
         return "{$namespace}.$className";
     }
 
+    /**
+     * 添加命名空间
+     * @param PhpNamespace $phpNamespace
+     */
     protected function addUse(PhpNamespace $phpNamespace)
     {
-        $phpNamespace->addUse($this->config->getModelClass());
-        $phpNamespace->addUse(Status::class);
-        $phpNamespace->addUse(Validate::class);
-        $phpNamespace->addUse(Validate::class);
-        $phpNamespace->addUse($this->config->getExtendClass());
+        $phpNamespace->addUse($this->config->getModelClass()); // 模型类命名空间
+        $phpNamespace->addUse(Status::class); // 响应状态类命名空间
+        $phpNamespace->addUse(Validate::class);  // 验证器类命名空间
+        $phpNamespace->addUse(Validate::class); // TODO 重复
+        $phpNamespace->addUse($this->config->getExtendClass()); // 扩展类命名空间
         //引入新版注解,以及文档生成
-        $phpNamespace->addUse(ApiGroup::class);
-        $phpNamespace->addUse(ApiGroupAuth::class);
-        $phpNamespace->addUse(ApiGroupDescription::class);
-        $phpNamespace->addUse(ApiFail::class);
-        $phpNamespace->addUse(ApiRequestExample::class);
-        $phpNamespace->addUse(ApiSuccess::class);
-        $phpNamespace->addUse(Method::class);
-        $phpNamespace->addUse(Param::class);
-        $phpNamespace->addUse(Api::class);
-        $phpNamespace->addUse(ApiSuccessParam::class);
-        $phpNamespace->addUse(ApiDescription::class);
-        $phpNamespace->addUse(ContextManager::class);
-        $phpNamespace->addUse(InjectParamsContext::class);
+        $phpNamespace->addUse(ApiGroup::class); // 接口组注释类命名空间
+        $phpNamespace->addUse(ApiGroupAuth::class); // 接口组认证注释类命名空间
+        $phpNamespace->addUse(ApiGroupDescription::class); // 接口组描述注释类命名空间
+        $phpNamespace->addUse(ApiFail::class); // 响应失败注释类命名空间
+        $phpNamespace->addUse(ApiRequestExample::class); // 接口请求例子注释类命令空间
+        $phpNamespace->addUse(ApiSuccess::class); // 响应成功注释类命名空间
+        $phpNamespace->addUse(Method::class); // 方法注释类命名空间
+        $phpNamespace->addUse(Param::class); // 方法参数注释类命名空间
+        $phpNamespace->addUse(Api::class); // 接口注释类命名空间
+        $phpNamespace->addUse(ApiSuccessParam::class); // 响应成功参数注释类命名空间
+        $phpNamespace->addUse(ApiDescription::class); // 接口描述注释类命名空间
+        $phpNamespace->addUse(ContextManager::class); // 上下文管理器命名空间
+        $phpNamespace->addUse(InjectParamsContext::class); // 注入
     }
 
     function addGenerationMethod(MethodAbstract $abstract)

@@ -8,7 +8,6 @@
 
 namespace EasySwoole\CodeGeneration\InitBaseClass\Controller;
 
-
 use EasySwoole\CodeGeneration\ClassGeneration\ClassGeneration;
 use EasySwoole\EasySwoole\ServerManager;
 use EasySwoole\EasySwoole\Trigger;
@@ -16,12 +15,16 @@ use EasySwoole\Http\Message\Status;
 use EasySwoole\HttpAnnotation\AnnotationController;
 use EasySwoole\HttpAnnotation\Exception\Annotation\ParamValidateError;
 
+/**
+ * 控制器基类生成器
+ */
 class ControllerGeneration extends ClassGeneration
 {
     /**
      * @var $config ControllerConfig
      */
     protected $config;
+
     public function __construct(?ControllerConfig $config=null)
     {
         if (empty($config)){
@@ -31,6 +34,9 @@ class ControllerGeneration extends ClassGeneration
         parent::__construct($config);
     }
 
+    /**
+     * 生成控制器基类
+     */
     function addClassData()
     {
         $this->addIndexMethod();
@@ -38,6 +44,9 @@ class ControllerGeneration extends ClassGeneration
         $this->addOnExceptionMethod();
     }
 
+    /**
+     * 控制器index方法
+     */
     protected function addIndexMethod()
     {
         $phpClass = $this->phpClass;
@@ -48,6 +57,9 @@ BODY
             );
     }
 
+    /**
+     * 获取客户端真实ip方法
+     */
     protected function addGetClientIpMethod()
     {
         $this->phpNamespace->addUse(ServerManager::class);
@@ -75,6 +87,9 @@ BODY
 
     }
 
+    /**
+     * 控制器异常处理方法
+     */
     function addOnExceptionMethod()
     {
         $this->phpNamespace->addUse(ParamValidateError::class);

@@ -8,13 +8,16 @@
 
 namespace EasySwoole\CodeGeneration\UnitTest\Method;
 
-
 use EasySwoole\CodeGeneration\Utility\Utility;
 
+/**
+ * 测试删除数据方法
+ */
 class Del extends UnitTestMethod
 {
     protected $methodName = 'testDel';
     protected $actionName = 'delete';
+
     function addMethodBody()
     {
         $method = $this->method;

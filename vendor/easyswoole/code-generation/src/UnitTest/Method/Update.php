@@ -8,13 +8,16 @@
 
 namespace EasySwoole\CodeGeneration\UnitTest\Method;
 
-
 use EasySwoole\CodeGeneration\Utility\Utility;
 
+/**
+ * 测试更新数据方法
+ */
 class Update extends UnitTestMethod
 {
     protected $methodName = 'testUpdate';
     protected $actionName = 'update';
+
     function addMethodBody()
     {
         $method = $this->method;
@@ -22,7 +25,7 @@ class Update extends UnitTestMethod
 \$data = [];
 
 BODY;
-        $body .= $this->getTableTestData('data');
+        $body .= $this->getTableTestData('data'); // 获取随机生成的测试数据
 
         $modelName = Utility::getModelName($this->classGeneration->getConfig()->getModelClass());
         $body .= <<<BODY

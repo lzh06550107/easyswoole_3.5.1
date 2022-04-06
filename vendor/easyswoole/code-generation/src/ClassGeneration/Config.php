@@ -10,12 +10,15 @@ namespace EasySwoole\CodeGeneration\ClassGeneration;
 
 use EasySwoole\CodeGeneration\Utility\Utility;
 
+/**
+ * 类代码生成配置类
+ */
 class Config
 {
     protected $extendClass;//继承的基类
     protected $directory;//生成的目录
     protected $namespace;//生成的命名空间
-    protected $className;
+    protected $className; //生成类的名称
     protected $rootPath;//项目根目录
 
     public function __construct($className, $nameSpace = "\\App")

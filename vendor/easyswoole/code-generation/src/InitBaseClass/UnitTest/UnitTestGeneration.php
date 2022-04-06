@@ -8,11 +8,13 @@
 
 namespace EasySwoole\CodeGeneration\InitBaseClass\UnitTest;
 
-
 use Curl\Curl;
 use EasySwoole\CodeGeneration\ClassGeneration\ClassGeneration;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * 单元测试基类生成器
+ */
 class UnitTestGeneration extends ClassGeneration
 {
     protected $apiBase = 'http://127.0.0.1:9501';
@@ -30,6 +32,9 @@ class UnitTestGeneration extends ClassGeneration
         parent::__construct($config);
     }
 
+    /**
+     * 生成单元测试基类
+     */
     function addClassData()
     {
         $this->phpNamespace->addUse(\EasySwoole\EasySwoole\Core::class);
@@ -43,12 +48,15 @@ class UnitTestGeneration extends ClassGeneration
     protected function addProperty()
     {
         $class = $this->phpClass;
-        $class->addProperty('isInit', 0)->setStatic();
-        $class->addProperty('curl')->setComment("@var Curl");
-        $class->addProperty('apiBase', $this->apiBase);
+        $class->addProperty('isInit', 0)->setStatic(); // 应用是否已经初始化
+        $class->addProperty('curl')->setComment("@var Curl"); // curl实例对象
+        $class->addProperty('apiBase', $this->apiBase); // 请求url基础
         $class->addProperty('modelName');
     }
 
+    /**
+     * 调用测试方法前的初始化
+     */
     protected function addSetUp()
     {
         $this->phpClass->addMethod('setUp')->setReturnType('void')->setProtected()->setBody(<<<BODY
@@ -65,11 +73,14 @@ BODY
         );
     }
 
+    /**
+     * 请求通用方法
+     */
     protected function addRequest()
     {
         $method = $this->phpClass->addMethod('request');
         $method->addParameter('action');
-        $method->addParameter('data')->setDefaultValue([]);
+        $method->addParameter('data')->setDefaultValue([]); // 请求参数
         $method->addParameter('modelName')->setDefaultValue(null);
         $method->setBody(<<<BODY
 \$modelName = \$modelName ?? \$this->modelName;

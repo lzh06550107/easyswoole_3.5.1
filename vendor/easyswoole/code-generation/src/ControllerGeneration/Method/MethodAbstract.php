@@ -8,19 +8,22 @@
 
 namespace EasySwoole\CodeGeneration\ControllerGeneration\Method;
 
-
 use EasySwoole\CodeGeneration\ControllerGeneration\ControllerConfig;
 use EasySwoole\CodeGeneration\ControllerGeneration\ControllerGeneration;
 use EasySwoole\DDL\Blueprint\Create\Index;
 use EasySwoole\HttpAnnotation\AnnotationTag\Param;
 use EasySwoole\ORM\Utility\Schema\Column;
 
+/**
+ * 控制器方法抽象类
+ */
 abstract class MethodAbstract extends \EasySwoole\CodeGeneration\ClassGeneration\MethodAbstract
 {
     /**
      * @var \Nette\PhpGenerator\Method $method
      */
     protected $method;
+
     /**
      * @var ControllerConfig
      */
@@ -38,6 +41,9 @@ abstract class MethodAbstract extends \EasySwoole\CodeGeneration\ClassGeneration
     protected $responseSuccessText = '{"code":200,"result":[],"msg":"操作成功"}';
     protected $responseFailText = '{"code":400,"result":[],"msg":"操作失败"}"}';
 
+    /**
+     * @param ControllerGeneration $classGeneration
+     */
     function __construct(ControllerGeneration $classGeneration)
     {
         $this->classGeneration = $classGeneration;
@@ -56,7 +62,7 @@ abstract class MethodAbstract extends \EasySwoole\CodeGeneration\ClassGeneration
 
 
     /**
-     * 新增请求头注释
+     * 新增方法请求头注释
      * addComment
      * @author tioncico
      * Time: 上午11:05
@@ -79,7 +85,7 @@ abstract class MethodAbstract extends \EasySwoole\CodeGeneration\ClassGeneration
     }
 
     /**
-     * 新增响应参数
+     * 新增方法响应参数
      * addResponseComment
      * @author tioncico
      * Time: 上午11:05
@@ -94,6 +100,10 @@ abstract class MethodAbstract extends \EasySwoole\CodeGeneration\ClassGeneration
         $method->addComment("@ApiFail({$this->responseFailText})");
     }
 
+    /**
+     * 获取控制器的api url
+     * @return array|string|string[]
+     */
     protected function getApiUrl()
     {
         $baseNamespace = $this->controllerConfig->getNamespace();
@@ -101,6 +111,10 @@ abstract class MethodAbstract extends \EasySwoole\CodeGeneration\ClassGeneration
         return $apiUrl;
     }
 
+    /**
+     * 获取模型名称
+     * @return false|mixed|string
+     */
     protected function getModelName()
     {
         $modelNameArr = (explode('\\', $this->controllerConfig->getModelClass()));
@@ -109,7 +123,7 @@ abstract class MethodAbstract extends \EasySwoole\CodeGeneration\ClassGeneration
     }
 
     /**
-     * 参数注释
+     * 给方法参数添加注释，列约束可以转换为方法参数约束
      * addColumnComment
      * @param \EasySwoole\HttpAnnotation\AnnotationTag\Param $param
      * @author Tioncico
@@ -129,19 +143,28 @@ abstract class MethodAbstract extends \EasySwoole\CodeGeneration\ClassGeneration
         $method->addComment($commentStr);
     }
 
+    /**
+     * 初始化一个列参数
+     * @param Column $column
+     * @return Param
+     */
     protected function newColumnParam(Column $column)
     {
-        $columnName = $column->getColumnName();
-        $columnComment = $column->getColumnComment();
+        $columnName = $column->getColumnName(); // 获取列名称
+        $columnComment = $column->getColumnComment(); // 获取列注释
         $paramValue = new Param();
-        $paramValue->name = $columnName;
-        $paramValue->alias = $columnComment;
-        $paramValue->description = $columnComment;
-        $paramValue->lengthMax = $column->getColumnLimit();
-        $paramValue->defaultValue = $column->getDefaultValue();
+        $paramValue->name = $columnName; // 参数名称
+        $paramValue->alias = $columnComment; // 参数注释
+        $paramValue->description = $columnComment; // 参数注释作为参数描述
+        $paramValue->lengthMax = $column->getColumnLimit(); // 设置参数值长度限制
+        $paramValue->defaultValue = $column->getDefaultValue(); // 设置参数默认值
         return $paramValue;
     }
 
+    /**
+     * 对表中的列迭代调用回调函数
+     * @param callable $callback
+     */
     protected function chunkTableColumn(callable $callback)
     {
         $table = $this->controllerConfig->getTable();
@@ -154,6 +177,10 @@ abstract class MethodAbstract extends \EasySwoole\CodeGeneration\ClassGeneration
         }
     }
 
+    /**
+     * 对表中的索引迭代调用回调函数，索引列转换为条件查询
+     * @param callable $callback
+     */
     protected function chunkTableIndex(callable $callback)
     {
         $table = $this->controllerConfig->getTable();
@@ -171,6 +198,7 @@ abstract class MethodAbstract extends \EasySwoole\CodeGeneration\ClassGeneration
     }
 
     /**
+     * 获取方法名称
      * @return string
      */
     public function getMethodName(): string

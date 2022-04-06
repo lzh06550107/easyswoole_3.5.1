@@ -8,9 +8,11 @@
 
 namespace EasySwoole\CodeGeneration\InitBaseClass\Controller;
 
-
 use EasySwoole\CodeGeneration\ClassGeneration\Config;
 
+/**
+ * 控制器配置
+ */
 class ControllerConfig extends Config
 {
 

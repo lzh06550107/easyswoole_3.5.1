@@ -13,6 +13,9 @@ use EasySwoole\CodeGeneration\ModelGeneration\ModelConfig;
 use EasySwoole\HttpAnnotation\AnnotationController;
 use EasySwoole\ORM\Utility\Schema\Table;
 
+/**
+ * 控制器配置类
+ */
 class ControllerConfig extends ModelConfig
 {
     protected $authSessionName;//额外需要的授权session名称

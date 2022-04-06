@@ -38,7 +38,7 @@ class GenerationCommand implements CommandInterface
     public function help(CommandHelpInterface $commandHelp): CommandHelpInterface
     {
         $commandHelp->addAction('init', 'initialization'); // 主要是初始化基类
-        $commandHelp->addAction('all', 'specify build'); //
+        $commandHelp->addAction('all', 'specify build'); // 生成所有类
         $commandHelp->addActionOpt('--tableName', 'specify table name');
         $commandHelp->addActionOpt('--modelPath', 'specify model path');
         $commandHelp->addActionOpt('--controllerPath', 'specify controller path');
@@ -83,18 +83,22 @@ class GenerationCommand implements CommandInterface
         return new ArrayToTextTable($table); // 用表格打印
     }
 
+    /**
+     * 生成所有类
+     * @return ArrayToTextTable|string
+     */
     protected function all()
     {
-        $tableName = CommandManager::getInstance()->getOpt('tableName');
+        $tableName = CommandManager::getInstance()->getOpt('tableName'); // 生成指定表的模型
         if (empty($tableName)) {
             return Color::error('table not empty');
         }
 
-        $modelPath = CommandManager::getInstance()->getOpt('modelPath');
-        $controllerPath = CommandManager::getInstance()->getOpt('controllerPath');
-        $unitTestPath = CommandManager::getInstance()->getOpt('unitTestPath');
+        $modelPath = CommandManager::getInstance()->getOpt('modelPath'); // 生成的模型所在目录
+        $controllerPath = CommandManager::getInstance()->getOpt('controllerPath'); // 生成的控制器所在目录
+        $unitTestPath = CommandManager::getInstance()->getOpt('unitTestPath'); // 生成的单元测试用例所在目录
         $connection = $this->getConnection();
-        $codeGeneration = new CodeGeneration($tableName, $connection);
+        $codeGeneration = new CodeGeneration($tableName, $connection); // 初始化代码生成器
         $this->trySetDiGenerationPath($codeGeneration);
 
         $table = [];
@@ -117,6 +121,12 @@ class GenerationCommand implements CommandInterface
         return new ArrayToTextTable($table);
     }
 
+    /**
+     * 根据代码生成配置获取数据库连接
+     * @return Connection
+     * @throws \EasySwoole\Spl\Exception\Exception
+     * @throws \Throwable
+     */
     protected function getConnection(): Connection
     {
         $connection = Di::getInstance()->get('CodeGeneration.connection');
@@ -132,12 +142,17 @@ class GenerationCommand implements CommandInterface
         }
     }
 
+    /**
+     * 尝试注入代码生成配置
+     * @param CodeGeneration $codeGeneration
+     * @throws \Throwable
+     */
     protected function trySetDiGenerationPath(CodeGeneration $codeGeneration)
     {
-        $modelBaseNameSpace = Di::getInstance()->get('CodeGeneration.modelBaseNameSpace');
-        $controllerBaseNameSpace = Di::getInstance()->get('CodeGeneration.controllerBaseNameSpace');
-        $unitTestBaseNameSpace = Di::getInstance()->get('CodeGeneration.unitTestBaseNameSpace');
-        $rootPath = Di::getInstance()->get('CodeGeneration.rootPath');
+        $modelBaseNameSpace = Di::getInstance()->get('CodeGeneration.modelBaseNameSpace'); // 模型基类命名空间
+        $controllerBaseNameSpace = Di::getInstance()->get('CodeGeneration.controllerBaseNameSpace'); // 控制器基类命名空间
+        $unitTestBaseNameSpace = Di::getInstance()->get('CodeGeneration.unitTestBaseNameSpace'); // 单元测试基类命名空间
+        $rootPath = Di::getInstance()->get('CodeGeneration.rootPath'); // 项目根目录
         if ($modelBaseNameSpace) {
             $codeGeneration->setModelBaseNameSpace($modelBaseNameSpace);
         }
@@ -152,7 +167,6 @@ class GenerationCommand implements CommandInterface
         }
     }
 
-
     protected function generationBaseController()
     {
         $generation = new \EasySwoole\CodeGeneration\InitBaseClass\Controller\ControllerGeneration();
@@ -165,6 +179,10 @@ class GenerationCommand implements CommandInterface
         return $generation->generate();
     }
 
+    /**
+     * 基础模型代码生成
+     * @return bool|int|string
+     */
     protected function generationBaseModel()
     {
         $generation = new \EasySwoole\CodeGeneration\InitBaseClass\Model\ModelGeneration();

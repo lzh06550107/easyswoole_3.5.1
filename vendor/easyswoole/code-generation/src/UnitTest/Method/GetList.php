@@ -8,13 +8,16 @@
 
 namespace EasySwoole\CodeGeneration\UnitTest\Method;
 
-
 use EasySwoole\CodeGeneration\Utility\Utility;
 
+/**
+ * 测试获取数据列表方法
+ */
 class GetList extends UnitTestMethod
 {
     protected $methodName = 'testGetList';
     protected $actionName = 'getList';
+    
     function addMethodBody()
     {
         $method = $this->method;

@@ -18,6 +18,9 @@ use EasySwoole\CodeGeneration\Utility\Utility;
 use EasySwoole\Utility\Random;
 use Nette\PhpGenerator\ClassType;
 
+/**
+ * 单元测试生成类
+ */
 class UnitTestGeneration extends ClassGeneration
 {
     /**
@@ -28,15 +31,19 @@ class UnitTestGeneration extends ClassGeneration
     function addClassData()
     {
         $this->phpClass->addProperty('modelName', $this->getApiUrl());
-        $this->phpNamespace->addUse($this->config->getModelClass());
-        $this->phpNamespace->addUse(Random::class);
-        $this->addGenerationMethod(new Add($this));
-        $this->addGenerationMethod(new GetOne($this));
-        $this->addGenerationMethod(new Update($this));
-        $this->addGenerationMethod(new GetList($this));
-        $this->addGenerationMethod(new Del($this));
+        $this->phpNamespace->addUse($this->config->getModelClass()); // 添加模型类命名空间
+        $this->phpNamespace->addUse(Random::class); // 添加随机类命名空间
+        $this->addGenerationMethod(new Add($this)); // 添加数据测试方法
+        $this->addGenerationMethod(new GetOne($this)); // 查询一条数据测试方法
+        $this->addGenerationMethod(new Update($this)); // 更新数据测试方法
+        $this->addGenerationMethod(new GetList($this)); // 查询多天数据测试方法
+        $this->addGenerationMethod(new Del($this)); // 删除一条数据测试方法
     }
 
+    /**
+     * 获取控制器的 api url路径
+     * @return array|mixed|string|string[]
+     */
     protected function getApiUrl()
     {
         $baseNamespace = $this->config->getControllerClass();
@@ -45,6 +52,7 @@ class UnitTestGeneration extends ClassGeneration
     }
 
     /**
+     * 获取类文件名称
      * @return mixed
      */
     public function getClassName()

@@ -8,16 +8,18 @@
 
 namespace EasySwoole\CodeGeneration\ClassGeneration;
 
-
 use EasySwoole\Utility\File;
 use Nette\PhpGenerator\PhpNamespace;
 
+/**
+ * 类生成器
+ */
 class ClassGeneration
 {
     /**
      * @var $config Config;
      */
-    protected $config;
+    protected $config; // 配置
     protected $phpClass;
     protected $phpNamespace;
     protected $methodGenerationList = [];
@@ -30,10 +32,10 @@ class ClassGeneration
     public function __construct(Config $config)
     {
         $this->config = $config;
-        File::createDirectory($config->getDirectory());
-        $phpNamespace = new PhpNamespace($this->config->getNamespace());
+        File::createDirectory($config->getDirectory()); // 创建目录
+        $phpNamespace = new PhpNamespace($this->config->getNamespace()); // 获取配置的命名空间
         $this->phpNamespace = $phpNamespace;
-        $className = $this->getClassName();
+        $className = $this->getClassName(); // 获取配置的类名称
         $phpClass = $phpNamespace->addClass($className);
         $this->phpClass = $phpClass;
         $this->addExtend();
@@ -48,17 +50,21 @@ class ClassGeneration
         }
     }
 
+    /**
+     * 
+     * @return bool|int|string
+     */
     final function generate()
     {
-        $this->addComment();
-        $this->addClassData();
+        $this->addComment(); // 给生成的类添加注释
+        $this->addClassData(); // 生成类数据
         /**
          * @var $method MethodAbstract
          */
         foreach ($this->methodGenerationList as $method) {
-            $method->run();
+            $method->run(); // 生成类方法
         }
-        return $this->createPHPDocument();
+        return $this->createPHPDocument(); // 生成文档注释
     }
 
     function addClassData()
@@ -66,6 +72,9 @@ class ClassGeneration
 
     }
 
+    /**
+     * 添加类注释
+     */
     protected function addComment()
     {
         $this->phpClass->addComment("{$this->getClassName()}");
@@ -73,13 +82,17 @@ class ClassGeneration
         $this->phpClass->addComment('Create With ClassGeneration');
     }
 
+    /**
+     * 子类可以覆盖，提供类注释
+     * @return mixed
+     */
     protected function getClassName()
     {
         return $this->config->getClassName();
     }
 
     /**
-     * createPHPDocument
+     * 生成文档注释
      * @return bool|int
      * @author Tioncico
      * Time: 19:49

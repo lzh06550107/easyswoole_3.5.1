@@ -14,6 +14,9 @@ use EasySwoole\CodeGeneration\ModelGeneration\Method\GetList;
 use EasySwoole\CodeGeneration\Utility\Utility;
 use Nette\PhpGenerator\ClassType;
 
+/**
+ * 模型生成器
+ */
 class ModelGeneration extends ClassGeneration
 {
     /**
@@ -24,8 +27,8 @@ class ModelGeneration extends ClassGeneration
     function addClassData()
     {
         $this->addClassBaseContent();
-        $this->addGenerationMethod(new GetList($this));
-        $this->addGenerationMethod(new AddData($this));
+        $this->addGenerationMethod(new GetList($this)); // 生成分页查询列表方法
+        $this->addGenerationMethod(new AddData($this)); // 生成保存模型对象方法
     }
 
     /**
@@ -42,15 +45,16 @@ class ModelGeneration extends ClassGeneration
         $phpClass->addProperty('tableName', $table->getTable())
             ->setVisibility('protected');
         foreach ($table->getColumns() as $column) {
-            $name = $column->getColumnName();
-            $comment = $column->getColumnComment();
-            $columnType = Utility::convertDbTypeToDocType($column->getColumnType());
-            $phpClass->addComment("@property {$columnType} \${$name} // {$comment}");
+            $name = $column->getColumnName(); // 获取列名称
+            $comment = $column->getColumnComment(); // 获取列注释
+            $columnType = Utility::convertDbTypeToDocType($column->getColumnType()); // 获取列类型
+            $phpClass->addComment("@property {$columnType} \${$name} // {$comment}"); // 类属性注释
         }
         return $phpClass;
     }
 
     /**
+     * 根据表和文件后缀来生成类文件名称
      * @return mixed
      */
     public function getClassName()

@@ -8,11 +8,13 @@
 
 namespace EasySwoole\CodeGeneration\ModelGeneration\Method;
 
-
 use App\Model\Package\PackageAdvertConfigModel;
 use EasySwoole\CodeGeneration\Utility\Utility;
 use EasySwoole\ORM\Utility\Schema\Column;
 
+/**
+ * 生成添加模型对象方法
+ */
 class AddData extends MethodAbstract
 {
     function addMethodBody()

@@ -8,13 +8,16 @@
 
 namespace EasySwoole\CodeGeneration\UnitTest\Method;
 
-
 use EasySwoole\CodeGeneration\Utility\Utility;
 
+/**
+ * 测试获取一行数据方法
+ */
 class GetOne extends UnitTestMethod
 {
     protected $methodName = 'testGetOne';
     protected $actionName = 'getOne';
+    
     function addMethodBody()
     {
         $method = $this->method;

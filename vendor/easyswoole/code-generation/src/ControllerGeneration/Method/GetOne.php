@@ -8,9 +8,11 @@
 
 namespace EasySwoole\CodeGeneration\ControllerGeneration\Method;
 
-
 use EasySwoole\ORM\Utility\Schema\Column;
 
+/**
+ * 
+ */
 class GetOne extends MethodAbstract
 {
 
@@ -40,7 +42,7 @@ class GetOne extends MethodAbstract
             if ($columnName != $table->getPkFiledName()) {
                 return false;
             }
-            $paramValue->required= '';
+            $paramValue->required= ''; // 主键必填
             $this->addColumnComment($paramValue);
             return false;
         });
@@ -56,6 +58,10 @@ Body;
 
     }
 
+    /**
+     * 添加方法响应参数注释
+     * @param $responseParamArr
+     */
     function addResponseParamComment($responseParamArr){
         foreach ($responseParamArr as  $value){
             $this->method->addComment($value);

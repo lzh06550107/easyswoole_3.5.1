@@ -37,6 +37,11 @@ class TableObjectGeneration
 
     }
 
+    /**
+     * 获取表的列信息
+     * @return mixed
+     * @throws Exception
+     */
     public function getTableColumnsInfo()
     {
         $query = new QueryBuilder();
@@ -64,6 +69,11 @@ class TableObjectGeneration
         return $data->getResult();
     }
 
+    /**
+     * 获取数据包结构对象
+     * @return Table
+     * @throws Exception
+     */
     public function generationTable()
     {
         $this->getTableColumnsInfo();
@@ -81,6 +91,9 @@ class TableObjectGeneration
         return $table;
     }
 
+    /**
+     * 获取表索引信息
+     */
     protected function getTableIndex()
     {
         $query = new QueryBuilder();
@@ -107,6 +120,11 @@ class TableObjectGeneration
 
     }
 
+    /**
+     * 获取表列信息
+     * @param $column
+     * @return Column
+     */
     protected function getTableColumn($column): Column
     {
         $columnTypeArr = explode(' ', $column['Type']);

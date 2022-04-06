@@ -8,9 +8,11 @@
 
 namespace EasySwoole\CodeGeneration\ControllerGeneration\Method;
 
-
 use EasySwoole\ORM\Utility\Schema\Column;
 
+/**
+ * 删除数据
+ */
 class Delete extends MethodAbstract
 {
 
@@ -39,7 +41,7 @@ class Delete extends MethodAbstract
             if ($columnName != $table->getPkFiledName()) {
                 return false;
             }
-            $paramValue->required = '';
+            $paramValue->required = ''; // 主键字段必须
             $this->addColumnComment($paramValue);
             return true;
         });

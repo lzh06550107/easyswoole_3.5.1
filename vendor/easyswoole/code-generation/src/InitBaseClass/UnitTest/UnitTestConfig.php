@@ -9,6 +9,9 @@ namespace EasySwoole\CodeGeneration\InitBaseClass\UnitTest;
 
 use EasySwoole\CodeGeneration\ClassGeneration\Config;
 
+/**
+ * 单元测试配置类
+ */
 class UnitTestConfig extends Config
 {
 

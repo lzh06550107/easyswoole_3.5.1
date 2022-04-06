@@ -8,9 +8,11 @@
 
 namespace EasySwoole\CodeGeneration\ControllerGeneration\Method;
 
-
 use EasySwoole\ORM\Utility\Schema\Column;
 
+/**
+ * 更新数据
+ */
 class Update extends MethodAbstract
 {
 
@@ -47,10 +49,10 @@ Body;
         $this->chunkTableColumn(function (Column $column, string $columnName) use ($table, &$methodBody) {
             $paramValue = $this->newColumnParam($column);
             if ($columnName == $table->getPkFiledName()) {
-                $paramValue->required = '';
+                $paramValue->required = ''; // 主键必填
             } else {
-                $methodBody .= "\$updateData['{$columnName}']=\$param['{$columnName}'] ?? \$info->{$columnName};\n";
-                $paramValue->optional = '';
+                $methodBody .= "\$updateData['{$columnName}']=\$param['{$columnName}'] ?? \$info->{$columnName};\n"; // 如果参数中不存在，则使用表中原始数据值
+                $paramValue->optional = ''; // 其它都是可选项
             }
             $this->addColumnComment($paramValue);
         });

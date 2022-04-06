@@ -8,7 +8,9 @@
 
 namespace EasySwoole\CodeGeneration\ModelGeneration\Method;
 
-
+/**
+ * 生成获取列表方法
+ */
 class GetList extends MethodAbstract
 {
     function addMethodBody()

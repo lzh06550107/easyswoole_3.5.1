@@ -12,6 +12,9 @@ use EasySwoole\CodeGeneration\ModelGeneration\ModelConfig;
 use EasySwoole\DDL\Blueprint\Table;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * 生成单元测试配置类
+ */
 class UnitTestConfig extends ModelConfig
 {
     protected $modelClass;//model的类名

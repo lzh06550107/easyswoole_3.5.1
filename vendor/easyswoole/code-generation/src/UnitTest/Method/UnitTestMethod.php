@@ -14,6 +14,9 @@ use EasySwoole\CodeGeneration\Utility\Utility;
 use EasySwoole\ORM\Utility\Schema\Column;
 use EasySwoole\Utility\Random;
 
+/**
+ * 单元测试方法抽象类
+ */
 abstract class UnitTestMethod extends MethodAbstract
 {
     /**
@@ -24,12 +27,20 @@ abstract class UnitTestMethod extends MethodAbstract
     protected $methodName;
     protected $actionName;
 
+    /**
+     * 获取方法名称
+     * @return string
+     */
     function getMethodName(): string
     {
         return $this->methodName;
     }
 
-
+    /**
+     * 获取表的测试数据，根据表列的类型自动生成
+     * @param $variableName
+     * @return string
+     */
     protected function getTableTestData($variableName = 'data')
     {
         $data = '';
@@ -44,6 +55,11 @@ abstract class UnitTestMethod extends MethodAbstract
         return $data;
     }
 
+    /**
+     * 根据列类型，随机生成测试数据
+     * @param Column $column
+     * @return string|null
+     */
     protected function randColumnTypeValue(Column $column)
     {
         $columnType = Utility::convertDbTypeToDocType($column->getColumnType());

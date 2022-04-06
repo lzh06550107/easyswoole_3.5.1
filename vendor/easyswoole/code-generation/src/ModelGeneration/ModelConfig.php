@@ -8,11 +8,13 @@
 
 namespace EasySwoole\CodeGeneration\ModelGeneration;
 
-
 use EasySwoole\CodeGeneration\ClassGeneration\Config;
 use EasySwoole\ORM\Utility\Schema\Table;
 use EasySwoole\Utility\Str;
 
+/**
+ * 模型配置类
+ */
 class ModelConfig extends Config
 {
     public function __construct(Table $schemaInfo, $tablePre = '', $nameSpace = "App\\Model", $extendClass = \EasySwoole\ORM\AbstractModel::class)
@@ -33,7 +35,7 @@ class ModelConfig extends Config
     protected $ignoreString = [
         'list',
         'log'
-    ];//文件名生成时,忽略的字符串(list,log等)
+    ];//文件名生成时,忽略的字符串(list,log等)，从表名称后部去除
 
     protected $fileSuffix = "Model";//文件后缀
 

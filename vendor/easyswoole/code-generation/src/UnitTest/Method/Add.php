@@ -8,9 +8,11 @@
 
 namespace EasySwoole\CodeGeneration\UnitTest\Method;
 
-
 use EasySwoole\CodeGeneration\Utility\Utility;
 
+/**
+ * 测试保存数据方法
+ */
 class Add extends UnitTestMethod
 {
     protected $methodName = 'testAdd';
@@ -22,13 +24,13 @@ class Add extends UnitTestMethod
 \$data = [];
 
 BODY;
-        $body .= $this->getTableTestData('data');
+        $body .= $this->getTableTestData('data'); // 获取测试随机生成的数据
         $modelName = Utility::getModelName($this->classGeneration->getConfig()->getModelClass());
 
         $body .= <<<BODY
 \$response = \$this->request('{$this->actionName}',\$data);
 \$model = new {$modelName}();
-\$model->destroy(\$response->result->{$this->classGeneration->getConfig()->getTable()->getPkFiledName()});
+\$model->destroy(\$response->result->{$this->classGeneration->getConfig()->getTable()->getPkFiledName()}); // 删除添加的测试数据
 //var_dump(json_encode(\$response,JSON_UNESCAPED_UNICODE));
 BODY;
         $method->setBody($body);

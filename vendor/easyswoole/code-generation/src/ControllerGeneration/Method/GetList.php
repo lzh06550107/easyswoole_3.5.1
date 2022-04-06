@@ -8,9 +8,11 @@
 
 namespace EasySwoole\CodeGeneration\ControllerGeneration\Method;
 
-
 use EasySwoole\ORM\Utility\Schema\Column;
 
+/**
+ * 分页获取数据列表
+ */
 class GetList extends MethodAbstract
 {
 
@@ -69,7 +71,10 @@ Body;
         $method->setBody($methodBody);
     }
 
-
+    /**
+     * 给方法添加响应参数注释
+     * @param $responseParamArr
+     */
     function addResponseParamComment($responseParamArr){
         foreach ($responseParamArr as  $value){
             $this->method->addComment($value);
