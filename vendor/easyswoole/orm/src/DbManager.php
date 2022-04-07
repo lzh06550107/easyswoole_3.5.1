@@ -333,7 +333,7 @@ class DbManager
     }
 
     /**
-     * 
+     * 提交事务
      * @param string $con
      * @return bool
      * @throws \Throwable
@@ -379,6 +379,7 @@ class DbManager
     }
 
     /**
+     * 回滚事务
      * @param string $con
      * @param float|NULL $timeout
      * @return bool

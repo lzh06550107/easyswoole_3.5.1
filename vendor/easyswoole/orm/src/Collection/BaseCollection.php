@@ -15,6 +15,9 @@ use EasySwoole\ORM\AbstractModel;
 use IteratorAggregate;
 use JsonSerializable;
 
+/**
+ * 集合基类
+ */
 class BaseCollection implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
 {
     /**
