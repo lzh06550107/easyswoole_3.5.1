@@ -223,7 +223,7 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
 
     /**
      * 设置表名(一般用于分表)
-     * @param string|null $name
+     * @param string|null $name 表名称
      * @param bool $is_temp
      * @return string|$this
      * @throws Exception
